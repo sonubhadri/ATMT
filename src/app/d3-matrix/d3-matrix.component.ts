@@ -602,9 +602,9 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
     var grid = d3.select("#grid")
         .append("svg")
-        .style("overflow", "auto")
-        .style("padding-top", "10px")
-        .style("padding-left", "100px")
+        // .style("overflow", "auto")
+        .style("margin-top", "10px")
+        // .style("padding-left", "100px")
 
     var row = grid.selectAll(".rowd3")
         .data(gridData)
@@ -908,16 +908,18 @@ export class D3MatrixComponent implements OnInit, OnChanges {
     // For making the svg matrix scrollable
     d3.selectAll("svg")
         .data(gridData)
-        .attr("width", function (d, i) {
-            let len = d.length;
-            len = (len * 35) + 240;
-            return len;
-        })
+        // .attr("width", function (d, i) {
+        //     let len = d.length;
+        //     len = (len * 35) + 240;
+        //     return len;
+        // })
         .attr("height", function (d, i) {
             let len = d[0].hindiVerticalWords.length;
             len = (len * 35) + 120;
             return len;
         })
+        .attr("width","100%")
+        .attr("viewBox","0 0 400 400")
     // Ended Here   
 
     var labell = d3.selectAll(".rowd3")
