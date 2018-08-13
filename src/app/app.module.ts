@@ -17,6 +17,7 @@ import {SelfBuildingSquareSpinnerModule, FulfillingSquareSpinnerModule, HalfCirc
 import { CsvToTableComponent } from './csv-to-table/csv-to-table.component';
 import { RouterModule} from '@angular/router';
 import { KeysPipePipe } from './keys-pipe.pipe';
+import { LinearWidgetComponent } from './linear-widget/linear-widget.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { KeysPipePipe } from './keys-pipe.pipe';
     HorizontalCardComponent,
     VerticalInterlinearComponent,
     CsvToTableComponent,
-    KeysPipePipe
+    KeysPipePipe,
+    LinearWidgetComponent
   ],
   imports: [
     BrowserModule,HttpModule,FormsModule,CommonModule,

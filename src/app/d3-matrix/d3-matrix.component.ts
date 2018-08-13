@@ -49,6 +49,8 @@ export class D3MatrixComponent implements OnInit, OnChanges {
      Interlinear = "Interlinear";
      verticalORgrid = "Display Bilinear";
      gridDataJson: any;
+     linear = false;
+     interLinearflag = true;
 
     constructor(private ApiUrl: GlobalUrl, private toastr: ToastrService, element: ElementRef, private ngZone: NgZone, d3Service: D3Service, private service: AlignerService, private _http: Http) {
         this.d3 = d3Service.getD3();
@@ -363,13 +365,25 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
     interlinearOnClick() {
         if (this.Interlinear == "Interlinear") {
+            this.linear = false;
+            this.interLinearflag = true;
             this.Interlinear = "Reverse-Interlinear"
         }
         else {
+            this.linear = false;
+            this.interLinearflag = true;
             this.Interlinear = "Interlinear"
         }
 
         this.bindHorizontalAlign();
+    }
+
+    linearOnClick(){
+        if(!this.linear){
+            this.linear = true;
+            this.interLinearflag = false;
+        }
+        
     }
 
     verticalORgridOnClick() {
