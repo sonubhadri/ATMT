@@ -497,6 +497,9 @@ export class D3MatrixComponent implements OnInit, OnChanges {
         this._http.get(this.ApiUrl.getnUpdateBCV + '/' + bcv + '/' + this.Lang)
             .subscribe(data => {
                 //console.log(data.json())
+                document.getElementById("grid").innerHTML = "";
+                (<HTMLInputElement> document.getElementById("nxtbtn")).disabled = false;
+                (<HTMLInputElement> document.getElementById("prebtn")).disabled = false;
                 this.generateVisual(data)
 
             }, (error: Response) => {

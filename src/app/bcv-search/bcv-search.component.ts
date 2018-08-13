@@ -108,7 +108,6 @@ export class BcvSearchComponent implements OnInit {
     
   }
 
-
   glLangChange(l){
     this.bookFirstIndex=0;
     this.chapterFirstIndex = 0;
@@ -230,6 +229,8 @@ export class BcvSearchComponent implements OnInit {
   }
 
   prevOnclick(){
+    (<HTMLInputElement> document.getElementById("nxtbtn")).disabled = true;
+    (<HTMLInputElement> document.getElementById("prebtn")).disabled = true;
     document.getElementById('grid').scrollTop =0;
     if(document.getElementById("saveButton").style.display != "none"){
       this.toastr.warning("Kindly click on save to make the updation or discard changes.")
@@ -277,6 +278,9 @@ export class BcvSearchComponent implements OnInit {
   }
 
   nextOnClick(){
+    (<HTMLInputElement> document.getElementById("nxtbtn")).disabled = true;
+    (<HTMLInputElement> document.getElementById("prebtn")).disabled = true;
+    
     document.getElementById('grid').scrollTop =0;
     if(document.getElementById("saveButton").style.display != "none"){
       this.toastr.warning("Kindly click on save to make the updation or discard changes.")
