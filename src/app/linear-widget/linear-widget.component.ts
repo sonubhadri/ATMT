@@ -8,10 +8,10 @@ import { Component, OnInit, Input } from '@angular/core';
 export class LinearWidgetComponent implements OnInit {
 
   @Input() linearCard: any;
-  private sourcetext;
-  private targettext;
-  private englishword;
-  private englishSourceArray = new Array();
+   sourcetext;
+   targettext;
+   englishword;
+   englishSourceArray = new Array();
 
   constructor() { }
 
