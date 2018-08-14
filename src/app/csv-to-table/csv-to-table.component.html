@@ -27,31 +27,31 @@
     <br>
     <div class="table-responsive">
     <div  *ngIf="alignmentData">
-        <table datatable id="employee_table" class="table table-bordered table-striped" width="50%">
+        <table datatable id="employee_table" class="table table-bordered table-striped" style="table-layout: fixed;" width="50%">
           <tr *ngFor = "let row of alignmentData;let count = index">
 
               <ng-container *ngFor = "let column of row.split('	');let i = index">
 
                <ng-container  *ngIf="count == 0">
-                <th  style="font-size: 13px;text-align:left" *ngIf="i != 6 && i != 7">
-                  <ng-container *ngIf="i != 8">
+                <th  style="word-wrap: break-word;font-size: 13px;text-align:left" *ngIf="i != 6">
+                  <ng-container *ngIf="i != 4">
                   {{column | uppercase}}
                 </ng-container>
-                <ng-container *ngIf="i == 8">
-                    BCV 
+                <ng-container *ngIf="i == 4">
+                    STRONG NUMBER 
                   </ng-container>
                 </th>
                </ng-container> 
 
-              <ng-container *ngIf="count != 0 && i != 6 && i != 7 && i != 8 "> 
-              <td style="font-size: 13px;">
+              <ng-container *ngIf="count != 0 && i != 6 && i != 7 && i != 5 "> 
+              <td style="word-wrap: break-word;font-size: 13px;">
                   {{column}}
               </td>
             </ng-container> 
 
-            <ng-container *ngIf="count != 0 && i != 6 && i != 7 && i == 8 "> 
-                <td style="font-size: 13px;">
-                    <a routerLink="/app-bcv-search/{{link.substring(0,8)}}" style="display:inherit;text-decoration:underline;" target="_blank" *ngFor="let link of column.split(' ')"> {{link.substring(0,8)}} </a>
+            <ng-container *ngIf="count != 0 && i != 6 && i != 7 && i == 5 "> 
+                <td style="word-wrap: break-word;font-size: 13px;">
+                    <a routerLink="/app-bcv-search/{{link.substring(0,8)}}" style="display:block;text-decoration:underline;" target="_blank" *ngFor="let link of column.split(',')"> {{link.substring(0,8)}} </a>               
                 </td>
               </ng-container> 
               </ng-container>                   

@@ -33,6 +33,7 @@ export class CsvToTableComponent implements OnInit {
   }
 
   ngOnInit() {
+    localStorage.setItem("language", "");
   }
 
 }

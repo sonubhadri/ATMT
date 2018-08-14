@@ -29,7 +29,7 @@ export class GlobalUrl {
     // grkhin : string = 'http://127.0.0.1:8000/v2/alignments/export';
     
     // // Fetch CSV file
-    // csvFile : string = 'http://localhost:4200/assets/reference.csv';
+      // csvFile : string = 'http://localhost:4200/assets/reference.csv';
 
     // //Fetch all the available language list
     // getLang : string = 'http://127.0.0.1:8000/v2/alignments/languages';
@@ -65,8 +65,10 @@ export class GlobalUrl {
     grkhin : string = 'https://stagingapi.autographamt.com/v2/alignments/export';
 
     // Fetch CSV file
-    csvFile : string = 'https://align.staging.autographamt.com/assets/reference.csv';
+    //csvFile : string = 'https://align.staging.autographamt.com/assets/reference.csv';
 
+      // Fetch CSV file
+    csvFile : string = 'https://autographa.herokuapp.com/assets/reference.csv';
 
     //Fetch all the available language list
     getLang : string = 'https://stagingapi.autographamt.com/v2/alignments/languages';
