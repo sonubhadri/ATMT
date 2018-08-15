@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { GlobalUrl } from './globalUrl';
 import { Router } from '@angular/router';
+import 'hammerjs';
 
 @Component({
   selector: 'app-root',

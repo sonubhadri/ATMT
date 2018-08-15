@@ -1,63 +1,72 @@
-<div class="container">
+<!-- <div class="container">
 
   <div align="center">
      <button type="button" (click)="getData()" name="load_data" id="load_data" class="btn btn-info">Load Data</button>
   </div>
-  <br>
 
-  <div class="container"  *ngIf = "display">
-      <div class="row">
-    
-          <div class="col-sm-5">
-              
-            </div>
-    
-          <div class="col-sm-6" >
-            <app-radar-spinner
-            [animationDuration]="1000"
-            [size]="100"
-            [color]="'blue'">
-          </app-radar-spinner>
-          </div>
-          <div class="col-sm-1">
-              
-            </div>
-      </div>
-    </div>
-    <br>
-    <div class="table-responsive">
-    <div  *ngIf="alignmentData">
-        <table datatable id="employee_table" class="table table-bordered table-striped" style="table-layout: fixed;" width="50%">
-          <tr *ngFor = "let row of alignmentData;let count = index">
+</div> -->
+<mat-progress-bar *ngIf="display" mode="indeterminate"></mat-progress-bar>
 
-              <ng-container *ngFor = "let column of row.split('	');let i = index">
+<br>
+<div class="container" *ngIf="csvData">
+  <mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter Search">
+  </mat-form-field>
 
-               <ng-container  *ngIf="count == 0">
-                <th  style="word-wrap: break-word;font-size: 13px;text-align:left" *ngIf="i != 6">
-                  <ng-container *ngIf="i != 4">
-                  {{column | uppercase}}
-                </ng-container>
-                <ng-container *ngIf="i == 4">
-                    STRONG NUMBER 
-                  </ng-container>
-                </th>
-               </ng-container> 
+  <div class="mat-elevation-z24">
+    <table mat-table [dataSource]="dataSource">
 
-              <ng-container *ngIf="count != 0 && i != 6 && i != 7 && i != 5 "> 
-              <td style="word-wrap: break-word;font-size: 13px;">
-                  {{column}}
-              </td>
-            </ng-container> 
+      <ng-container matColumnDef="S.No">
+        <th mat-header-cell *matHeaderCellDef>
+          <strong> S.No</strong>
+        </th>
+        <td mat-cell *matCellDef="let row"> {{row.position}} </td>
+      </ng-container>
 
-            <ng-container *ngIf="count != 0 && i != 6 && i != 7 && i == 5 "> 
-                <td style="word-wrap: break-word;font-size: 13px;">
-                    <a routerLink="/app-bcv-search/{{link.substring(0,8)}}" style="display:block;text-decoration:underline;" target="_blank" *ngFor="let link of column.split(',')"> {{link.substring(0,8)}} </a>               
-                </td>
-              </ng-container> 
-              </ng-container>                   
-          </tr>
-        </table>
-    </div>
-</div>
+      <ng-container matColumnDef="English Word forms">
+        <th mat-header-cell *matHeaderCellDef>
+          <strong> English Word forms </strong>
+        </th>
+        <td mat-cell *matCellDef="let row"> {{row.English}}</td>
+      </ng-container>
 
-</div>
+      <ng-container matColumnDef="Hindi Dictionary Translation">
+        <th mat-header-cell *matHeaderCellDef>
+          <strong> Hindi Dictionary Translation </strong>
+        </th>
+        <td mat-cell *matCellDef="let row"> {{row.Hindi}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Definition/Facts/Description">
+        <th mat-header-cell *matHeaderCellDef>
+          <strong> Definition/Facts/Description </strong>
+        </th>
+        <td mat-cell *matCellDef="let row"> {{row.Definition}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="Strong Number">
+        <th mat-header-cell *matHeaderCellDef>
+          <strong> Strong Number </strong>
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <span style="display:block;" *ngFor="let link of row.StrongNumber.split(',')">{{link}}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="References">
+        <th mat-header-cell *matHeaderCellDef>
+          <strong> References </strong>
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <a routerLink="/app-bcv-search/{{link.substring(0,8)}}" style="display:block;text-decoration:underline;" target="_blank"
+            *ngFor="let link of row.References.split(',')"> {{link.substring(0,8)}} </a>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+      </tr>
+    </table>
+
+    <!-- <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator> -->
+  </div>

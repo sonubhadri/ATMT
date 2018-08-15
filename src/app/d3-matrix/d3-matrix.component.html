@@ -11,8 +11,10 @@
   <a id="fixButton" href="#" class="next" (click)="fixOnClick()">Fix Alignment</a>
   <a id="discardButton"  style="display: none;" href="#" class="next" (click)="discardOnClick()">Discard Changes</a> -->
 </div>
+<br>
 
-<div class="container" *ngIf="display">
+<mat-progress-bar *ngIf = "display" mode="indeterminate"></mat-progress-bar>
+<!-- <div class="container" *ngIf="display">
   <div class="row">
 
     <div class="col-sm-5">
@@ -27,7 +29,7 @@
 
     </div>
   </div>
-</div>
+</div> -->
 
 
 <div class="container" style="text-align: left" *ngIf="!display">

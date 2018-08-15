@@ -16,7 +16,7 @@ export class LinearWidgetComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.linearCard)
+    //console.log(this.linearCard)
     this.sourcetext = this.linearCard.sourcetext;
     this.targettext = this.linearCard.targettext;
     this.englishword = this.linearCard.englishword;

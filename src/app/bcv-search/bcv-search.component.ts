@@ -80,7 +80,7 @@ export class BcvSearchComponent implements OnInit {
         let BcvParam: string = params['BCV'];
 
         BcvParam = BcvParam.replace(/\./g, "");
-        if (BcvParam.length == 8) {
+        if (BcvParam.toString().length == 8) {
 
           let langstr;
 
@@ -100,14 +100,14 @@ export class BcvSearchComponent implements OnInit {
 
 
           let chapterstr = BcvParam.substring(2, 5).replace(/^0+/, '');
-          this.chapterFirstIndex = BcvParam.substring(2, 5).replace(/^0+/, '');
+          this.chapterFirstIndex =Number(BcvParam.substring(2, 5).replace(/^0+/, ''));
           this.chapterChange(chapterstr, booknostr);
 
           this.bookNumber = BcvParam.substring(0, 2);
           this.chapterNumber = BcvParam.substring(2, 5);
 
           let versestr = BcvParam.substring(5, 8).replace(/^0+/, '');
-          this.verseFirstIndex = BcvParam.substring(5, 8).replace(/^0+/, '');
+          this.verseFirstIndex = Number(BcvParam.substring(5, 8).replace(/^0+/, ''));
           this.verseChange(versestr);
 
           localStorage.setItem("lastAlignments", "");
@@ -202,9 +202,9 @@ export class BcvSearchComponent implements OnInit {
           this.bookNumber = booknumber[this.bookName];
           //console.log(booknumber[this.bookName]);
 
-          if (x.length > 2) { this.chapterNumber = x }
-          else if (x.length > 1) { this.chapterNumber = '0' + x }
-          else if (x.length === 1) { this.chapterNumber = '00' + x };
+          if (x.toString().length > 2) { this.chapterNumber = x }
+          else if (x.toString().length > 1) { this.chapterNumber = '0' + x }
+          else if (x.toString().length === 1) { this.chapterNumber = '00' + x };
           //console.log(this.chapterNumber)
         }, (error: Response) => {
           if (error.status === 404) {
@@ -220,9 +220,9 @@ export class BcvSearchComponent implements OnInit {
   }
 
   verseChange(x: string) {
-    if (x.length > 2) { this.verseNumber = x }
-    else if (x.length > 1) { this.verseNumber = '0' + x }
-    else if (x.length === 1) { this.verseNumber = '00' + x };
+    if (x.toString().length > 2) { this.verseNumber = x }
+    else if (x.toString().length > 1) { this.verseNumber = '0' + x }
+    else if (x.toString().length === 1) { this.verseNumber = '00' + x };
 
     if (this.verseNumber == '000') { this.BCV = null }
     else
@@ -267,9 +267,9 @@ export class BcvSearchComponent implements OnInit {
 
 
         let U: string = this.verseNumber;
-        if (U.length > 2) { this.verseNumber = U }
-        else if (U.length > 1) { this.verseNumber = '0' + U }
-        else if (U.length === 1) { this.verseNumber = '00' + U };
+        if (U.toString().length > 2) { this.verseNumber = U }
+        else if (U.toString().length > 1) { this.verseNumber = '0' + U }
+        else if (U.toString().length === 1) { this.verseNumber = '00' + U };
         //console.log(this.verseNumber)
 
 
@@ -315,9 +315,9 @@ export class BcvSearchComponent implements OnInit {
       this.verseFirstIndex = Number(this.verseNumber);
 
       let U: string = this.verseNumber;
-      if (U.length > 2) { this.verseNumber = U }
-      else if (U.length > 1) { this.verseNumber = '0' + U }
-      else if (U.length === 1) { this.verseNumber = '00' + U };
+      if (U.toString().length > 2) { this.verseNumber = U }
+      else if (U.toString().length > 1) { this.verseNumber = '0' + U }
+      else if (U.toString().length === 1) { this.verseNumber = '00' + U };
       //console.log(this.verseNumber)
 
       //console.log('prev' + this.bookNumber + this.chapterNumber + this.verseNumber);

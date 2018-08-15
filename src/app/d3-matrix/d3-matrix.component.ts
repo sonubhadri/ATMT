@@ -460,17 +460,20 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
 
     exportOnClick() {
-        console.log(this.BOOKNAME)
+  
         this.display = true;
+        console.log(this.display)
         this._http.get(this.ApiUrl.grkhin + "/" + this.Lang + "/" + this.BOOKNAME)
             .toPromise()
             .then(response => this.saveToFileSystem(response.json()));
-        this.display = false;
+
     }
 
     private saveToFileSystem(response) {
         const blob = new Blob([JSON.stringify(response)], { type: 'application/json' });
         saveAs(blob, 'bible.json');
+        this.display = false;
+        console.log(this.display)
     }
 
 
