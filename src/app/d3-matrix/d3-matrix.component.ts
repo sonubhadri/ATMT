@@ -855,6 +855,20 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                 x.style.fill = "#008000";
                 y.style.fontSize = "17px";
                 y.style.fill = "#008000";
+                let xValue = d.x;
+
+                xValue = xValue/25 - 4;
+                for(let m = xValue; m >= 0; m --){
+                   
+                    document.getElementById('rect-'+d.y+m.toString()).style.stroke = 'blue';
+                    document.getElementById('rect-'+d.y+m.toString()).style.strokeWidth = '2px';
+                }
+                let yValue = d.y;
+                for(let n= yValue; n >= 100; n = n-25){
+
+                    document.getElementById('rect-'+n+xValue.toString()).style.stroke = 'blue';
+                    document.getElementById('rect-'+n+xValue.toString()).style.strokeWidth = '2px';
+                }
 
                 div.style("left", d3.event.pageX + 10 + "px");
                 div.style("top", d3.event.pageY - 25 + "px");
@@ -862,7 +876,6 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                 div.style("text-align", "left")
                 div.style("width", "150px")
                 div.html(function () {
-
                     if (d.greekHorizontalWord[i] != 'NULL') {
                         // console.log(Number(d.greekHorizontalWords[i].substring(1,d.greekHorizontalWords[i].length)));
                         let removeZero = Number(d.greekHorizontalWord[i].substring(1, d.greekHorizontalWord[i].length)).toString();
@@ -900,6 +913,22 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                 y.style.fontSize = "16px";
                 y.style.fill = "black";
                 div.style("display", "none");
+
+                let xValue = d.x;
+
+                xValue = xValue/25 - 4;
+                for(let m = xValue; m >= 0; m --){
+                   
+                    document.getElementById('rect-'+d.y+m.toString()).style.stroke = '';
+                    document.getElementById('rect-'+d.y+m.toString()).style.strokeWidth = '';
+                }
+                let yValue = d.y;
+                for(let n= yValue; n >= 100; n = n-25){
+
+                    document.getElementById('rect-'+n+xValue.toString()).style.stroke = '';
+                    document.getElementById('rect-'+n+xValue.toString()).style.strokeWidth = '';
+                }
+
             })
 
         var upperColumn = row.selectAll(".upperColumn")
