@@ -460,7 +460,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
 
     exportOnClick() {
-  
+
         this.display = true;
         console.log(this.display)
         this._http.get(this.ApiUrl.grkhin + "/" + this.Lang + "/" + this.BOOKNAME)
@@ -501,8 +501,8 @@ export class D3MatrixComponent implements OnInit, OnChanges {
             .subscribe(data => {
                 //console.log(data.json())
                 document.getElementById("grid").innerHTML = "";
-                (<HTMLInputElement> document.getElementById("nxtbtn")).disabled = false;
-                (<HTMLInputElement> document.getElementById("prebtn")).disabled = false;
+                (<HTMLInputElement>document.getElementById("nxtbtn")).disabled = false;
+                (<HTMLInputElement>document.getElementById("prebtn")).disabled = false;
                 this.generateVisual(data)
 
             }, (error: Response) => {
@@ -912,24 +912,24 @@ export class D3MatrixComponent implements OnInit, OnChanges {
         // For making the svg matrix scrollable
         d3.selectAll("svg")
             .data(gridData)
-            // .attr("width", function (d, i) {
-            //     let len = d.length;
-            //     len = (len * 35) + 240;
-            //     return len;
-            // })
+            .attr("width", function (d, i) {
+                let len = d.length;
+                len = (len * 35) + 40;
+                return len;
+            })
             .attr("height", function (d, i) {
                 let len = d[0].hindiVerticalWords.length;
                 len = (len * 35) + 120;
                 return len;
             })
-            .attr("width", "100%")
+            // .attr("width", "100%")
             .attr("viewBox", function (d, i) {
                 let height = d[0].hindiVerticalWords.length;
                 height = (height * 35) + 120;
 
                 let width = d.length;
-                width = (width * 35);
-                return "0 0 " +  width + " " + height;
+                width = (width * 35) + 40;
+                return "0 0 " + width + " " + height;
             })
         //"0 0 400 400")
         // Ended Here   
@@ -956,12 +956,12 @@ export class D3MatrixComponent implements OnInit, OnChanges {
             label.nodes()[i].setAttribute('x', 75 - textLen)
         }
 
-        //  content.addEventListener('scroll', function(evt) {
-        //    //console.log(  label.nodes()[1]);
-        //    for(var i =0; i<label.nodes().length; i++){
-        //     label.nodes()[i].setAttribute('x', 30 + this.scrollLeft);
-        // }
-        //   }, false)
+        content.addEventListener('scroll', function (evt) {
+            //console.log(  label.nodes()[1]);
+            for (var i = 0; i < label.nodes().length; i++) {
+                label.nodes()[i].setAttribute('x', 30 + this.scrollLeft);
+            }
+        }, false)
 
 
         var labellll = grid.selectAll("svg")
@@ -1030,18 +1030,38 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
             // for(var i = 0; i < elms.length; i++) 
             //     elms[i].style.display='none'; 
+            //console.log(labelGreek.nodes())
 
             for (var i = 0; i < labelGreek.nodes().length; i++) {
                 let labelGreekData: any = gridData[0][i];
-                var xi: any = labelGreekData.x + 25;
-                (labelGreek.nodes()[i] as any).setAttribute("transform", "translate(" + xi + "," + (85 + this.scrollTop) + ")rotate(300)")
-                //labelGreek.nodes()[i].setAttribute("style","font-size:20px")
+                var xi: any = labelGreekData.x + 14;
+                (labelGreek.nodes()[i] as any).setAttribute("transform", "translate(" + xi + "," + (95 + this.scrollTop) + ")rotate(300)");
+            }
 
+            let count = 100;
+            for (var h = 0; h < label.nodes().length; h++) {
+                for (var i = 0; i < labelGreek.nodes().length; i++) {
+                    let b: any = count + i.toString();
+                    let a: any = 85 + this.scrollTop + i.toString();
+                    // console.log(a)
+                    // console.log(b)
+                    if ((document.getElementById('rect-' + b) != null) && (Number(b) < Number(a))) {
+                        //console.log('asdfsfd')
+                        document.getElementById('rect-' + b).style.display = "none";
+                        if (document.getElementById(label.nodes()[h].id) != null) {
+                            document.getElementById(label.nodes()[h].id).style.display = "none";
+                        }
+                    }
 
-                // document.getElementById('rect-100').style.display = "none";
-                // console.log (85 + this.scrollTop)
-
-
+                    if ((document.getElementById('rect-' + b) != null) && (Number(b) > Number(a))) {
+                        //console.log('asdfsfd')
+                        document.getElementById('rect-' + b).style.display = "";
+                        if (document.getElementById(label.nodes()[h].id) != null) {
+                            document.getElementById(label.nodes()[h].id).style.display = "";
+                        }
+                    }
+                }
+                count = count + 25;
             }
         }, false)
 

@@ -29,7 +29,7 @@ export class GlobalUrl {
     // grkhin : string = 'http://127.0.0.1:8000/v2/alignments/export';
     
     // // Fetch CSV file
-      //  csvFile : string = 'http://localhost:4200/assets/reference.csv';
+    //    csvFile : string = 'http://localhost:4200/assets/reference.csv';
 
     // //Fetch all the available language list
     // getLang : string = 'http://127.0.0.1:8000/v2/alignments/languages';

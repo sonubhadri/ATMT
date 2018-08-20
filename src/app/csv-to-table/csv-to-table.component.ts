@@ -23,7 +23,7 @@ export class CsvToTableComponent implements OnInit {
    ELEMENT_DATA: PeriodicElement[] = [];
    csvData:any;
 
-  displayedColumns: string[] = ['S.No', 'English Word forms', 'Hindi Dictionary Translation', 'Definition/Facts/Description', 'Strong Number', 'References'];
+  displayedColumns: string[] = ['S.No', 'English Word forms', 'Hindi Translation', 'Definition/Facts/Description', 'Strong Number', 'References'];
   dataSource = new MatTableDataSource<PeriodicElement>(this.ELEMENT_DATA);
   // @ViewChild(MatPaginator) paginator: MatPaginator;
   // @ViewChild(MatSort) sort: MatSort;
