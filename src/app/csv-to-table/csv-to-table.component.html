@@ -41,7 +41,8 @@
         <th mat-header-cell *matHeaderCellDef>
           <strong> Definition/Facts/Description </strong>
         </th>
-        <td id="{{'def-' + row.position}}" style="cursor: pointer;"  mat-cell *matCellDef="let row" (click)="showAll('def-' + row.position)"> {{row.Definition.substring(0,150) + "......"}}  </td>
+        <td id="{{'def-' + row.position}}" style="cursor: pointer;" mat-cell *matCellDef="let row" (click)="showAll('def-' + row.position)">
+        {{row.Definition.substring(0,150) + "......"}} </td>
       </ng-container>
 
       <ng-container matColumnDef="Strong Number">
@@ -63,11 +64,22 @@
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="API">
+      <ng-container matColumnDef="AlignedStrongs">
         <th mat-header-cell *matHeaderCellDef>
-          <strong> API </strong>
+          <strong> AlignedStrongs </strong>
         </th>
-        <td mat-cell *matCellDef="let row"> {{row.API}} </td>
+        <td mat-cell *matCellDef="let row">
+          <span style="display:block;" *ngFor="let link of row.AlignedStrongs.split(',')">{{link}}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="HindiAlignedWords">
+        <th mat-header-cell *matHeaderCellDef>
+          <strong> AlignedHindi </strong>
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <span style="display:block;" *ngFor="let link of row.HindiAlignedWords.split(',')">{{link}}</span>
+        </td>
       </ng-container>
 
 
