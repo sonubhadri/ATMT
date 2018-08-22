@@ -985,12 +985,12 @@ export class D3MatrixComponent implements OnInit, OnChanges {
             label.nodes()[i].setAttribute('x', 175 - textLen)
         }
 
-        content.addEventListener('scroll', function (evt) {
-            //console.log(  label.nodes()[1]);
-            for (var i = 0; i < label.nodes().length; i++) {
-                label.nodes()[i].setAttribute('x', 130 + this.scrollLeft);
-            }
-        }, false)
+        // content.addEventListener('scroll', function (evt) {
+        //     //console.log(  label.nodes()[1]);
+        //     for (var i = 0; i < label.nodes().length; i++) {
+        //         label.nodes()[i].setAttribute('x', 30 + this.scrollLeft);
+        //     }
+        // }, false)
 
 
         var labellll = grid.selectAll("svg")
