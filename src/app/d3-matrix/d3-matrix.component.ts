@@ -63,7 +63,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
 
     gridData(d: any, rawPoss: any) {
-        var xpos = 100;
+        var xpos = 200;
         var ypos = 100;
         var width = 25;
         var height = 25;
@@ -148,7 +148,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                 xpos += width;
 
             }
-            xpos = 100;
+            xpos = 200;
             ypos += height;
 
         }
@@ -462,7 +462,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
     exportOnClick() {
 
         this.display = true;
-        console.log(this.display)
+        //console.log(this.display)
         this._http.get(this.ApiUrl.grkhin + "/" + this.Lang + "/" + this.BOOKNAME)
             .toPromise()
             .then(response => this.saveToFileSystem(response.json()));
@@ -857,7 +857,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                 y.style.fill = "#008000";
                 let xValue = d.x;
 
-                xValue = xValue/25 - 4;
+                xValue = xValue/25 - 8;
                 for(let m = xValue; m >= 0; m --){
                    
                     document.getElementById('rect-'+d.y+m.toString()).style.stroke = 'blue';
@@ -916,7 +916,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
                 let xValue = d.x;
 
-                xValue = xValue/25 - 4;
+                xValue = xValue/25 - 8;
                 for(let m = xValue; m >= 0; m --){
                    
                     document.getElementById('rect-'+d.y+m.toString()).style.stroke = '';
@@ -943,7 +943,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
             .data(gridData)
             .attr("width", function (d, i) {
                 let len = d.length;
-                len = (len * 35) + 40;
+                len = (len * 35) + 140;
                 return len;
             })
             .attr("height", function (d, i) {
@@ -957,7 +957,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                 height = (height * 35) + 120;
 
                 let width = d.length;
-                width = (width * 35) + 40;
+                width = (width * 35) + 140;
                 return "0 0 " + width + " " + height;
             })
         //"0 0 400 400")
@@ -982,13 +982,13 @@ export class D3MatrixComponent implements OnInit, OnChanges {
         for (var i = 0; i < label.nodes().length; i++) {
             //console.log(  label.nodes()[i].getComputedTextLength());
             var textLen = label.nodes()[i].getComputedTextLength();
-            label.nodes()[i].setAttribute('x', 75 - textLen)
+            label.nodes()[i].setAttribute('x', 175 - textLen)
         }
 
         content.addEventListener('scroll', function (evt) {
             //console.log(  label.nodes()[1]);
             for (var i = 0; i < label.nodes().length; i++) {
-                label.nodes()[i].setAttribute('x', 30 + this.scrollLeft);
+                label.nodes()[i].setAttribute('x', 130 + this.scrollLeft);
             }
         }, false)
 
