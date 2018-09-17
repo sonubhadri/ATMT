@@ -13,7 +13,7 @@ import {
     Transition
 } from 'd3-ng2-service';
 
-import { Http, Response } from '@angular/http';
+import { Http, Response, Headers } from '@angular/http';
 import { Observable } from 'rxjs';
 
 import 'rxjs/add/operator/map';
@@ -25,6 +25,7 @@ import { HorizontalAlign } from '../horizontalAlign';
 import { getHostElement } from '@angular/core/src/render3';
 import { stringify } from '@angular/compiler/src/util';
 import { saveAs } from 'file-saver/FileSaver';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 
 @Component({
     selector: 'app-d3-matrix',
@@ -45,22 +46,37 @@ export class D3MatrixComponent implements OnInit, OnChanges {
     @Input() BCV: any;
     @Input() BOOKNAME: any;
     @Input() Lang: any;
+    @Input() NextFlag : boolean;
+    DiscardFlag : boolean;
     Statuses = new Array();
     Interlinear = "Interlinear";
     verticalORgrid = "Display Bilinear";
     gridDataJson: any;
     linear = false;
     interLinearflag = true;
+    headers = new Headers();
+    prefetchData:any;
 
-    constructor(private ApiUrl: GlobalUrl, private toastr: ToastrService, element: ElementRef, private ngZone: NgZone, d3Service: D3Service, private service: AlignerService, private _http: Http) {
+    constructor(public router: Router, private ApiUrl: GlobalUrl, private toastr: ToastrService, element: ElementRef, private ngZone: NgZone, d3Service: D3Service, private service: AlignerService, private _http: Http) {
         this.d3 = d3Service.getD3();
         this.toastr.toastrConfig.positionClass = "toast-top-center"
         this.toastr.toastrConfig.closeButton = true;
         this.toastr.toastrConfig.progressBar = true;
         this.toastr.toastrConfig.timeOut = 1200;
 
+        if (!localStorage.getItem('access-token')) {
+            this.toastr.error('You are not logged in');
+            this.router.navigate(['../app-login']);
+        }
+
+        this.createAuthorizationHeader(this.headers);
     }
 
+
+    createAuthorizationHeader(headers: Headers) {
+        headers.append('Authorization', 'bearer ' +
+            localStorage.getItem("access-token"));
+    }
 
     gridData(d: any, rawPoss: any) {
         var xpos = 200;
@@ -158,7 +174,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
     saveOnClick() {
 
-        document.getElementById("grid").innerHTML = "";
+        document.getElementById("grid").style.display = "none";
         var x: any = this.BCV;
         var y: any = this.positionalPairOfApi;
         var l: any = this.Lang;
@@ -189,14 +205,17 @@ export class D3MatrixComponent implements OnInit, OnChanges {
         }
         var data = { "bcv": x, "positional_pairs": y, "lang": l };
         this.display = true;
-        this._http.post(this.ApiUrl.getnUpdateBCV, data)
+        this._http.post(this.ApiUrl.getnUpdateBCV, data, {
+            headers: this.headers
+        })
             .subscribe(data => {
                 let response: any = data;
                 this.display = false;
                 //console.log(response._body);
                 if (response._body === 'Saved') {
                     this.toastr.success('Updation has been done successfully.');
-                    this.gridBind();
+                    document.getElementById("grid").style.display = "";
+                    //this.gridBind();
                 }
             }, (error: Response) => {
                 if (error.status === 400) {
@@ -212,7 +231,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
         document.getElementById('saveButton').style.display = 'none';
         document.getElementById("appButton").style.display = "";
-        document.getElementById("fixButton").style.display = "none";
+        //document.getElementById("fixButton").style.display = "none";
         //document.getElementById('discardButton').style.display = 'none';
 
         localStorage.setItem("lastAlignments", this.rawPos);
@@ -229,7 +248,9 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
         var data = { "bcv": x, "positional_pairs": y, "lang": l };
         this.display = true;
-        this._http.post(this.ApiUrl.approveAlignments, data)
+        this._http.post(this.ApiUrl.approveAlignments, data, {
+            headers: this.headers
+        })
             .subscribe(data => {
                 let response: any = data;
                 this.display = false;
@@ -263,7 +284,9 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
         var data = { "bcv": x, "lang": l };
         this.display = true;
-        this._http.post(this.ApiUrl.fixAlignments, data)
+        this._http.post(this.ApiUrl.fixAlignments, data, {
+            headers: this.headers
+        })
             .subscribe(data => {
                 //let response: any = data;
                 this.display = false;
@@ -293,6 +316,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
     }
 
     discardOnClick() {
+        this.DiscardFlag = true;
         document.getElementById("grid").innerHTML = "";
         if (localStorage.getItem("lastAlignments") !== "") {
             var x: any = this.BCV;
@@ -326,7 +350,9 @@ export class D3MatrixComponent implements OnInit, OnChanges {
             }
             var data = { "bcv": x, "positional_pairs": y, "lang": l };
             this.display = true;
-            this._http.post(this.ApiUrl.getnUpdateBCV, data)
+            this._http.post(this.ApiUrl.getnUpdateBCV, data, {
+                headers: this.headers
+            })
                 .subscribe(data => {
                     let response: any = data;
                     this.display = false;
@@ -463,7 +489,9 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
         this.display = true;
         //console.log(this.display)
-        this._http.get(this.ApiUrl.grkhin + "/" + this.Lang + "/" + this.BOOKNAME)
+        this._http.get(this.ApiUrl.grkhin + "/" + this.Lang + "/" + this.BOOKNAME, {
+            headers: this.headers
+        })
             .toPromise()
             .then(response => this.saveToFileSystem(response.json()));
 
@@ -473,11 +501,12 @@ export class D3MatrixComponent implements OnInit, OnChanges {
         const blob = new Blob([JSON.stringify(response)], { type: 'application/json' });
         saveAs(blob, 'bible.json');
         this.display = false;
-        console.log(this.display)
+        //console.log(this.display)
     }
 
 
-    ngOnInit() { }
+    ngOnInit() {
+    }
 
     ngOnChanges(changes: SimpleChanges) {
         const bookChapterVerse: SimpleChange = changes.BCV;
@@ -487,35 +516,81 @@ export class D3MatrixComponent implements OnInit, OnChanges {
         this.verticalORgrid = "Display Bilinear";
         document.getElementById('verticalInterlinear').style.display = "none";
         document.getElementById('grid').style.display = "";
-        document.getElementById("fixButton").style.display = "";
+        //document.getElementById("fixButton").style.display = "";
     }
-
 
     gridBind() {
         let bcv: any = this.BCV; //40001010;
         //   var data = new FormData();
         //   data.append("bcv",bcv);
         this.display = true;
+        if((!this.NextFlag) || (this.DiscardFlag)){
         document.getElementById("grid").innerHTML = "";
-        this._http.get(this.ApiUrl.getnUpdateBCV + '/' + bcv + '/' + this.Lang)
+        this._http.get(this.ApiUrl.getnUpdateBCV + '/' + bcv + '/' + this.Lang, {
+            headers: this.headers
+        })
             .subscribe(data => {
                 //console.log(data.json())
+                this.DiscardFlag = false;
                 document.getElementById("grid").innerHTML = "";
-                (<HTMLInputElement>document.getElementById("nxtbtn")).disabled = false;
-                (<HTMLInputElement>document.getElementById("prebtn")).disabled = false;
+                // (<HTMLInputElement>document.getElementById("nxtbtn")).disabled = false;
+                // (<HTMLInputElement>document.getElementById("prebtn")).disabled = false;
+                // console.log('nextflag is'.concat(String(this.NextFlag)) + 'and the next bcv is' + Number(Number(bcv) + 1))
+                // console.log(data)
+                // console.log(String(data.json()) )
                 this.generateVisual(data)
 
             }, (error: Response) => {
                 if (error.status === 404 || error.status === 500) {
+                    (<HTMLInputElement>document.getElementById("prebtn")).disabled = false;
                     this.toastr.warning("Data not available")
                     this.display = false;
                 }
                 else {
+                    (<HTMLInputElement>document.getElementById("prebtn")).disabled = false;
                     this.toastr.error("An Unexpected Error Occured.")
                     this.display = false;
                 }
 
             });
+        }
+        if(this.NextFlag  && (!this.DiscardFlag)){
+            // document.getElementById("grid").innerHTML = "";
+         
+                    //console.log(data.json())
+                    document.getElementById("grid").innerHTML = "";
+                    // (<HTMLInputElement>document.getElementById("nxtbtn")).disabled = false;
+                    // (<HTMLInputElement>document.getElementById("prebtn")).disabled = false;
+                    document.getElementById('grid').style.display = "";
+                   this.generateVisual(this.prefetchData)
+    
+             
+        }
+
+            this._http.get(this.ApiUrl.getnUpdateBCV + '/' + Number(Number(bcv) + 1) + '/' + this.Lang, {
+                headers: this.headers
+            })
+                .subscribe(dataa => {
+                    //console.log(data.json())
+                (<HTMLInputElement>document.getElementById("nxtbtn")).disabled = false;
+                (<HTMLInputElement>document.getElementById("prebtn")).disabled = false;
+                    this.prefetchData = dataa;
+    
+                }, (error: Response) => {
+                    if (error.status === 404 || error.status === 500) {
+                        (<HTMLInputElement>document.getElementById("nxtbtn")).disabled = false;
+                        (<HTMLInputElement>document.getElementById("prebtn")).disabled = false;
+                        // this.toastr.warning("Data not available")
+                        // this.display = false;
+                    }
+                    else {
+                        (<HTMLInputElement>document.getElementById("nxtbtn")).disabled = false;
+                        (<HTMLInputElement>document.getElementById("prebtn")).disabled = false;
+                        // this.toastr.error("An Unexpected Error Occured.")
+                        // this.display = false;
+                    }
+    
+                });        
 
     }
 
@@ -595,12 +670,18 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
         var greekLexiconText = '';
         var greekArray = new Array();
+        //console.log (Object.keys(data.json().lexicondata))
         for (var l = 0; l < data.json().sourcetext.length; l++) {
-            self._http.get(self.ApiUrl.getLexicon + '/' + data.json().sourcetext[l])
-                .subscribe(data => {
-                    // console.log(data.json())
-                    greekArray.push("<b>English Word</b>:- " + data.json().targetword + "<br/><br/>" + "<b>Definition</b>:- " + data.json().definition + "<br/><br/>" + "<b>greek_word</b>:- " + data.json().sourceword + "<br/><br/>" + "<b>pronunciation</b>:- " + data.json().pronunciation + "<br/><br/>" + "strongs:- " + data.json().strongs + " " + "<br/><br/>" + "<b>transliteration</b>:- " + data.json().transliteration);
-                });
+            //self._http.get(self.ApiUrl.getLexicon + '/' + data.json().sourcetext[l])
+            //.subscribe(data => {
+            //console.log(data.json().sourcetext[l])
+            //console.log (Object.keys(data.json().lexicondata).indexOf(data.json().sourcetext[l]));
+            //var objIndex:any = Object.keys(data.json().lexicondata).indexOf(data.json().sourcetext[l]);
+            //console.log(data.json().lexicondata[data.json().sourcetext[l]].targetword)
+
+            greekArray.push("<b>English Word</b>:- " + data.json().lexicondata[data.json().sourcetext[l]].targetword + "<br/><br/>" + "<b>Definition</b>:- " + data.json().lexicondata[data.json().sourcetext[l]].definition + "<br/><br/>" + "<b>greek_word</b>:- " + data.json().lexicondata[data.json().sourcetext[l]].sourceword + "<br/><br/>" + "<b>pronunciation</b>:- " + data.json().lexicondata[data.json().sourcetext[l]].pronunciation + "<br/><br/>" + "strongs:- " + data.json().lexicondata[data.json().sourcetext[l]].strongs + " " + "<br/><br/>" + "<b>transliteration</b>:- " + data.json().lexicondata[data.json().sourcetext[l]].transliteration);
+
+            //});
 
             //    console.log(greekArray)       
         }
@@ -674,7 +755,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                     //console.log(d.positionalPairOfApi)
                     if (!self.indPair.includes(d.positionalPair)) {
                         self.indPair.push(d.positionalPair);
-                        console.log(self.indPair)
+                        //console.log(self.indPair)
                     }
 
                     //document.getElementById('rect-'+d.y+0).style.fill = "#fff";
@@ -857,17 +938,17 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                 y.style.fill = "#008000";
                 let xValue = d.x;
 
-                xValue = xValue/25 - 8;
-                for(let m = xValue; m >= 0; m --){
-                   
-                    document.getElementById('rect-'+d.y+m.toString()).style.stroke = 'blue';
-                    document.getElementById('rect-'+d.y+m.toString()).style.strokeWidth = '2px';
+                xValue = xValue / 25 - 8;
+                for (let m = xValue; m >= 0; m--) {
+
+                    document.getElementById('rect-' + d.y + m.toString()).style.stroke = 'blue';
+                    document.getElementById('rect-' + d.y + m.toString()).style.strokeWidth = '2px';
                 }
                 let yValue = d.y;
-                for(let n= yValue; n >= 100; n = n-25){
+                for (let n = yValue; n >= 100; n = n - 25) {
 
-                    document.getElementById('rect-'+n+xValue.toString()).style.stroke = 'blue';
-                    document.getElementById('rect-'+n+xValue.toString()).style.strokeWidth = '2px';
+                    document.getElementById('rect-' + n + xValue.toString()).style.stroke = 'blue';
+                    document.getElementById('rect-' + n + xValue.toString()).style.strokeWidth = '2px';
                 }
 
                 div.style("left", d3.event.pageX + 10 + "px");
@@ -916,17 +997,17 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
                 let xValue = d.x;
 
-                xValue = xValue/25 - 8;
-                for(let m = xValue; m >= 0; m --){
-                   
-                    document.getElementById('rect-'+d.y+m.toString()).style.stroke = '';
-                    document.getElementById('rect-'+d.y+m.toString()).style.strokeWidth = '';
+                xValue = xValue / 25 - 8;
+                for (let m = xValue; m >= 0; m--) {
+
+                    document.getElementById('rect-' + d.y + m.toString()).style.stroke = '';
+                    document.getElementById('rect-' + d.y + m.toString()).style.strokeWidth = '';
                 }
                 let yValue = d.y;
-                for(let n= yValue; n >= 100; n = n-25){
+                for (let n = yValue; n >= 100; n = n - 25) {
 
-                    document.getElementById('rect-'+n+xValue.toString()).style.stroke = '';
-                    document.getElementById('rect-'+n+xValue.toString()).style.strokeWidth = '';
+                    document.getElementById('rect-' + n + xValue.toString()).style.stroke = '';
+                    document.getElementById('rect-' + n + xValue.toString()).style.strokeWidth = '';
                 }
 
             })

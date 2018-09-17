@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response,Headers } from '@angular/http';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 import { AlignerService } from '../aligner.service';
@@ -26,29 +26,43 @@ export class BcvSearchComponent implements OnInit {
   bookNumber: string;
   verseNumber: string;
   BCV: any;
+  NextFlag: boolean = false;
   langFirstIndex: any;
   chapterFirstIndex: any;
   verseFirstIndex: any;
   bookFirstIndex: any;
   LangArray: any; //= new Array();
   langParam: any;
+  headers = new Headers();
 
-  constructor(private activatedRoute: ActivatedRoute, private toastr: ToastrService, private _http: Http, private ApiUrl: GlobalUrl) {
+  constructor(public router: Router,private activatedRoute: ActivatedRoute, private toastr: ToastrService, private _http: Http, private ApiUrl: GlobalUrl) {
 
     this.toastr.toastrConfig.positionClass = "toast-top-center"
     this.toastr.toastrConfig.closeButton = true;
     this.toastr.toastrConfig.progressBar = true;
+    if(!localStorage.getItem('access-token')){
+      this.toastr.error('You are not logged in');
+      this.router.navigate(['../app-login']);
+    }
   }
 
+  createAuthorizationHeader(headers: Headers) {
+    headers.append('Authorization', 'bearer ' +
+      localStorage.getItem("access-token")); 
+  }
 
   ngOnInit() {
     this.chapterFirstIndex = 0;
     this.verseFirstIndex = 0;
     this.bookFirstIndex = 0;
     this.langFirstIndex = 0;
+ 
 
+  this.createAuthorizationHeader(this.headers);
 
-    this._http.get(this.ApiUrl.getLang)
+    this._http.get(this.ApiUrl.getLang,{
+      headers: this.headers
+    })
       .subscribe(data => {
         this.LangArray = data.json();
       }, (error: Response) => {
@@ -84,7 +98,7 @@ export class BcvSearchComponent implements OnInit {
 
           let langstr;
 
-          if (localStorage.getItem('language') != "") {
+          if (localStorage.getItem('language') != "" && localStorage.getItem('language') != 'null') {
             langstr = localStorage.getItem('language');
             this.langFirstIndex = localStorage.getItem('language');            
           }
@@ -111,6 +125,7 @@ export class BcvSearchComponent implements OnInit {
           this.verseChange(versestr);
 
           localStorage.setItem("lastAlignments", "");
+          this.NextFlag = false;
         }
       }
     });
@@ -127,7 +142,9 @@ export class BcvSearchComponent implements OnInit {
 
     localStorage.setItem('language', this.langParam);
 
-    this._http.get(this.ApiUrl.getBooks + '/' + l)
+    this._http.get(this.ApiUrl.getBooks + '/' + l,{
+      headers: this.headers
+    })
       .subscribe(data => {
         this.Books = data.json().books;
         //console.log (data.json())
@@ -154,7 +171,9 @@ export class BcvSearchComponent implements OnInit {
     //console.log(this.bookName)
 
     if (this.bookFirstIndex != 0) {
-      this._http.get(this.ApiUrl.getChapters + x)
+      this._http.get(this.ApiUrl.getChapters + x,{
+        headers: this.headers
+      })
         .subscribe(data => {
           this.Chapters = data.json().chapter_numbers;
           //console.log (data.json())
@@ -182,7 +201,9 @@ export class BcvSearchComponent implements OnInit {
     // data.append("bookname", y);
 
     if (x != stringify(0)) {
-      this._http.get(this.ApiUrl.getVerses + y + '/' + x)
+      this._http.get(this.ApiUrl.getVerses + y + '/' + x,{
+        headers: this.headers
+      })
         .subscribe(data => {
           this.Verses = data.json().verse_numbers;
           // console.log (data.json())
@@ -237,6 +258,7 @@ export class BcvSearchComponent implements OnInit {
       document.getElementById("discardButton").style.display = 'none';
 
     localStorage.setItem("lastAlignments", "");
+    this.NextFlag = false;
   }
 
   prevOnclick() {
@@ -284,6 +306,7 @@ export class BcvSearchComponent implements OnInit {
       }
     }
     localStorage.setItem("lastAlignments", "");
+    this.NextFlag = false;
   }
 
   nextOnClick() {
@@ -328,6 +351,7 @@ export class BcvSearchComponent implements OnInit {
       //console.log (this.BCV + "  " + "next")
 
       localStorage.setItem("lastAlignments", "");
+      this.NextFlag = true;
     }
   }
 

@@ -13,11 +13,11 @@ export class GlobalUrl {
     // //Returns a list of chapter number of the book queried.
     // getChapters: string = 'http://127.0.0.1:8000/v2/alignments/chapternumbers/';
 
-    // //Returns a list containing the verse numbers for the particular chapter number of a book.
+    // //Returns a list containing the verse numbers for the p articular chapter number of a book.
     // getVerses: string = 'http://127.0.0.1:8000/v2/alignments/versenumbers/';
 
     // // Returns the lexicon data for the corresponding greek strong number
-    // getLexicon: string = 'http://127.0.0.1:8000/v2/lexicons';
+    // getLexicon: string = 'http://127.0.0.1:8000/v2/lexicons';   
 
     // // Saves the new approved alignments in the feedback lookup table for further use
     // approveAlignments: string = 'http://127.0.0.1:8000/v2/alignments/feedbacks';
@@ -29,10 +29,10 @@ export class GlobalUrl {
     // grkhin: string = 'http://127.0.0.1:8000/v2/alignments/export';
 
     // // Fetch CSV file
-    // csvFile: string = 'http://localhost:4200/assets/reference.csv';
+    //  csvFile: string = 'http://localhost:4200/assets/reference.csv';
 
     // // Fetch sampleData file
-    // sampleFile: string = 'http://localhost:4200/assets/SampleDemo.json';
+    //  sampleFile: string = 'http://localhost:4200/assets/SampleDemo.json';
 
     // //Fetch all the available language list
     // getLang: string = 'http://127.0.0.1:8000/v2/alignments/languages';
@@ -70,15 +70,30 @@ export class GlobalUrl {
     // Fetch CSV file
     //csvFile : string = 'https://align.staging.autographamt.com/assets/reference.csv';
 
-    // Fetch CSV file
+    //Fetch CSV file
     csvFile: string = 'https://autographa.herokuapp.com/assets/reference.csv';
 
     // Fetch sampleData file
-    sampleFile: string = 'https://autographa.herokuapp.com/assets/SampleDemo.json';
+    //sampleFile: string = 'https://autographa.herokuapp.com/assets/SampleDemo.json';
 
     //Fetch all the available language list
     getLang: string = 'https://stagingapi.autographamt.com/v2/alignments/languages';
 
     //Fetch BCV number
-    getBcvSearch: string = 'https://stagingapi.autographamt.com/v2/searchreferences'
+    getBcvSearch: string = 'https://stagingapi.autographamt.com/v2/searchreferences';
+
+    //ResetPassword API
+    resetPassword: string = 'https://stagingapi.autographamt.com/v1/resetpassword';
+
+    //Registration API
+    registration: string = 'https://stagingapi.autographamt.com/v1/registrations';
+
+    //Auth API
+    auth: string = 'https://stagingapi.autographamt.com/v1/auth';
+
+    //forgotPassword API
+    forgotPassword: string = 'https://stagingapi.autographamt.com/v1/forgotpassword';
+
+    //fetch translationwords API
+    translationwords: string = "https://stagingapi.autographamt.com/v2/alignments/translationwords/grkhin/";
 }
