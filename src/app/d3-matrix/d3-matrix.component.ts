@@ -514,6 +514,8 @@ export class D3MatrixComponent implements OnInit, OnChanges {
         this.gridBind();
         this.Interlinear = "Interlinear"
         this.verticalORgrid = "Display Bilinear";
+        this.linear = false;
+        this.interLinearflag = true;
         document.getElementById('verticalInterlinear').style.display = "none";
         document.getElementById('grid').style.display = "";
         //document.getElementById("fixButton").style.display = "";
