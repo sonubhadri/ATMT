@@ -17,6 +17,7 @@ export class ForgotpasswordComponent implements OnInit {
   temppassword: string
   hide = true;
   display = false;
+  home = '';
 
   constructor(private toastr: ToastrService, private _http: Http, private route: ActivatedRoute,
     private router: Router, private API: GlobalUrl) {

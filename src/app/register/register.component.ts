@@ -27,6 +27,7 @@ export class RegisterComponent implements OnInit {
   email = new FormControl('', [Validators.required, Validators.email]);
   passwords = new FormControl('', [Validators.required, Validators.minLength(5)]);
   confirmPass = new FormControl('', [Validators.required]);
+  home = '';
   // login() : void {
   //   if(this.username == 'admin' && this.password == 'admin'){
   //    this.router.navigate(["user"]);

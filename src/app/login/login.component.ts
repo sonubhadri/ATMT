@@ -25,6 +25,7 @@ export class LoginComponent implements OnInit {
   password : string
   hide = true;
   display= false;
+  home = '';
   //route:string = "../"
 
   // login() : void {
