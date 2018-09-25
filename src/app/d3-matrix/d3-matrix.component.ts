@@ -1026,7 +1026,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
             .data(gridData)
             .attr("width", function (d, i) {
                 let len = d.length;
-                len = (len * 35) + 140;
+                len = (len * 35) +  215;  //140;
                 return len;
             })
             .attr("height", function (d, i) {
@@ -1040,7 +1040,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                 height = (height * 35) + 120;
 
                 let width = d.length;
-                width = (width * 35) + 140;
+                width = (width * 35) + 215;  //140;
                 return "0 0 " + width + " " + height;
             })
         //"0 0 400 400")

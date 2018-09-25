@@ -38,8 +38,22 @@ export class GlobalUrl {
     // getLang: string = 'http://127.0.0.1:8000/v2/alignments/languages';
 
     // //Fetch BCV number
-    // getBcvSearch: string = 'http://127.0.0.1:8000/v2/searchreferences'
+    // getBcvSearch: string = 'http://127.0.0.1:8000/v2/searchreferences';
+    
+    // //ResetPassword API
+    // resetPassword: string = 'http://127.0.0.1:8000/v1/resetpassword';
 
+    // //Registration API
+    // registration: string = 'http://127.0.0.1:8000/v1/registrations';
+
+    // //Auth API
+    // auth: string = 'http://127.0.0.1:8000/v1/auth';
+
+    // //forgotPassword API
+    // forgotPassword: string = 'http://127.0.0.1:8000/v1/forgotpassword';
+
+    // //fetch translationwords API
+    // translationwords: string = "http://127.0.0.1:8000/v2/alignments/translationwords/grkhin/";
 
     // For Production Environment
     //In case of get request this api Returns list of positional pairs, list of Hindi words, list of strong numbers for the bcv queried. 
