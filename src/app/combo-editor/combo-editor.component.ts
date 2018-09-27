@@ -21,6 +21,7 @@ export class ComboEditorComponent implements OnInit {
   display: boolean;
   constructor(private activatedRoute: ActivatedRoute, private _http: Http, private ApiUrl: GlobalUrl) { }
   headers = new Headers();
+  guestUser = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJva3VAeW9wbWFpbC5jb20iLCJleHAiOjE1MzgxNjIwMTgsInJvbGUiOiJtZW1iZXIifQ.diVbmG_9TqRvgNIWKsnfrbgWUoqJxtWCc_HVVoFjMac";
 
   ngOnInit() {
     this.createAuthorizationHeader(this.headers);
@@ -73,8 +74,13 @@ export class ComboEditorComponent implements OnInit {
 
 
   createAuthorizationHeader(headers: Headers) {
-    headers.append('Authorization', 'bearer ' +
-      localStorage.getItem("access-token")); 
+      if(localStorage.getItem("access-token")){
+        headers.append('Authorization', 'bearer ' +
+          localStorage.getItem("access-token")); 
+        }
+        else{
+          headers.append('Authorization', 'bearer ' + this.guestUser);
+        }
   }
 
   ngAfterViewChecked() {

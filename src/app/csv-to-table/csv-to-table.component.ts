@@ -31,6 +31,7 @@ export class CsvToTableComponent implements OnInit {
   from: number = 1;
   to: number = 10;
   headers = new Headers();
+  guestUser = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJva3VAeW9wbWFpbC5jb20iLCJleHAiOjE1MzgxNjIwMTgsInJvbGUiOiJtZW1iZXIifQ.diVbmG_9TqRvgNIWKsnfrbgWUoqJxtWCc_HVVoFjMac";
 
   displayedColumns: string[] = ['S.No', 'English Word forms', 'Hindi Translation', 'Definition/Facts/Description', 'Strong Number', 'References', 'AlignedStrongs', 'HindiAlignedWords'];
   dataSource = new MatTableDataSource<PeriodicElement>(this.ELEMENT_DATA);
@@ -42,18 +43,23 @@ export class CsvToTableComponent implements OnInit {
 
   constructor(public router: Router, private toastr: ToastrService, private _http: Http, private ApiUrl: GlobalUrl, private changeDetectorRefs: ChangeDetectorRef) {
 
-    if (!localStorage.getItem('access-token')) {
-      this.toastr.error('You are not logged in');
-      this.router.navigate(['../app-login']);
-    }
+    // if (!localStorage.getItem('access-token')) {
+    //   this.toastr.error('You are not logged in');
+    //   this.router.navigate(['../app-login']);
+    // }
 
     this.createAuthorizationHeader(this.headers);
   }
 
 
   createAuthorizationHeader(headers: Headers) {
-    headers.append('Authorization', 'bearer ' +
-      localStorage.getItem("access-token"));
+      if(localStorage.getItem("access-token")){
+        headers.append('Authorization', 'bearer ' +
+          localStorage.getItem("access-token")); 
+        }
+        else{
+          headers.append('Authorization', 'bearer ' + this.guestUser);
+        }
   }
 
   display = false;

@@ -55,6 +55,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
     linear = false;
     interLinearflag = true;
     headers = new Headers();
+    guestUser = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJva3VAeW9wbWFpbC5jb20iLCJleHAiOjE1MzgxNjIwMTgsInJvbGUiOiJtZW1iZXIifQ.diVbmG_9TqRvgNIWKsnfrbgWUoqJxtWCc_HVVoFjMac";
     prefetchData:any;
 
     constructor(public router: Router, private ApiUrl: GlobalUrl, private toastr: ToastrService, element: ElementRef, private ngZone: NgZone, d3Service: D3Service, private service: AlignerService, private _http: Http) {
@@ -64,18 +65,23 @@ export class D3MatrixComponent implements OnInit, OnChanges {
         this.toastr.toastrConfig.progressBar = true;
         this.toastr.toastrConfig.timeOut = 1200;
 
-        if (!localStorage.getItem('access-token')) {
-            this.toastr.error('You are not logged in');
-            this.router.navigate(['../app-login']);
-        }
+        // if (!localStorage.getItem('access-token')) {
+        //     this.toastr.error('You are not logged in');
+        //     this.router.navigate(['../app-login']);
+        // }
 
         this.createAuthorizationHeader(this.headers);
     }
 
 
     createAuthorizationHeader(headers: Headers) {
-        headers.append('Authorization', 'bearer ' +
-            localStorage.getItem("access-token"));
+        if(localStorage.getItem("access-token")){
+            headers.append('Authorization', 'bearer ' +
+              localStorage.getItem("access-token")); 
+            }
+            else{
+              headers.append('Authorization', 'bearer ' + this.guestUser);
+            }
     }
 
     gridData(d: any, rawPoss: any) {
@@ -749,6 +755,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                 }
             })
             .on('click', function (d: any, i) {
+                if(localStorage.getItem('access-token')){
                 if (!d.filled) {
                     d3.select(this)
                         .style("fill", "#023659")
@@ -929,6 +936,10 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                 }
                 //console.log(d.positionalPairOfApi)
                 //console.log(self.indPair)
+            }
+            else{
+                self.toastr.error('You are not a registered User. Sign In to make changes.')
+            }
             })
 
             .on("mouseover", function (d: any, i) {

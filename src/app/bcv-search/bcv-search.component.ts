@@ -34,21 +34,27 @@ export class BcvSearchComponent implements OnInit {
   LangArray: any; //= new Array();
   langParam: any;
   headers = new Headers();
+  guestUser = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJva3VAeW9wbWFpbC5jb20iLCJleHAiOjE1MzgxNjIwMTgsInJvbGUiOiJtZW1iZXIifQ.diVbmG_9TqRvgNIWKsnfrbgWUoqJxtWCc_HVVoFjMac";
 
   constructor(public router: Router,private activatedRoute: ActivatedRoute, private toastr: ToastrService, private _http: Http, private ApiUrl: GlobalUrl) {
 
     this.toastr.toastrConfig.positionClass = "toast-top-center"
     this.toastr.toastrConfig.closeButton = true;
     this.toastr.toastrConfig.progressBar = true;
-    if(!localStorage.getItem('access-token')){
-      this.toastr.error('You are not logged in');
-      this.router.navigate(['../app-login']);
-    }
+    // if(!localStorage.getItem('access-token')){
+    //   this.toastr.error('You are not logged in');
+    //   this.router.navigate(['../app-login']);
+    // }
   }
 
   createAuthorizationHeader(headers: Headers) {
+    if(localStorage.getItem("access-token")){
     headers.append('Authorization', 'bearer ' +
       localStorage.getItem("access-token")); 
+    }
+    else{
+      headers.append('Authorization', 'bearer ' + this.guestUser);
+    }
   }
 
   ngOnInit() {

@@ -124,7 +124,7 @@ import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.compone
     MatTreeModule,
     ToastrModule.forRoot(),
     RouterModule.forRoot([
-      { path: '', component: LoginComponent },
+      { path: '', component: BcvSearchComponent },
       {
         path: 'csv-to-table',
         component: CsvToTableComponent
