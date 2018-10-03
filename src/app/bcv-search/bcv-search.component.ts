@@ -33,8 +33,8 @@ export class BcvSearchComponent implements OnInit {
   bookFirstIndex: any;
   LangArray: any; //= new Array();
   langParam: any;
-  headers = new Headers();
-  guestUser = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJva3VAeW9wbWFpbC5jb20iLCJleHAiOjE1MzgxNjIwMTgsInJvbGUiOiJtZW1iZXIifQ.diVbmG_9TqRvgNIWKsnfrbgWUoqJxtWCc_HVVoFjMac";
+  // headers = new Headers();
+  // guestUser = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJva3VAeW9wbWFpbC5jb20iLCJleHAiOjE1MzgxNjIwMTgsInJvbGUiOiJtZW1iZXIifQ.diVbmG_9TqRvgNIWKsnfrbgWUoqJxtWCc_HVVoFjMac";
 
   constructor(public router: Router,private activatedRoute: ActivatedRoute, private toastr: ToastrService, private _http: Http, private ApiUrl: GlobalUrl) {
 
@@ -47,15 +47,15 @@ export class BcvSearchComponent implements OnInit {
     // }
   }
 
-  createAuthorizationHeader(headers: Headers) {
-    if(localStorage.getItem("access-token")){
-    headers.append('Authorization', 'bearer ' +
-      localStorage.getItem("access-token")); 
-    }
-    else{
-      headers.append('Authorization', 'bearer ' + this.guestUser);
-    }
-  }
+  // createAuthorizationHeader(headers: Headers) {
+  //   if(localStorage.getItem("access-token")){
+  //   headers.append('Authorization', 'bearer ' +
+  //     localStorage.getItem("access-token")); 
+  //   }
+  //   else{
+  //     headers.append('Authorization', 'bearer ' + this.guestUser);
+  //   }
+  // }
 
   ngOnInit() {
     this.chapterFirstIndex = 0;
@@ -64,11 +64,9 @@ export class BcvSearchComponent implements OnInit {
     this.langFirstIndex = 0;
  
 
-  this.createAuthorizationHeader(this.headers);
+  // this.createAuthorizationHeader(this.headers);
 
-    this._http.get(this.ApiUrl.getLang,{
-      headers: this.headers
-    })
+    this._http.get(this.ApiUrl.getLang)
       .subscribe(data => {
         this.LangArray = data.json();
       }, (error: Response) => {
@@ -148,9 +146,7 @@ export class BcvSearchComponent implements OnInit {
 
     localStorage.setItem('language', this.langParam);
 
-    this._http.get(this.ApiUrl.getBooks + '/' + l,{
-      headers: this.headers
-    })
+    this._http.get(this.ApiUrl.getBooks + '/' + l)
       .subscribe(data => {
         this.Books = data.json().books;
         //console.log (data.json())
@@ -177,9 +173,7 @@ export class BcvSearchComponent implements OnInit {
     //console.log(this.bookName)
 
     if (this.bookFirstIndex != 0) {
-      this._http.get(this.ApiUrl.getChapters + x,{
-        headers: this.headers
-      })
+      this._http.get(this.ApiUrl.getChapters + x)
         .subscribe(data => {
           this.Chapters = data.json().chapter_numbers;
           //console.log (data.json())
@@ -207,9 +201,7 @@ export class BcvSearchComponent implements OnInit {
     // data.append("bookname", y);
 
     if (x != stringify(0)) {
-      this._http.get(this.ApiUrl.getVerses + y + '/' + x,{
-        headers: this.headers
-      })
+      this._http.get(this.ApiUrl.getVerses + y + '/' + x)
         .subscribe(data => {
           this.Verses = data.json().verse_numbers;
           // console.log (data.json())

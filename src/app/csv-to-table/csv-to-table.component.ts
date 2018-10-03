@@ -30,8 +30,8 @@ export class CsvToTableComponent implements OnInit {
   transData: any;
   from: number = 1;
   to: number = 10;
-  headers = new Headers();
-  guestUser = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJva3VAeW9wbWFpbC5jb20iLCJleHAiOjE1MzgxNjIwMTgsInJvbGUiOiJtZW1iZXIifQ.diVbmG_9TqRvgNIWKsnfrbgWUoqJxtWCc_HVVoFjMac";
+  // headers = new Headers();
+  // guestUser = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJva3VAeW9wbWFpbC5jb20iLCJleHAiOjE1MzgxNjIwMTgsInJvbGUiOiJtZW1iZXIifQ.diVbmG_9TqRvgNIWKsnfrbgWUoqJxtWCc_HVVoFjMac";
 
   displayedColumns: string[] = ['S.No', 'English Word forms', 'Hindi Translation', 'Definition/Facts/Description', 'Strong Number', 'References', 'AlignedStrongs', 'HindiAlignedWords'];
   dataSource = new MatTableDataSource<PeriodicElement>(this.ELEMENT_DATA);
@@ -48,19 +48,19 @@ export class CsvToTableComponent implements OnInit {
     //   this.router.navigate(['../app-login']);
     // }
 
-    this.createAuthorizationHeader(this.headers);
+    // this.createAuthorizationHeader(this.headers);
   }
 
 
-  createAuthorizationHeader(headers: Headers) {
-      if(localStorage.getItem("access-token")){
-        headers.append('Authorization', 'bearer ' +
-          localStorage.getItem("access-token")); 
-        }
-        else{
-          headers.append('Authorization', 'bearer ' + this.guestUser);
-        }
-  }
+  // createAuthorizationHeader(headers: Headers) {
+  //     if(localStorage.getItem("access-token")){
+  //       headers.append('Authorization', 'bearer ' +
+  //         localStorage.getItem("access-token")); 
+  //       }
+  //       else{
+  //         headers.append('Authorization', 'bearer ' + this.guestUser);
+  //       }
+  // }
 
   display = false;
   showAll(id) {
@@ -123,7 +123,7 @@ export class CsvToTableComponent implements OnInit {
             }
 
           }
-          console.log(transKey)
+          //console.log(transKey)
           this.ELEMENT_DATA.push({ position: value[0], English: value[1], Hindi: value[2], Definition: value[3], StrongNumber: value[4], References: value[5], AlignedStrongs: foo, HindiAlignedWords: loo })
           this.dataSource = new MatTableDataSource<PeriodicElement>(this.ELEMENT_DATA);
           ++c;
@@ -161,9 +161,7 @@ export class CsvToTableComponent implements OnInit {
         document.getElementById('pageInd').innerHTML = this.from + '-' + this.to;
       }
       // this._http.get('http://127.0.0.1:8000/v2/alignments/translationwords/grkhin/' + this.from + '-' + this.to,{
-      this._http.get(this.ApiUrl.translationwords + this.from + '-' + this.to, {
-        headers: this.headers
-      })
+      this._http.get(this.ApiUrl.translationwords + this.from + '-' + this.to)
         .subscribe(data => {
           this.transData = JSON.parse(data.json());
           ////console.log(Object.values(Object.keys(this.transData)[3]))

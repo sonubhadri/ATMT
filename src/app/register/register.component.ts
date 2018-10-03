@@ -48,7 +48,7 @@ export class RegisterComponent implements OnInit {
         this.display = true;
         this._http.post(this.API.registration, data)
           .subscribe(Response => {
-            console.log(Response)
+           // console.log(Response)
             if (Response.json().success == true) {
               this.display = false;
               this.toastr.success(Response.json().message)

@@ -20,11 +20,11 @@ export class ComboEditorComponent implements OnInit {
   englishSourceArray = new Array();
   display: boolean;
   constructor(private activatedRoute: ActivatedRoute, private _http: Http, private ApiUrl: GlobalUrl) { }
-  headers = new Headers();
-  guestUser = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJva3VAeW9wbWFpbC5jb20iLCJleHAiOjE1MzgxNjIwMTgsInJvbGUiOiJtZW1iZXIifQ.diVbmG_9TqRvgNIWKsnfrbgWUoqJxtWCc_HVVoFjMac";
+  // headers = new Headers();
+  // guestUser = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJva3VAeW9wbWFpbC5jb20iLCJleHAiOjE1MzgxNjIwMTgsInJvbGUiOiJtZW1iZXIifQ.diVbmG_9TqRvgNIWKsnfrbgWUoqJxtWCc_HVVoFjMac";
 
   ngOnInit() {
-    this.createAuthorizationHeader(this.headers);
+    // this.createAuthorizationHeader(this.headers);
     this.activatedRoute.params.subscribe((params: Params) => {
 
       if (params['BCV'] && params['Strong'] && params['Hindi']) {
@@ -36,9 +36,7 @@ export class ComboEditorComponent implements OnInit {
         //console.log(x)
 
         this.display = true;
-        this._http.get(this.ApiUrl.getnUpdateBCV + '/' + x + '/' + l,{
-          headers: this.headers
-        })
+        this._http.get(this.ApiUrl.getnUpdateBCV + '/' + x + '/' + l)
           .subscribe(data => {
 
             this.linearCard = data.json();
@@ -73,15 +71,15 @@ export class ComboEditorComponent implements OnInit {
   }
 
 
-  createAuthorizationHeader(headers: Headers) {
-      if(localStorage.getItem("access-token")){
-        headers.append('Authorization', 'bearer ' +
-          localStorage.getItem("access-token")); 
-        }
-        else{
-          headers.append('Authorization', 'bearer ' + this.guestUser);
-        }
-  }
+  // createAuthorizationHeader(headers: Headers) {
+  //     if(localStorage.getItem("access-token")){
+  //       headers.append('Authorization', 'bearer ' +
+  //         localStorage.getItem("access-token")); 
+  //       }
+  //       else{
+  //         headers.append('Authorization', 'bearer ' + this.guestUser);
+  //       }
+  // }
 
   ngAfterViewChecked() {
     //console.log('G' + this.strong + '0')

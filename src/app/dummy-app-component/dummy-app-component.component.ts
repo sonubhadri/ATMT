@@ -14,10 +14,10 @@ export class DummyAppComponentComponent implements OnInit {
 
   navBarFlag: boolean = true;
   logoutFlag: boolean = false;
-  guestUser = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJva3VAeW9wbWFpbC5jb20iLCJleHAiOjE1MzgxNjIwMTgsInJvbGUiOiJtZW1iZXIifQ.diVbmG_9TqRvgNIWKsnfrbgWUoqJxtWCc_HVVoFjMac";
+  // guestUser = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJva3VAeW9wbWFpbC5jb20iLCJleHAiOjE1MzgxNjIwMTgsInJvbGUiOiJtZW1iZXIifQ.diVbmG_9TqRvgNIWKsnfrbgWUoqJxtWCc_HVVoFjMac";
 
   constructor(private toastr: ToastrService, private ApiUrl: GlobalUrl, private _http: Http, public router: Router) {
-    this.createAuthorizationHeader(this.headers);
+    // this.createAuthorizationHeader(this.headers);
     this.toastr.toastrConfig.positionClass = "toast-top-center"
     this.toastr.toastrConfig.closeButton = true;
     this.toastr.toastrConfig.progressBar = true;
@@ -30,15 +30,15 @@ export class DummyAppComponentComponent implements OnInit {
 
   ngOnInit() { }
 
-  createAuthorizationHeader(headers: Headers) {
-    if(localStorage.getItem("access-token")){
-      headers.append('Authorization', 'bearer ' +
-        localStorage.getItem("access-token")); 
-      }
-      else{
-        headers.append('Authorization', 'bearer ' + this.guestUser);
-      }
-  }
+  // createAuthorizationHeader(headers: Headers) {
+  //   if(localStorage.getItem("access-token")){
+  //     headers.append('Authorization', 'bearer ' +
+  //       localStorage.getItem("access-token")); 
+  //     }
+  //     else{
+  //       headers.append('Authorization', 'bearer ' + this.guestUser);
+  //     }
+  // }
 
   title = 'app';
 
@@ -51,9 +51,7 @@ export class DummyAppComponentComponent implements OnInit {
     if (this.textValue) {
       var formData = new FormData();
       formData.append("reference", this.textValue);
-      this._http.post(this.ApiUrl.getBcvSearch, formData, {
-        headers: this.headers
-      })
+      this._http.post(this.ApiUrl.getBcvSearch, formData)
         .subscribe(data => {
           let response: any = data;
           //this.display = false;

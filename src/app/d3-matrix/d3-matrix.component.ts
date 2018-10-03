@@ -26,6 +26,7 @@ import { getHostElement } from '@angular/core/src/render3';
 import { stringify } from '@angular/compiler/src/util';
 import { saveAs } from 'file-saver/FileSaver';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import { toDate } from '@angular/common/src/i18n/format_date';
 
 @Component({
     selector: 'app-d3-matrix',
@@ -55,7 +56,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
     linear = false;
     interLinearflag = true;
     headers = new Headers();
-    guestUser = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJva3VAeW9wbWFpbC5jb20iLCJleHAiOjE1MzgxNjIwMTgsInJvbGUiOiJtZW1iZXIifQ.diVbmG_9TqRvgNIWKsnfrbgWUoqJxtWCc_HVVoFjMac";
+    // guestUser = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJva3VAeW9wbWFpbC5jb20iLCJleHAiOjE1MzgxNjIwMTgsInJvbGUiOiJtZW1iZXIifQ.diVbmG_9TqRvgNIWKsnfrbgWUoqJxtWCc_HVVoFjMac";
     prefetchData:any;
 
     constructor(public router: Router, private ApiUrl: GlobalUrl, private toastr: ToastrService, element: ElementRef, private ngZone: NgZone, d3Service: D3Service, private service: AlignerService, private _http: Http) {
@@ -78,10 +79,19 @@ export class D3MatrixComponent implements OnInit, OnChanges {
         if(localStorage.getItem("access-token")){
             headers.append('Authorization', 'bearer ' +
               localStorage.getItem("access-token")); 
+
+            this.decodeToken(String(JSON.parse(JSON.stringify(this.headers)).Authorization));
             }
-            else{
-              headers.append('Authorization', 'bearer ' + this.guestUser);
-            }
+    }
+
+   decodeToken(token){
+        var playload = JSON.parse(atob(token.split('.')[1]));
+       let dd = Number(playload.exp )
+        var timeDiff = Math.abs(new Date(dd * 1000).getTime() - new Date().getTime());
+        if(Math.ceil(timeDiff / (1000 * 3600 * 24)) > 1){
+            localStorage.setItem("access-token", '');
+            this.router.navigate(['../app-login']);
+        }        
     }
 
     gridData(d: any, rawPoss: any) {
@@ -180,6 +190,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
     saveOnClick() {
 
+        this.decodeToken(String(JSON.parse(JSON.stringify(this.headers)).Authorization));
         document.getElementById("grid").style.display = "none";
         var x: any = this.BCV;
         var y: any = this.positionalPairOfApi;
@@ -246,6 +257,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
     }
 
     approveOnClick() {
+        this.decodeToken(String(JSON.parse(JSON.stringify(this.headers)).Authorization));
         document.getElementById("grid").innerHTML = "";
         var x: any = this.BCV;
         var y: any = this.indPair;
@@ -283,6 +295,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
     }
 
     fixOnClick() {
+        this.decodeToken(String(JSON.parse(JSON.stringify(this.headers)).Authorization));
         document.getElementById("grid").innerHTML = "";
         var x: any = this.BCV;
         var l: any = this.Lang;
@@ -322,6 +335,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
     }
 
     discardOnClick() {
+        this.decodeToken(String(JSON.parse(JSON.stringify(this.headers)).Authorization));
         this.DiscardFlag = true;
         document.getElementById("grid").innerHTML = "";
         if (localStorage.getItem("lastAlignments") !== "") {
@@ -495,9 +509,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
         this.display = true;
         //console.log(this.display)
-        this._http.get(this.ApiUrl.grkhin + "/" + this.Lang + "/" + this.BOOKNAME, {
-            headers: this.headers
-        })
+        this._http.get(this.ApiUrl.grkhin + "/" + this.Lang + "/" + this.BOOKNAME)
             .toPromise()
             .then(response => this.saveToFileSystem(response.json()));
 
@@ -534,9 +546,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
         this.display = true;
         if((!this.NextFlag) || (this.DiscardFlag)){
         document.getElementById("grid").innerHTML = "";
-        this._http.get(this.ApiUrl.getnUpdateBCV + '/' + bcv + '/' + this.Lang, {
-            headers: this.headers
-        })
+        this._http.get(this.ApiUrl.getnUpdateBCV + '/' + bcv + '/' + this.Lang)
             .subscribe(data => {
                 //console.log(data.json())
                 this.DiscardFlag = false;
@@ -575,9 +585,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
              
         }
 
-            this._http.get(this.ApiUrl.getnUpdateBCV + '/' + Number(Number(bcv) + 1) + '/' + this.Lang, {
-                headers: this.headers
-            })
+            this._http.get(this.ApiUrl.getnUpdateBCV + '/' + Number(Number(bcv) + 1) + '/' + this.Lang)
                 .subscribe(dataa => {
                     //console.log(data.json())
                 (<HTMLInputElement>document.getElementById("nxtbtn")).disabled = false;
