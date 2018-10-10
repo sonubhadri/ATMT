@@ -11,7 +11,10 @@
         </li>
       </ul>
       <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" [(ngModel)]="textValue" name="text" type="search" placeholder="Search  (MAT 1 : 1)" aria-label="Search">
+        <input id="q" class="form-control mr-sm-2" (keyup)="do_parse()" [(ngModel)]="textValue" name="text" type="search" placeholder="Search  (MAT 1 : 1)" aria-label="Search">
+        <mat-chip-list>
+          <mat-chip *ngFor="let osis of osisMat">{{osis.osis}}</mat-chip>
+        </mat-chip-list>&nbsp;
         <button (click)="searchBCV()" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
       </form>
     

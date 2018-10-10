@@ -57,7 +57,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
     interLinearflag = true;
     headers = new Headers();
     // guestUser = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJva3VAeW9wbWFpbC5jb20iLCJleHAiOjE1MzgxNjIwMTgsInJvbGUiOiJtZW1iZXIifQ.diVbmG_9TqRvgNIWKsnfrbgWUoqJxtWCc_HVVoFjMac";
-    prefetchData:any;
+    prefetchData:any="";
 
     constructor(public router: Router, private ApiUrl: GlobalUrl, private toastr: ToastrService, element: ElementRef, private ngZone: NgZone, d3Service: D3Service, private service: AlignerService, private _http: Http) {
         this.d3 = d3Service.getD3();
@@ -544,7 +544,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
         //   var data = new FormData();
         //   data.append("bcv",bcv);
         this.display = true;
-        if((!this.NextFlag) || (this.DiscardFlag)){
+        if( (this.DiscardFlag) || this.prefetchData == ""){
         document.getElementById("grid").innerHTML = "";
         this._http.get(this.ApiUrl.getnUpdateBCV + '/' + bcv + '/' + this.Lang)
             .subscribe(data => {
@@ -572,7 +572,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
             });
         }
-        if(this.NextFlag  && (!this.DiscardFlag)){
+        if(this.NextFlag  && (!this.DiscardFlag) && this.prefetchData != ""){
             // document.getElementById("grid").innerHTML = "";
          
                     //console.log(data.json())
@@ -594,12 +594,14 @@ export class D3MatrixComponent implements OnInit, OnChanges {
     
                 }, (error: Response) => {
                     if (error.status === 404 || error.status === 500) {
+                        this.prefetchData = "";
                         (<HTMLInputElement>document.getElementById("nxtbtn")).disabled = false;
                         (<HTMLInputElement>document.getElementById("prebtn")).disabled = false;
                         // this.toastr.warning("Data not available")
                         // this.display = false;
                     }
                     else {
+                        this.prefetchData = "";
                         (<HTMLInputElement>document.getElementById("nxtbtn")).disabled = false;
                         (<HTMLInputElement>document.getElementById("prebtn")).disabled = false;
                         // this.toastr.error("An Unexpected Error Occured.")

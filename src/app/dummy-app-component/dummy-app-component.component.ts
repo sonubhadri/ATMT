@@ -14,6 +14,9 @@ export class DummyAppComponentComponent implements OnInit {
 
   navBarFlag: boolean = true;
   logoutFlag: boolean = false;
+  bcv_parser = require("bible-passage-reference-parser/js/en_bcv_parser").bcv_parser;
+  bcvParser = new this.bcv_parser;
+  osisMat:any;
   // guestUser = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJva3VAeW9wbWFpbC5jb20iLCJleHAiOjE1MzgxNjIwMTgsInJvbGUiOiJtZW1iZXIifQ.diVbmG_9TqRvgNIWKsnfrbgWUoqJxtWCc_HVVoFjMac";
 
   constructor(private toastr: ToastrService, private ApiUrl: GlobalUrl, private _http: Http, public router: Router) {
@@ -26,6 +29,8 @@ export class DummyAppComponentComponent implements OnInit {
       this.navBarFlag = true;
       this.logoutFlag = true;
     }
+   
+    this.bcvParser.set_options({"book_alone_strategy": "include", "book_sequence_strategy": "include"});
   }
 
   ngOnInit() { }
@@ -86,5 +91,11 @@ export class DummyAppComponentComponent implements OnInit {
   signup() {
     this.router.navigate(['../app-register'])
   }
+
+  do_parse() {
+    var s = (<HTMLInputElement> document.getElementById("q")).value;
+    var osises = this.bcvParser.parse(s).osis_and_indices();
+    this.osisMat = osises;
+}
 
 }
