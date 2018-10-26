@@ -1133,12 +1133,14 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                 div.html(function () {
 
                     if (d.greekHorizontalWord[i] != 'NULL') {
-                        // console.log(Number(d.greekHorizontalWords[i].substring(1,d.greekHorizontalWords[i].length)));
-                        let removeZero = Number(d.greekHorizontalWord[i].substring(1, d.greekHorizontalWord[i].length)).toString();
+                         console.log(d.greekHorizontalWord[i]);
+
+                        let removeZero = Number(String(d.greekHorizontalWord[i]).substring(1, String(d.greekHorizontalWord[i]).length)).toString();
                         if (removeZero.endsWith('0')) {
                             removeZero = removeZero.substring(0, removeZero.length - 1)
                         }
-                        // console.log(removeZero)
+                         console.log(removeZero)
+                         console.log(greekArray)
                         for (let count = 0; count < greekArray.length; count++) {
                             //console.log(greekArray[count])
                             if (greekArray[count].includes("strongs:- " + removeZero + " ")) {

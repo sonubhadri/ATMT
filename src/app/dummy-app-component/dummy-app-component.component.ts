@@ -49,6 +49,7 @@ export class DummyAppComponentComponent implements OnInit {
 
   home: any = "/app-bcv-search";
   csv: string = "/csv-to-table";
+  wordview: string = "/wordview"
   textValue: string;
   headers = new Headers();
 

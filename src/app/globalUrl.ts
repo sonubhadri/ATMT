@@ -39,7 +39,7 @@ export class GlobalUrl {
 
     // //Fetch BCV number
     // getBcvSearch: string = 'http://127.0.0.1:8000/v2/searchreferences';
-    
+
     // //ResetPassword API
     // resetPassword: string = 'http://127.0.0.1:8000/v1/resetpassword';
 
@@ -110,4 +110,9 @@ export class GlobalUrl {
 
     //fetch translationwords API
     translationwords: string = "https://stagingapi.autographamt.com/v2/alignments/translationwords/grkhin/";
+
+    //fetch list of strongs
+    strongslist: string = "https://stagingapi.autographamt.com/v2/alignments/strongs";
+
+    strongLexicon: string = "https://stagingapi.autographamt.com/v2/lexicons";
 }

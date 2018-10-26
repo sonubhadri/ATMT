@@ -1,0 +1,55 @@
+<dummy-app-component></dummy-app-component>
+<mat-progress-bar *ngIf="display" mode="indeterminate"></mat-progress-bar>
+
+<br>
+
+
+<div class="container">
+  <mat-card>
+    <span>
+      <h2>Strong:- {{strongNo}}</h2>
+    </span>
+    <mat-tab-group>
+      <mat-tab label="English Word">
+        <div style="margin-top: 10px; width:900px;padding-left:200px;text-align: center">
+          {{targetword}} </div>
+      </mat-tab>
+      <mat-tab label="Definition">
+        <div style="margin-top: 10px; width:900px;padding-left:200px;text-align: center">{{definition}} </div>
+      </mat-tab>
+      <mat-tab label="Greek Word">
+        <div style="margin-top: 10px; width:900px;padding-left:200px;text-align: center"> {{sourceword}}</div> 
+      </mat-tab>
+      <mat-tab label="Pronunciation">
+        <div style="margin-top: 10px; width:900px;padding-left:200px;text-align: center">{{pronunciation}}</div>
+      </mat-tab>
+      <mat-tab label="Transliteration">
+        <div style="margin-top: 10px; width:900px;padding-left:200px;text-align: center">{{transliteration}}</div>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card>
+
+  <br>
+  <mat-divider></mat-divider>
+  <br>
+  <div style="text-align: left">
+    <mat-accordion *ngFor="let acc of objLenArr" >
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Total Count :- {{objCountArr[acc]}}
+          </mat-panel-title>
+          <mat-panel-description>
+            {{objLangWordArr[acc]}}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+
+        <a routerLink="/combo/{{link}}-{{strongNo}}-{{objLangWordArr[acc]}}" style="display:block;text-decoration:underline;text-align: center" target="_blank" *ngFor= "let link of objBcvArr[acc]">
+         {{link}} </a>
+        
+      </mat-expansion-panel>
+    </mat-accordion>
+
+  </div>
+</div>

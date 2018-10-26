@@ -63,6 +63,9 @@ import { RegisterComponent } from './register/register.component';
 import { DummyAppComponentComponent } from './dummy-app-component/dummy-app-component.component';
 import { ResetpasswordComponent } from './resetpassword/resetpassword.component';
 import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
+import { WordViewEditorComponent } from './word-view-editor/word-view-editor.component';
+import { StrongpageComponent } from './strongpage/strongpage.component';
+import { ComboComponent } from './combo/combo.component';
 
 @NgModule({
   declarations: [
@@ -79,7 +82,10 @@ import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.compone
     RegisterComponent,
     DummyAppComponentComponent,
     ResetpasswordComponent,
-    ForgotpasswordComponent
+    ForgotpasswordComponent,
+    WordViewEditorComponent,
+    StrongpageComponent,
+    ComboComponent
   ],
   imports: [
     BrowserModule, HttpModule, FormsModule, CommonModule,
@@ -156,7 +162,20 @@ import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.compone
       {
         path: 'forgotpassword',
         component: ForgotpasswordComponent
-      }
+      },
+      {
+        path: 'wordview',
+        component: WordViewEditorComponent
+      },
+      {
+        path: 'strong/:Strong',
+        component: StrongpageComponent
+      },
+      {
+        path: 'combo/:BCV',
+        component: ComboComponent
+      }          
+      
     ])
   ],
   providers: [AlignerService, D3Service, GlobalUrl],
