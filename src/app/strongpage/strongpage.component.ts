@@ -173,8 +173,8 @@ export class StrongpageComponent implements OnInit {
 
   Checked(word, ind) {
     let param ={};
-    for(let i=0;i < (((Object.values(this.apiData)[ind]["references"])["unchecked"])["positionalPairs"]).length; i ++){
-      param[(((Object.values(this.apiData)[ind]["references"])["unchecked"])["bcv"])[i]] =  (((Object.values(this.apiData)[ind]["references"])["unchecked"])["positionalPairs"])[i];
+    for(let i=0;i < this.objBcvUncheckPos[ind].length; i ++){
+      param[this.objBcvUncheckArr[ind][i]] =  this.objBcvUncheckPos[ind][i];
     }
 
     //console.log(param);
@@ -216,8 +216,8 @@ export class StrongpageComponent implements OnInit {
 
   Unchecked(word, ind) {
     let param ={};
-    for(let i=0;i < (((Object.values(this.apiData)[ind]["references"])["checked"])["positionalPairs"]).length; i ++){
-      param[(((Object.values(this.apiData)[ind]["references"])["checked"])["bcv"])[i]] =  (((Object.values(this.apiData)[ind]["references"])["checked"])["positionalPairs"])[i];
+    for(let i=0;i < this.objBcvCheckPos[ind].length; i ++){
+      param[this.objBcvCheckArr[ind][i]] =  this.objBcvCheckPos[ind][i];
     }
 
     var data = { "srclang": this.lang, "trglang": "grk-ugnt", "strongs": this.strongNo, "word": word, "status": "1","positionData": param  };
@@ -254,10 +254,14 @@ export class StrongpageComponent implements OnInit {
   }
 
   filterData(ind, flag) {
-    console.log("before check Bcv" + this.objBcvCheckArr)
-    console.log("check pos" + this.objBcvCheckPos)
-    console.log("uncheck bcv" + this.objBcvUncheckArr)
-    console.log("before uncheck pos" + this.objBcvUncheckPos)
+    // console.log("before check Bcv" + this.objBcvCheckArr)
+    // console.log("check pos" + this.objBcvCheckPos)
+    // console.log("uncheck bcv" + this.objBcvUncheckArr)
+    // console.log("before uncheck pos" + this.objBcvUncheckPos)
+
+    // console.log('before')
+    // console.log(((Object.values(this.apiData)[ind]["references"])["checked"]))
+    // console.log(((Object.values(this.apiData)[ind]["references"])["unchecked"]))
 
     if (flag == 'check') {
       this.checkedCount[ind] = (Object.values(this.apiData)[ind]["checkedCount"]) + (Object.values(this.apiData)[ind]["uncheckedCount"]);
@@ -298,10 +302,15 @@ export class StrongpageComponent implements OnInit {
         this.objBcvCheckPos[ind] = "";
       }
     }
-    console.log("after check Bcv" + this.objBcvCheckArr)
-    console.log("check pos" + this.objBcvCheckPos)
-    console.log("uncheck bcv" + this.objBcvUncheckArr)
-    console.log("after uncheck pos" + this.objBcvUncheckPos)
+    // console.log("after check Bcv" + this.objBcvCheckArr)
+    // console.log("check pos" + this.objBcvCheckPos)
+    // console.log("uncheck bcv" + this.objBcvUncheckArr)
+    // console.log("after uncheck pos" + this.objBcvUncheckPos)
+
+    // console.log('after')
+    // console.log(((Object.values(this.apiData)[ind]["references"])["checked"]))
+    // console.log(((Object.values(this.apiData)[ind]["references"])["unchecked"]))
+
   }
 
 }
