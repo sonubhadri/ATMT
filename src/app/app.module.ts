@@ -21,6 +21,7 @@ import { LinearWidgetComponent } from './linear-widget/linear-widget.component';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CdkTreeModule } from '@angular/cdk/tree';
 import {
+  MAT_DIALOG_DEFAULT_OPTIONS,
   MatAutocompleteModule,
   MatBadgeModule,
   MatBottomSheetModule,
@@ -66,6 +67,9 @@ import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.compone
 import { WordViewEditorComponent } from './word-view-editor/word-view-editor.component';
 import { StrongpageComponent } from './strongpage/strongpage.component';
 import { ComboComponent } from './combo/combo.component';
+import { NumberToStringPipe } from './number-to-string.pipe';
+import { AdminPanelComponent } from './admin-panel/admin-panel.component';
+import { DialogOverviewExampleDialog} from './admin-panel/admin-panel.component';
 
 @NgModule({
   declarations: [
@@ -85,7 +89,10 @@ import { ComboComponent } from './combo/combo.component';
     ForgotpasswordComponent,
     WordViewEditorComponent,
     StrongpageComponent,
-    ComboComponent
+    ComboComponent,
+    NumberToStringPipe,
+    AdminPanelComponent,
+    DialogOverviewExampleDialog
   ],
   imports: [
     BrowserModule, HttpModule, FormsModule, CommonModule,
@@ -168,17 +175,21 @@ import { ComboComponent } from './combo/combo.component';
         component: WordViewEditorComponent
       },
       {
-        path: 'strong/:Strong',
+        path: 'strong/:Strong/:Lang',
         component: StrongpageComponent
       },
       {
-        path: 'combo/:BCV',
+        path: 'combo/:BCV/:Lang/:Pos',
         component: ComboComponent
-      }          
-      
+      },
+      {
+        path: 'adminpanel',
+        component: AdminPanelComponent
+      }
     ])
   ],
-  providers: [AlignerService, D3Service, GlobalUrl],
-  bootstrap: [AppComponent]
+  providers: [AlignerService, D3Service, GlobalUrl,{provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}],
+  bootstrap: [AppComponent],
+  entryComponents: [DialogOverviewExampleDialog]
 })
 export class AppModule { }

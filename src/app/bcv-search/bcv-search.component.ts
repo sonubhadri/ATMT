@@ -107,8 +107,8 @@ export class BcvSearchComponent implements OnInit {
             this.langFirstIndex = localStorage.getItem('language');            
           }
           else {
-            langstr = "grkhin";
-            this.langFirstIndex = "grkhin";
+            langstr = "hin-4";
+            this.langFirstIndex = "hin-4";
           }
 
           this.glLangChange(langstr);
@@ -146,7 +146,7 @@ export class BcvSearchComponent implements OnInit {
 
     localStorage.setItem('language', this.langParam);
 
-    this._http.get(this.ApiUrl.getBooks + '/' + l)
+    this._http.get(this.ApiUrl.getBooks + '/' + l + '/grk-ugnt')
       .subscribe(data => {
         this.Books = data.json().books;
         //console.log (data.json())

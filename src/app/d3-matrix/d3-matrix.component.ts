@@ -546,7 +546,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
         this.display = true;
         if( (this.DiscardFlag) || this.prefetchData == ""){
         document.getElementById("grid").innerHTML = "";
-        this._http.get(this.ApiUrl.getnUpdateBCV + '/' + bcv + '/' + this.Lang)
+        this._http.get(this.ApiUrl.getnUpdateBCV + '/' + bcv + '/' + this.Lang + '/grk-ugnt')
             .subscribe(data => {
                 //console.log(data.json())
                 this.DiscardFlag = false;
@@ -585,7 +585,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
              
         }
 
-            this._http.get(this.ApiUrl.getnUpdateBCV + '/' + Number(Number(bcv) + 1) + '/' + this.Lang)
+            this._http.get(this.ApiUrl.getnUpdateBCV + '/' + Number(Number(bcv) + 1) + '/' + this.Lang + '/grk-ugnt')
                 .subscribe(dataa => {
                     //console.log(data.json())
                 (<HTMLInputElement>document.getElementById("nxtbtn")).disabled = false;

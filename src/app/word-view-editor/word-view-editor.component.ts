@@ -25,9 +25,12 @@ export class WordViewEditorComponent implements OnInit {
   displayedColumns: string[] = ['Strong Number', 'Checked', 'Unchecked'];
   dataSource = new MatTableDataSource<PeriodicElement>(this.ELEMENT_DATA);
   LangArray: any;
-  strongArray: any
+  strongArray: any;
+  checkArray: any;
+  uncheckArray:any;
   langFirstIndex: any;
   display:boolean;
+  glang:any;
 
   ngOnInit() {
     localStorage.setItem("language", "");
@@ -46,25 +49,7 @@ export class WordViewEditorComponent implements OnInit {
           this.toastr.error("An Unexpected Error Occured.")
         }
 
-      })
-
-
-    this._http.get(this.ApiUrl.strongslist)
-      .subscribe(data => {
-        this.display = true;
-        this.strongArray = data.json();
-        this.getSampeTranslationData();
-        
-      }, (error: Response) => {
-        if (error.status === 404) {
-          this.toastr.warning("Strongs data not available")
-        }
-        else {
-          this.toastr.error("An Unexpected Error Occured.")
-        }
-
-      })
-    
+      })    
   }
 
   constructor(public router: Router, private toastr: ToastrService, private _http: Http, private ApiUrl: GlobalUrl, private changeDetectorRefs: ChangeDetectorRef) {
@@ -78,14 +63,36 @@ export class WordViewEditorComponent implements OnInit {
 
   getSampeTranslationData() {
     if (this.strongArray) {
-      for (let i = 0; i < this.strongArray.length; i++) {
-
-         
-        this.ELEMENT_DATA.push({StrongNumber:this.strongArray[i], Checked:'NA', Unchecked:'NA' })
+      this.ELEMENT_DATA = [];
+      for (let i = 0; i < this.strongArray.length; i++) {        
+        this.ELEMENT_DATA.push({StrongNumber:this.strongArray[i], Checked:this.checkArray[i]["checked"], Unchecked:this.checkArray[i]["unchecked"] })
       }
       this.dataSource = new MatTableDataSource<PeriodicElement>(this.ELEMENT_DATA);
     }
     this.display = false;
+  }
+
+  glLangChange(value){
+    //console.log('event run')
+    this.glang = value;
+    this._http.get(this.ApiUrl.strongslist + "/" + value  + '/grk-ugnt' )
+    .subscribe(data => {
+      this.display = true;
+      this.strongArray = Object.keys(data.json());
+      this.checkArray =  Object.values(data.json());      
+      //console.log(this.checkArray)
+      this.getSampeTranslationData();
+      
+    }, (error: Response) => {
+      if (error.status === 404) {
+        this.toastr.warning("Strongs data not available")
+      }
+      else {
+        this.toastr.error("An Unexpected Error Occured.")
+      }
+
+    })
+         
   }
 
 }

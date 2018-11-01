@@ -5,12 +5,12 @@
 
 <div *ngIf="linearCard" class="container" style="display:inline-block;text-align:left">
   <mat-card>
-    <span id="{{span}}" style="color: #99D6FF;font-size: 18px" *ngFor="let span of targettext" (click)="targetClick(span)" >{{span + ' '}}</span>
+    <span id="up-{{i+1}}" style="color: #99D6FF;font-size: 18px" *ngFor="let span of targettext; let i = index" (click)="targetClick(i+1)" >{{span + ' '}}</span>
     <br>
     <span style="color: #d55500;" *ngFor="let span of englishSourceArray">{{span + ' '}}</span>
     <br>
 
-    <span id="{{span}}" style="color: #001320;font-size: 18px;" *ngFor="let span of sourcetext"> {{ '<' + span + '>' + ' '}} </span>
+    <span id="down-{{i+1}}" style="color: #001320;font-size: 18px;" *ngFor="let span of sourcetext; let i = index"> {{ '<' + span + '>' + ' '}} </span>
 
     <br>
 

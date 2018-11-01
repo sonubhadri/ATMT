@@ -12,8 +12,10 @@ import { ToastrService } from 'ngx-toastr';
 export class ComboComponent implements OnInit {
 
   BCV: any;
-  Strong: any;
-  langWord: any;
+  // Strong: any;
+  // langWord: any;
+  Pos = [];
+  Lang: any;
   linearCard: any;
   sourcetext;
   targettext;
@@ -55,15 +57,17 @@ export class ComboComponent implements OnInit {
     this.activatedRoute.params.subscribe((params: Params) => {
 
       if (params['BCV']) {
-        this.BCV = params['BCV'].split('-')[0];
-        this.Strong = params['BCV'].split('-')[1];
-        this.langWord = params['BCV'].split('-')[2];
+        this.BCV = params['BCV'];
+        // this.Strong = params['BCV'].split('-')[1];
+        // this.langWord = params['BCV'].split('-')[2];
+        this.Pos = params['Pos'].split(',');
+        this.Lang = params['Lang'];
         var x: any = this.BCV;
-        var l: any = 'grkhin'; //this.Lang;
-        //console.log(x)
+        var l: any = this.Lang;
+        //console.log(this.Pos)
 
         this.display = true;
-        this._http.get(this.ApiUrl.getnUpdateBCV + '/' + x + '/' + l)
+        this._http.get(this.ApiUrl.getnUpdateBCV + '/' + x + '/' + l + '/grk-ugnt')
           .subscribe(data => {
 
             this.linearCard = data.json();
@@ -100,47 +104,56 @@ export class ComboComponent implements OnInit {
   }
 
   ngAfterViewChecked() {
-    if (document.getElementById(this.Strong) && document.getElementById(this.langWord)) {
-      document.getElementById(this.Strong).style.background = 'yellow';
+    // if (document.getElementById(this.Strong) && document.getElementById(this.langWord)) {
+    //   document.getElementById(this.Strong).style.background = 'yellow';
 
-      if (this.targettext.includes(this.langWord) && this.sourcetext.includes(Number(this.Strong))) {
-        //console.log(Number(this.targettext.indexOf(e) + 1))
-        let left = Number(this.targettext.indexOf(this.langWord) + 1);
-        let right = Number(this.sourcetext.indexOf(Number(this.Strong)) + 1);
+    //   if (this.targettext.includes(this.langWord) && this.sourcetext.includes(Number(this.Strong))) {
+    //     //console.log(Number(this.targettext.indexOf(e) + 1))
+    //     let left = Number(this.targettext.indexOf(this.langWord) + 1);
+    //     let right = Number(this.sourcetext.indexOf(Number(this.Strong)) + 1);
 
-        if (this.linearCard.positionalpairs.includes(left + "-" + right)) {
-          const index: number = this.linearCard.positionalpairs.indexOf(left + "-" + right);
-          if (index !== -1) {
-            console.log("ngview")
-            document.getElementById(this.langWord).style.background = 'black';
-          }
-        }
+    //     if (this.linearCard.positionalpairs.includes(left + "-" + right)) {
+    //       const index: number = this.linearCard.positionalpairs.indexOf(left + "-" + right);
+    //       if (index !== -1) {
+    //         console.log("ngview")
+    //         document.getElementById(this.langWord).style.background = 'black';
+    //       }
+    //     }
+    //   }
+    // }
+
+    for (let i = 0; i < this.Pos.length; i++) {
+      if (document.getElementById('down-' + (this.Pos[i].split('-')[1]))) {
+        document.getElementById('down-' + (this.Pos[i].split('-')[1])).style.background = 'yellow';
+      }
+
+      if (document.getElementById('up-' + (this.Pos[i].split('-')[0])) && this.linearCard.positionalpairs.includes(this.Pos[i].split('-')[0] + "-" + (this.Pos[0].split('-')[1]))) {
+        document.getElementById('up-' + (this.Pos[i].split('-')[0])).style.background = 'black';
+        document.getElementById('up-' + (this.Pos[i].split('-')[0])).style.borderStyle = 'outset';
+
       }
     }
   }
 
   targetClick(e) {
+    console.log(e)
     console.log(this.linearCard.positionalpairs)
-    if (this.targettext.includes(e) && this.sourcetext.includes(Number(this.Strong))) {
-      //console.log(Number(this.targettext.indexOf(e) + 1))
-      let left = Number(this.targettext.indexOf(e) + 1);
-      let right = Number(this.sourcetext.indexOf(Number(this.Strong)) + 1);
-      console.log(left + "-" + right)
+    if (this.linearCard.positionalpairs.includes(e + "-" + (this.Pos[0].split('-')[1]))) {
 
-      if (this.linearCard.positionalpairs.includes(left + "-" + right)) {
-
-        const index: number = this.linearCard.positionalpairs.indexOf(left + "-" + right);
-        if (index !== -1) {
-          this.linearCard.positionalpairs.splice(index, 1);
-          console.log("splice")
-          document.getElementById(e).style.background = '';
-        }
+      const index: number = this.linearCard.positionalpairs.indexOf(e + "-" + (this.Pos[0].split('-')[1]));
+      if (index !== -1) {
+        this.linearCard.positionalpairs.splice(index, 1);
+        console.log("splice")
+        document.getElementById('up-' + e).style.background = '';
+        document.getElementById('up-' + e).style.borderStyle = "";
+        console.log('up-' + e)
       }
-      else {
-        this.linearCard.positionalpairs.push(left + "-" + right);
+    }
+    else {
+      this.linearCard.positionalpairs.push(e + "-" + (this.Pos[0].split('-')[1]));
 
-        document.getElementById(e).style.background = "black";
-      }
+      document.getElementById('up-' + e).style.background = "black";
+      document.getElementById('up-' + e).style.borderStyle = "outset";
     }
     console.log(this.linearCard.positionalpairs)
   }
@@ -150,10 +163,10 @@ export class ComboComponent implements OnInit {
       this.decodeToken(String(JSON.parse(JSON.stringify(this.headers)).Authorization));
       var x: any = this.BCV;
       var y: any = this.linearCard.positionalpairs;
-      var l: any = 'grkhin'; //this.Lang;
+      var l: any = this.Lang;
 
 
-      var data = { "bcv": x, "positional_pairs": y, "lang": l };
+      var data = { "bcv": x, "positional_pairs": y, "srclang": l, "trglang":"grk-ugnt" };
       this.display = true;
       this._http.post(this.ApiUrl.getnUpdateBCV, data, {
         headers: this.headers
