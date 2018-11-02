@@ -109,7 +109,7 @@ export class GlobalUrl {
     forgotPassword: string = 'https://stagingapi.autographamt.com/v1/forgotpassword';
 
     //fetch translationwords API
-    translationwords: string = "https://stagingapi.autographamt.com/v2/alignments/translationwords/grkhin/";
+    translationwords: string = "https://stagingapi.autographamt.com/v2/alignments/translationwords/";
 
     //fetch list of strongs
     strongslist: string = "https://stagingapi.autographamt.com/v2/alignments/strongs";
