@@ -220,7 +220,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
             }
             y[index] = separatedPair[0] + "-" + separatedPair[1];
         }
-        var data = { "bcv": x, "positional_pairs": y, "lang": l };
+        var data = {"bcv": x, "positional_pairs": y, "srclang": l, "trglang":"grk-ugnt"};
         this.display = true;
         this._http.post(this.ApiUrl.getnUpdateBCV, data, {
             headers: this.headers
@@ -368,7 +368,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                 }
                 y[index] = separatedPair[0] + "-" + separatedPair[1];
             }
-            var data = { "bcv": x, "positional_pairs": y, "lang": l };
+            var data = {"bcv": x, "positional_pairs": y, "srclang": l, "trglang":"grk-ugnt"};
             this.display = true;
             this._http.post(this.ApiUrl.getnUpdateBCV, data, {
                 headers: this.headers
@@ -509,7 +509,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
         this.display = true;
         //console.log(this.display)
-        this._http.get(this.ApiUrl.grkhin + "/" + this.Lang + "/" + this.BOOKNAME)
+        this._http.get(this.ApiUrl.grkhin + "/" + this.Lang + "/grk-ugnt" + "/" + this.BOOKNAME)
             .toPromise()
             .then(response => this.saveToFileSystem(response.json()));
 

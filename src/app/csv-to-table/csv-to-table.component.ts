@@ -161,7 +161,7 @@ export class CsvToTableComponent implements OnInit {
         document.getElementById('pageInd').innerHTML = this.from + '-' + this.to;
       }
       // this._http.get('http://127.0.0.1:8000/v2/alignments/translationwords/grkhin/' + this.from + '-' + this.to,{
-      this._http.get(this.ApiUrl.translationwords + this.from + '-' + this.to)
+      this._http.get(this.ApiUrl.translationwords + '/hin-4/grk-ugnt/' + this.from + '-' + this.to)
         .subscribe(data => {
           this.transData = JSON.parse(data.json());
           ////console.log(Object.values(Object.keys(this.transData)[3]))
