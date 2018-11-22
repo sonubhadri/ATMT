@@ -25,7 +25,7 @@ export class AdminPanelComponent implements OnInit {
   animal: string;
   name: string;
   headers = new Headers();
-  projectList: string[];
+  projectList: any;
   organisation: string;
 
   constructor(public router: Router, private toastr: ToastrService, private _http: Http, private ApiUrl: GlobalUrl, public dialog: MatDialog) {
