@@ -3,7 +3,7 @@
     <br>
     <br>
     <button style="width:150px;height:100px;" *ngFor="let Alignment of alignArray;let i = index" class="btn btn-secondary border border-white" (click)="AlignmentClick(i)">{{Alignment}}</button>
-    <h5 *ngIf="!(alignArray.length) > 0"><span style="color:grey;">No Assignment for Alignment</span></h5>
+    <h5 *ngIf="!(alignArray.length > 0)"><span style="color:grey;">No Assignment for Alignment</span></h5>
 </div>
 <br>
 <br>

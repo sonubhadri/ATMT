@@ -32,7 +32,7 @@ export class ReportsComponent {
   showLabels = true;
   explodeSlices = false;
   doughnut = false;
-
+  gradient = "";
   onSelect(event) {
     console.log(event);
   }
