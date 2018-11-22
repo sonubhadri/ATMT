@@ -59,6 +59,20 @@ export class DashboardComponent implements OnInit {
     this.router.navigate(['../app-bcv-search/' + this.alignArray[i]+ '/' + this.alignBookArray[i]]);
   }
 
+  TranslateClick(i){
+    console.log(i)
+    // localStorage.setItem("AlignmentLang",this.alignArray[i]);
+    // localStorage.setItem("AlignmentBooks",this.alignBookArray[i]);
+    this.router.navigate(['../app-bcv-search/' + this.translateArray[i]+ '/' + this.translateBookArray[i]]);
+  }
+
+  CheckClick(i){
+    console.log(i)
+    // localStorage.setItem("AlignmentLang",this.checkArray[i]);
+    // localStorage.setItem("AlignmentBooks",this.checkArray[i]);
+    this.router.navigate(['../app-bcv-search/' + this.checkArray[i]+ '/' + this.checkBookArray[i]]);
+  }
+
   ngOnInit() {
     this._http.get(this.ApiUrl.taskListForUser + "/" + this.user, {
       headers: this.headers

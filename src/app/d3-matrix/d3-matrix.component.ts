@@ -27,6 +27,7 @@ import { stringify } from '@angular/compiler/src/util';
 import { saveAs } from 'file-saver/FileSaver';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { toDate } from '@angular/common/src/i18n/format_date';
+import { Location } from '@angular/common';
 
 @Component({
     selector: 'app-d3-matrix',
@@ -47,8 +48,9 @@ export class D3MatrixComponent implements OnInit, OnChanges {
     @Input() BCV: any;
     @Input() BOOKNAME: any;
     @Input() Lang: any;
-    @Input() NextFlag : boolean;
-    DiscardFlag : boolean;
+    @Input() NextFlag: boolean;
+    DiscardFlag: boolean = false;
+    prefetchData: any = "";
     Statuses = new Array();
     Interlinear = "Interlinear";
     verticalORgrid = "Display Bilinear";
@@ -56,42 +58,35 @@ export class D3MatrixComponent implements OnInit, OnChanges {
     linear = false;
     interLinearflag = true;
     headers = new Headers();
-    // guestUser = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJva3VAeW9wbWFpbC5jb20iLCJleHAiOjE1MzgxNjIwMTgsInJvbGUiOiJtZW1iZXIifQ.diVbmG_9TqRvgNIWKsnfrbgWUoqJxtWCc_HVVoFjMac";
-    prefetchData:any="";
 
-    constructor(public router: Router, private ApiUrl: GlobalUrl, private toastr: ToastrService, element: ElementRef, private ngZone: NgZone, d3Service: D3Service, private service: AlignerService, private _http: Http) {
+    constructor(public locations: Location, public router: Router, private ApiUrl: GlobalUrl, private toastr: ToastrService, element: ElementRef, private ngZone: NgZone, d3Service: D3Service, private service: AlignerService, private _http: Http) {
         this.d3 = d3Service.getD3();
         this.toastr.toastrConfig.positionClass = "toast-top-center"
         this.toastr.toastrConfig.closeButton = true;
         this.toastr.toastrConfig.progressBar = true;
         this.toastr.toastrConfig.timeOut = 1200;
 
-        // if (!localStorage.getItem('access-token')) {
-        //     this.toastr.error('You are not logged in');
-        //     this.router.navigate(['../app-login']);
-        // }
-
         this.createAuthorizationHeader(this.headers);
     }
 
 
     createAuthorizationHeader(headers: Headers) {
-        if(localStorage.getItem("access-token")){
+        if (localStorage.getItem("access-token")) {
             headers.append('Authorization', 'bearer ' +
-              localStorage.getItem("access-token")); 
+                localStorage.getItem("access-token"));
 
             this.decodeToken(String(JSON.parse(JSON.stringify(this.headers)).Authorization));
-            }
+        }
     }
 
-   decodeToken(token){
+    decodeToken(token) {
         var playload = JSON.parse(atob(token.split('.')[1]));
-       let dd = Number(playload.exp )
+        let dd = Number(playload.exp)
         var timeDiff = Math.abs(new Date(dd * 1000).getTime() - new Date().getTime());
-        if(Math.ceil(timeDiff / (1000 * 3600 * 24)) > 1){
+        if (Math.ceil(timeDiff / (1000 * 3600 * 24)) > 1) {
             localStorage.setItem("access-token", '');
             this.router.navigate(['../app-login']);
-        }        
+        }
     }
 
     gridData(d: any, rawPoss: any) {
@@ -220,7 +215,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
             }
             y[index] = separatedPair[0] + "-" + separatedPair[1];
         }
-        var data = {"bcv": x, "positional_pairs": y, "srclang": l, "trglang":"grk-ugnt"};
+        var data = { "bcv": x, "positional_pairs": y, "srclang": l, "trglang": "grk-ugnt" };
         this.display = true;
         this._http.post(this.ApiUrl.getnUpdateBCV, data, {
             headers: this.headers
@@ -368,7 +363,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                 }
                 y[index] = separatedPair[0] + "-" + separatedPair[1];
             }
-            var data = {"bcv": x, "positional_pairs": y, "srclang": l, "trglang":"grk-ugnt"};
+            var data = { "bcv": x, "positional_pairs": y, "srclang": l, "trglang": "grk-ugnt" };
             this.display = true;
             this._http.post(this.ApiUrl.getnUpdateBCV, data, {
                 headers: this.headers
@@ -506,18 +501,26 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
 
     exportOnClick() {
+        let flag = (<HTMLInputElement>document.getElementById("usfmchkbox")).checked;
+        let usfmFlag = "";
+        if (flag) {
+            usfmFlag = "/true";
+        }
 
         this.display = true;
         //console.log(this.display)
-        this._http.get(this.ApiUrl.grkhin + "/" + this.Lang + "/grk-ugnt" + "/" + this.BOOKNAME)
+        this._http.get(this.ApiUrl.grkhin + "/" + this.Lang + "/" + this.BOOKNAME + usfmFlag)
             .toPromise()
-            .then(response => this.saveToFileSystem(response.json()));
-
+            .then(response => this.saveToFileSystem(response.json()))
+            .catch((err) => {
+                this.toastr.error(err)
+                this.display = false;
+            });
     }
 
     private saveToFileSystem(response) {
         const blob = new Blob([JSON.stringify(response)], { type: 'application/json' });
-        saveAs(blob, 'bible.json');
+        saveAs(blob, this.Lang + '_' + this.BOOKNAME + '.json');
         this.display = false;
         //console.log(this.display)
     }
@@ -529,6 +532,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges) {
         const bookChapterVerse: SimpleChange = changes.BCV;
         this.BCV = bookChapterVerse.currentValue;
+        this.locations.go('/app-bcv-search/' + this.BCV)
         this.gridBind();
         this.Interlinear = "Interlinear"
         this.verticalORgrid = "Display Bilinear";
@@ -536,6 +540,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
         this.interLinearflag = true;
         document.getElementById('verticalInterlinear').style.display = "none";
         document.getElementById('grid').style.display = "";
+        (<HTMLInputElement>document.getElementById("usfmchkbox")).checked = false;
         //document.getElementById("fixButton").style.display = "";
     }
 
@@ -544,71 +549,61 @@ export class D3MatrixComponent implements OnInit, OnChanges {
         //   var data = new FormData();
         //   data.append("bcv",bcv);
         this.display = true;
-        if( (this.DiscardFlag) || this.prefetchData == ""){
-        document.getElementById("grid").innerHTML = "";
-        this._http.get(this.ApiUrl.getnUpdateBCV + '/' + bcv + '/' + this.Lang + '/grk-ugnt')
-            .subscribe(data => {
-                //console.log(data.json())
-                this.DiscardFlag = false;
-                document.getElementById("grid").innerHTML = "";
-                // (<HTMLInputElement>document.getElementById("nxtbtn")).disabled = false;
-                // (<HTMLInputElement>document.getElementById("prebtn")).disabled = false;
-                // console.log('nextflag is'.concat(String(this.NextFlag)) + 'and the next bcv is' + Number(Number(bcv) + 1))
-                // console.log(data)
-                // console.log(String(data.json()) )
-                this.generateVisual(data)
-
-            }, (error: Response) => {
-                if (error.status === 404 || error.status === 500) {
-                    (<HTMLInputElement>document.getElementById("prebtn")).disabled = false;
-                    this.toastr.warning("Data not available")
-                    this.display = false;
-                }
-                else {
-                    (<HTMLInputElement>document.getElementById("prebtn")).disabled = false;
-                    this.toastr.error("An Unexpected Error Occured.")
-                    this.display = false;
-                }
-
-            });
-        }
-        if(this.NextFlag  && (!this.DiscardFlag) && this.prefetchData != ""){
-            // document.getElementById("grid").innerHTML = "";
-         
+        if ((this.DiscardFlag) || this.prefetchData == "" || (!this.NextFlag)) {
+            document.getElementById("grid").innerHTML = "";
+            this._http.get(this.ApiUrl.getnUpdateBCV + '/' + bcv + '/' + this.Lang + '/grk-ugnt')
+                .subscribe(data => {
                     //console.log(data.json())
+                    this.DiscardFlag = false;
                     document.getElementById("grid").innerHTML = "";
                     // (<HTMLInputElement>document.getElementById("nxtbtn")).disabled = false;
                     // (<HTMLInputElement>document.getElementById("prebtn")).disabled = false;
-                    document.getElementById('grid').style.display = "";
-                   this.generateVisual(this.prefetchData)
-    
-             
-        }
+                    this.generateVisual(data)
 
-            this._http.get(this.ApiUrl.getnUpdateBCV + '/' + Number(Number(bcv) + 1) + '/' + this.Lang + '/grk-ugnt')
-                .subscribe(dataa => {
-                    //console.log(data.json())
-                (<HTMLInputElement>document.getElementById("nxtbtn")).disabled = false;
-                (<HTMLInputElement>document.getElementById("prebtn")).disabled = false;
-                    this.prefetchData = dataa;
-    
                 }, (error: Response) => {
                     if (error.status === 404 || error.status === 500) {
-                        this.prefetchData = "";
-                        (<HTMLInputElement>document.getElementById("nxtbtn")).disabled = false;
                         (<HTMLInputElement>document.getElementById("prebtn")).disabled = false;
-                        // this.toastr.warning("Data not available")
-                        // this.display = false;
+                        this.toastr.warning("Data not available")
+                        this.display = false;
                     }
                     else {
-                        this.prefetchData = "";
-                        (<HTMLInputElement>document.getElementById("nxtbtn")).disabled = false;
                         (<HTMLInputElement>document.getElementById("prebtn")).disabled = false;
-                        // this.toastr.error("An Unexpected Error Occured.")
-                        // this.display = false;
+                        this.toastr.error("An Unexpected Error Occured.")
+                        this.display = false;
                     }
-    
-                });        
+
+                });
+        }
+        if (this.NextFlag && (!this.DiscardFlag) && this.prefetchData != "") {
+            document.getElementById("grid").innerHTML = "";
+            document.getElementById('grid').style.display = "";
+            this.generateVisual(this.prefetchData)
+        }
+
+        this._http.get(this.ApiUrl.getnUpdateBCV + '/' + Number(Number(bcv) + 1) + '/' + this.Lang + '/grk-ugnt')
+            .subscribe(dataa => {
+                //console.log(data.json())
+                (<HTMLInputElement>document.getElementById("nxtbtn")).disabled = false;
+                (<HTMLInputElement>document.getElementById("prebtn")).disabled = false;
+                this.prefetchData = dataa;
+
+            }, (error: Response) => {
+                if (error.status === 404 || error.status === 500) {
+                    this.prefetchData = "";
+                    (<HTMLInputElement>document.getElementById("nxtbtn")).disabled = false;
+                    (<HTMLInputElement>document.getElementById("prebtn")).disabled = false;
+                    // this.toastr.warning("Data not available")
+                    // this.display = false;
+                }
+                else {
+                    this.prefetchData = "";
+                    (<HTMLInputElement>document.getElementById("nxtbtn")).disabled = false;
+                    (<HTMLInputElement>document.getElementById("prebtn")).disabled = false;
+                    // this.toastr.error("An Unexpected Error Occured.")
+                    // this.display = false;
+                }
+
+            });
 
     }
 
@@ -688,7 +683,6 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
         var greekLexiconText = '';
         var greekArray = new Array();
-        //console.log (Object.keys(data.json().lexicondata))
         for (var l = 0; l < data.json().sourcetext.length; l++) {
             //self._http.get(self.ApiUrl.getLexicon + '/' + data.json().sourcetext[l])
             //.subscribe(data => {
@@ -765,191 +759,191 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                 }
             })
             .on('click', function (d: any, i) {
-                if(localStorage.getItem('access-token')){
-                if (!d.filled) {
-                    d3.select(this)
-                        .style("fill", "#023659")
-                        .attr('class', "filledsquare");
+                if (localStorage.getItem('access-token')) {
+                    if (!d.filled) {
+                        d3.select(this)
+                            .style("fill", "#023659")
+                            .attr('class', "filledsquare");
 
-                    //console.log(d.positionalPairOfApi)
-                    if (!self.indPair.includes(d.positionalPair)) {
-                        self.indPair.push(d.positionalPair);
-                        //console.log(self.indPair)
-                    }
-
-                    //document.getElementById('rect-'+d.y+0).style.fill = "#fff";
-
-                    var splilttedWord = d.positionalPair.split('-');
-                    if (d.positionalPairOfApi.includes(splilttedWord[0] + "-0")) {
-                        const index: number = d.positionalPairOfApi.indexOf(splilttedWord[0] + "-0");
-                        if (index !== -1) {
-                            d.positionalPairOfApi.splice(index, 1);
+                        //console.log(d.positionalPairOfApi)
+                        if (!self.indPair.includes(d.positionalPair)) {
+                            self.indPair.push(d.positionalPair);
+                            //console.log(self.indPair)
                         }
-                        document.getElementById('rect-' + d.y + 0).style.fill = "#fff";
 
-                    }
+                        //document.getElementById('rect-'+d.y+0).style.fill = "#fff";
 
-                    // console.log(splilttedWord)
-                    if (d.positionalPairOfApi.includes("0-" + splilttedWord[1])) {
-                        const indexs: number = d.positionalPairOfApi.indexOf("0-" + splilttedWord[1]);
-                        if (indexs !== -1) {
-                            d.positionalPairOfApi.splice(indexs, 1);
+                        var splilttedWord = d.positionalPair.split('-');
+                        if (d.positionalPairOfApi.includes(splilttedWord[0] + "-0")) {
+                            const index: number = d.positionalPairOfApi.indexOf(splilttedWord[0] + "-0");
+                            if (index !== -1) {
+                                d.positionalPairOfApi.splice(index, 1);
+                            }
+                            document.getElementById('rect-' + d.y + 0).style.fill = "#fff";
+
                         }
-                        document.getElementById('rect-' + 100 + i).style.fill = "#fff";
-                    }
 
-                    d.filled = true;
-                    d.positionalPairOfApi.push(d.positionalPair);
-
-                    //console.log(d.positionalPairOfApi)
-                    if (d.rawPosss != d.positionalPairOfApi) {
-                        document.getElementById("saveButton").style.display = "";
-                        document.getElementById("discardButton").style.display = "";
-                        document.getElementById("appButton").style.display = "none";
-                    }
-                    else {
-                        document.getElementById("saveButton").style.display = "none";
-                        document.getElementById("discardButton").style.display = "none";
-                    }
-
-                    if (self.Interlinear == "Interlinear") {
-                        // Code for horizontal alignment
-
-                        self.Statuses = [];
-                        for (var h = 0; h < data.json().targettext.length; h++) {
-                            var greekPair = new Array();
-
-                            for (var g = 0; g < d.positionalPairOfApi.length; g++) {
-                                let pair = d.positionalPairOfApi[g].split('-');
-                                if (h == (Number(pair[0] - 1))) {
-                                    if (pair[1] == "0") {
-                                        greekPair.push("Null");
-                                    }
-                                    else {
-                                        //greekPair.push(data.json().greek[Number(pair[1] - 1)]);
-                                        greekPair.push(data.json().englishword[Number(pair[1] - 1)] + "(" + data.json().sourcetext[Number(pair[1] - 1)] + ")");
-                                    }
-                                }
+                        // console.log(splilttedWord)
+                        if (d.positionalPairOfApi.includes("0-" + splilttedWord[1])) {
+                            const indexs: number = d.positionalPairOfApi.indexOf("0-" + splilttedWord[1]);
+                            if (indexs !== -1) {
+                                d.positionalPairOfApi.splice(indexs, 1);
                             }
-                            if (greekPair[0] == undefined) {
-                                greekPair.push("NA");
-                            }
-                            self.Statuses.push(new HorizontalAlign(h, data.json().targettext[h], greekPair))
+                            document.getElementById('rect-' + 100 + i).style.fill = "#fff";
                         }
-                        // Ends Here
-                    }
 
+                        d.filled = true;
+                        d.positionalPairOfApi.push(d.positionalPair);
 
-                    if (self.Interlinear == "Reverse-Interlinear") {
-                        // Code for horizontal alignment
-
-                        self.Statuses = [];
-                        for (var h = 0; h < data.json().sourcetext.length; h++) {
-                            var greekPair = new Array();
-
-                            for (var g = 0; g < d.positionalPairOfApi.length; g++) {
-                                let pair = d.positionalPairOfApi[g].split('-');
-                                if (h == (Number(pair[1] - 1))) {
-                                    if (pair[0] == "0") {
-                                        greekPair.push(data.json().englishword[Number(pair[1] - 1)] + "(" + "Null" + ")");
-                                    }
-                                    else {
-                                        //greekPair.push(data.json().targettext[Number(pair[0] - 1)]);
-                                        greekPair.push(data.json().englishword[Number(pair[1] - 1)] + "(" + data.json().targettext[Number(pair[0] - 1)] + ")");
-                                    }
-                                }
-                            }
-                            if (greekPair[0] == undefined) {
-                                greekPair.push(data.json().englishword[h] + "(" + "NA" + ")");
-                            }
-                            self.Statuses.push(new HorizontalAlign(h, data.json().sourcetext[h], greekPair))
-                        }
-                        // Ends Here
-                    }
-                    self.gridDataJson.positionalpairs = d.positionalPairOfApi;
-                }
-                else {
-                    d3.select(this)
-                        .style("fill", "#fff")
-                        .attr('class', "square")
-                    d.filled = false;
-                    var index = d.positionalPairOfApi.indexOf(d.positionalPair);
-                    if (index > -1) {
-                        d.positionalPairOfApi.splice(index, 1);
+                        //console.log(d.positionalPairOfApi)
                         if (d.rawPosss != d.positionalPairOfApi) {
-                            //console.log('not matching')
                             document.getElementById("saveButton").style.display = "";
                             document.getElementById("discardButton").style.display = "";
+                            document.getElementById("appButton").style.display = "none";
                         }
                         else {
-                            //console.log('matching')
                             document.getElementById("saveButton").style.display = "none";
                             document.getElementById("discardButton").style.display = "none";
                         }
 
-                    }
+                        if (self.Interlinear == "Interlinear") {
+                            // Code for horizontal alignment
 
-                    if (self.Interlinear == "Interlinear") {
-                        // Code for horizontal alignment
+                            self.Statuses = [];
+                            for (var h = 0; h < data.json().targettext.length; h++) {
+                                var greekPair = new Array();
 
-                        self.Statuses = [];
-                        for (var h = 0; h < data.json().targettext.length; h++) {
-                            var greekPair = new Array();
-
-                            for (var g = 0; g < d.positionalPairOfApi.length; g++) {
-                                let pair = d.positionalPairOfApi[g].split('-');
-                                if (h == (Number(pair[0] - 1))) {
-                                    if (pair[1] == "0") {
-                                        greekPair.push("Null");
-                                    }
-                                    else {
-                                        //greekPair.push(data.json().sourcetext[Number(pair[1] - 1)]);
-                                        greekPair.push(data.json().englishword[Number(pair[1] - 1)] + "(" + data.json().sourcetext[Number(pair[1] - 1)] + ")");
-                                    }
-                                }
-                            }
-                            if (greekPair[0] == undefined) {
-                                greekPair.push("NA");
-                            }
-                            self.Statuses.push(new HorizontalAlign(h, data.json().targettext[h], greekPair))
-                        }
-                        // Ends Here
-                    }
-
-                    if (self.Interlinear == "Reverse-Interlinear") {
-                        // Code for horizontal alignment
-
-                        self.Statuses = [];
-                        for (var h = 0; h < data.json().sourcetext.length; h++) {
-                            var greekPair = new Array();
-
-                            for (var g = 0; g < d.positionalPairOfApi.length; g++) {
-                                let pair = d.positionalPairOfApi[g].split('-');
-                                if (h == (Number(pair[1] - 1))) {
-                                    if (pair[0] == "0") {
-                                        greekPair.push(data.json().englishword[Number(pair[1] - 1)] + "(" + "Null" + ")");
-                                    }
-                                    else {
-                                        //greekPair.push(data.json().targettext[Number(pair[0] - 1)]);
-                                        greekPair.push(data.json().englishword[Number(pair[1] - 1)] + "(" + data.json().targettext[Number(pair[0] - 1)] + ")");
+                                for (var g = 0; g < d.positionalPairOfApi.length; g++) {
+                                    let pair = d.positionalPairOfApi[g].split('-');
+                                    if (h == (Number(pair[0] - 1))) {
+                                        if (pair[1] == "0") {
+                                            greekPair.push("Null");
+                                        }
+                                        else {
+                                            //greekPair.push(data.json().greek[Number(pair[1] - 1)]);
+                                            greekPair.push(data.json().englishword[Number(pair[1] - 1)] + "(" + data.json().sourcetext[Number(pair[1] - 1)] + ")");
+                                        }
                                     }
                                 }
+                                if (greekPair[0] == undefined) {
+                                    greekPair.push("NA");
+                                }
+                                self.Statuses.push(new HorizontalAlign(h, data.json().targettext[h], greekPair))
                             }
-                            if (greekPair[0] == undefined) {
-                                greekPair.push(data.json().englishword[h] + "(" + "NA" + ")");
-                            }
-                            self.Statuses.push(new HorizontalAlign(h, data.json().sourcetext[h], greekPair))
+                            // Ends Here
                         }
-                        // Ends Here
+
+
+                        if (self.Interlinear == "Reverse-Interlinear") {
+                            // Code for horizontal alignment
+
+                            self.Statuses = [];
+                            for (var h = 0; h < data.json().sourcetext.length; h++) {
+                                var greekPair = new Array();
+
+                                for (var g = 0; g < d.positionalPairOfApi.length; g++) {
+                                    let pair = d.positionalPairOfApi[g].split('-');
+                                    if (h == (Number(pair[1] - 1))) {
+                                        if (pair[0] == "0") {
+                                            greekPair.push(data.json().englishword[Number(pair[1] - 1)] + "(" + "Null" + ")");
+                                        }
+                                        else {
+                                            //greekPair.push(data.json().targettext[Number(pair[0] - 1)]);
+                                            greekPair.push(data.json().englishword[Number(pair[1] - 1)] + "(" + data.json().targettext[Number(pair[0] - 1)] + ")");
+                                        }
+                                    }
+                                }
+                                if (greekPair[0] == undefined) {
+                                    greekPair.push(data.json().englishword[h] + "(" + "NA" + ")");
+                                }
+                                self.Statuses.push(new HorizontalAlign(h, data.json().sourcetext[h], greekPair))
+                            }
+                            // Ends Here
+                        }
+                        self.gridDataJson.positionalpairs = d.positionalPairOfApi;
                     }
-                    self.gridDataJson.positionalpairs = d.positionalPairOfApi;
+                    else {
+                        d3.select(this)
+                            .style("fill", "#fff")
+                            .attr('class', "square")
+                        d.filled = false;
+                        var index = d.positionalPairOfApi.indexOf(d.positionalPair);
+                        if (index > -1) {
+                            d.positionalPairOfApi.splice(index, 1);
+                            if (d.rawPosss != d.positionalPairOfApi) {
+                                //console.log('not matching')
+                                document.getElementById("saveButton").style.display = "";
+                                document.getElementById("discardButton").style.display = "";
+                            }
+                            else {
+                                //console.log('matching')
+                                document.getElementById("saveButton").style.display = "none";
+                                document.getElementById("discardButton").style.display = "none";
+                            }
+
+                        }
+
+                        if (self.Interlinear == "Interlinear") {
+                            // Code for horizontal alignment
+
+                            self.Statuses = [];
+                            for (var h = 0; h < data.json().targettext.length; h++) {
+                                var greekPair = new Array();
+
+                                for (var g = 0; g < d.positionalPairOfApi.length; g++) {
+                                    let pair = d.positionalPairOfApi[g].split('-');
+                                    if (h == (Number(pair[0] - 1))) {
+                                        if (pair[1] == "0") {
+                                            greekPair.push("Null");
+                                        }
+                                        else {
+                                            //greekPair.push(data.json().sourcetext[Number(pair[1] - 1)]);
+                                            greekPair.push(data.json().englishword[Number(pair[1] - 1)] + "(" + data.json().sourcetext[Number(pair[1] - 1)] + ")");
+                                        }
+                                    }
+                                }
+                                if (greekPair[0] == undefined) {
+                                    greekPair.push("NA");
+                                }
+                                self.Statuses.push(new HorizontalAlign(h, data.json().targettext[h], greekPair))
+                            }
+                            // Ends Here
+                        }
+
+                        if (self.Interlinear == "Reverse-Interlinear") {
+                            // Code for horizontal alignment
+
+                            self.Statuses = [];
+                            for (var h = 0; h < data.json().sourcetext.length; h++) {
+                                var greekPair = new Array();
+
+                                for (var g = 0; g < d.positionalPairOfApi.length; g++) {
+                                    let pair = d.positionalPairOfApi[g].split('-');
+                                    if (h == (Number(pair[1] - 1))) {
+                                        if (pair[0] == "0") {
+                                            greekPair.push(data.json().englishword[Number(pair[1] - 1)] + "(" + "Null" + ")");
+                                        }
+                                        else {
+                                            //greekPair.push(data.json().targettext[Number(pair[0] - 1)]);
+                                            greekPair.push(data.json().englishword[Number(pair[1] - 1)] + "(" + data.json().targettext[Number(pair[0] - 1)] + ")");
+                                        }
+                                    }
+                                }
+                                if (greekPair[0] == undefined) {
+                                    greekPair.push(data.json().englishword[h] + "(" + "NA" + ")");
+                                }
+                                self.Statuses.push(new HorizontalAlign(h, data.json().sourcetext[h], greekPair))
+                            }
+                            // Ends Here
+                        }
+                        self.gridDataJson.positionalpairs = d.positionalPairOfApi;
+                    }
+                    //console.log(d.positionalPairOfApi)
+                    //console.log(self.indPair)
                 }
-                //console.log(d.positionalPairOfApi)
-                //console.log(self.indPair)
-            }
-            else{
-                self.toastr.error('You are not a registered User. Sign In to make changes.')
-            }
+                else {
+                    self.toastr.error('You are not a registered User. Sign In to make changes.')
+                }
             })
 
             .on("mouseover", function (d: any, i) {
@@ -982,10 +976,16 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                 div.html(function () {
                     if (d.greekHorizontalWord[i] != 'NULL') {
                         // console.log(Number(d.greekHorizontalWords[i].substring(1,d.greekHorizontalWords[i].length)));
-                        let removeZero = Number(d.greekHorizontalWord[i].substring(1, d.greekHorizontalWord[i].length)).toString();
-                        if (removeZero.endsWith('0')) {
-                            removeZero = removeZero.substring(0, removeZero.length - 1)
-                        }
+                        // let removeZero = Number(d.greekHorizontalWord[i].substring(1, d.greekHorizontalWord[i].length)).toString();
+                        // if (removeZero.endsWith('0')) {
+                        //     removeZero = removeZero.substring(0, removeZero.length - 1)
+                        // }
+
+
+                        //Added on 17 Oct for showing lexicon data as per new updates
+                        let removeZero = Number(d.greekHorizontalWord[i]);
+                        // Ended here on 17 Oct
+
                         // console.log(removeZero)
                         for (let count = 0; count < greekArray.length; count++) {
                             //console.log(greekArray[count])
@@ -1047,7 +1047,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
             .data(gridData)
             .attr("width", function (d, i) {
                 let len = d.length;
-                len = (len * 35) +  215;  //140;
+                len = (len * 35) + 215;  //140;
                 return len;
             })
             .attr("height", function (d, i) {
@@ -1131,16 +1131,20 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                 div.style("text-align", "left")
                 div.style("width", "400px")
                 div.html(function () {
-
                     if (d.greekHorizontalWord[i] != 'NULL') {
-                         console.log(d.greekHorizontalWord[i]);
+                        // console.log(d.greekHorizontalWord[i]);
 
-                        let removeZero = Number(String(d.greekHorizontalWord[i]).substring(1, String(d.greekHorizontalWord[i]).length)).toString();
-                        if (removeZero.endsWith('0')) {
-                            removeZero = removeZero.substring(0, removeZero.length - 1)
-                        }
-                         console.log(removeZero)
-                         console.log(greekArray)
+                        // let removeZero = Number(String(d.greekHorizontalWord[i]).substring(1, String(d.greekHorizontalWord[i]).length)).toString();
+                        // if (removeZero.endsWith('0')) {
+                        //     removeZero = removeZero.substring(0, removeZero.length - 1)
+                        // }
+                        // console.log(removeZero)
+                        // console.log(greekArray)
+
+                        //Added on 17 Oct for showing lexicon data as per new updates
+                        let removeZero = Number(d.greekHorizontalWord[i]);
+                        // Ended here on 17 Oct
+
                         for (let count = 0; count < greekArray.length; count++) {
                             //console.log(greekArray[count])
                             if (greekArray[count].includes("strongs:- " + removeZero + " ")) {

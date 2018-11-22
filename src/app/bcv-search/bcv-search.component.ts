@@ -26,36 +26,21 @@ export class BcvSearchComponent implements OnInit {
   bookNumber: string;
   verseNumber: string;
   BCV: any;
-  NextFlag: boolean = false;
   langFirstIndex: any;
   chapterFirstIndex: any;
   verseFirstIndex: any;
   bookFirstIndex: any;
   LangArray: any; //= new Array();
   langParam: any;
-  // headers = new Headers();
-  // guestUser = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoZXJva3VAeW9wbWFpbC5jb20iLCJleHAiOjE1MzgxNjIwMTgsInJvbGUiOiJtZW1iZXIifQ.diVbmG_9TqRvgNIWKsnfrbgWUoqJxtWCc_HVVoFjMac";
+  NextFlag: boolean = false;
 
   constructor(public router: Router, private activatedRoute: ActivatedRoute, private toastr: ToastrService, private _http: Http, private ApiUrl: GlobalUrl) {
 
     this.toastr.toastrConfig.positionClass = "toast-top-center"
     this.toastr.toastrConfig.closeButton = true;
     this.toastr.toastrConfig.progressBar = true;
-    // if(!localStorage.getItem('access-token')){
-    //   this.toastr.error('You are not logged in');
-    //   this.router.navigate(['../app-login']);
-    // }
   }
 
-  // createAuthorizationHeader(headers: Headers) {
-  //   if(localStorage.getItem("access-token")){
-  //   headers.append('Authorization', 'bearer ' +
-  //     localStorage.getItem("access-token")); 
-  //   }
-  //   else{
-  //     headers.append('Authorization', 'bearer ' + this.guestUser);
-  //   }
-  // }
 
   ngOnInit() {
     this.chapterFirstIndex = 0;
@@ -63,8 +48,6 @@ export class BcvSearchComponent implements OnInit {
     this.bookFirstIndex = 0;
     this.langFirstIndex = 0;
 
-
-    // this.createAuthorizationHeader(this.headers);
 
     this._http.get(this.ApiUrl.getLang)
       .subscribe(data => {
@@ -134,9 +117,9 @@ export class BcvSearchComponent implements OnInit {
             // console.log(params['AssignLang'])
 
             let langFullName = this.LangArray[params['AssignLang']];
-            this.LangArray = {currLang : langFullName}
+            this.LangArray = { currLang: langFullName }
             this.langParam = params['AssignLang'];
-            this.langFirstIndex =  "currLang";
+            this.langFirstIndex = "currLang";
             console.log(this.LangArray)
             console.log(params['AssignLang'])
 
@@ -165,31 +148,33 @@ export class BcvSearchComponent implements OnInit {
   }
 
   glLangChange(l) {
-    this.bookFirstIndex = 0;
-    this.chapterFirstIndex = 0;
-    this.verseFirstIndex = 0;
-    this.verseNumber = stringify(0);
-    this.BCV = null
-    this.langParam = l;
+    if (l != 0) {
+      this.bookFirstIndex = 0;
+      this.chapterFirstIndex = 0;
+      this.verseFirstIndex = 0;
+      this.verseNumber = stringify(0);
+      this.BCV = null
+      this.langParam = l;
 
-    localStorage.setItem('language', this.langParam);
+      localStorage.setItem('language', this.langParam);
 
-    this._http.get(this.ApiUrl.getBooks + '/' + l + '/grk-ugnt')
-      .subscribe(data => {
-        this.Books = data.json().books;
-        //console.log (data.json())
-      }, (error: Response) => {
-        if (error.status === 404) {
-          this.toastr.warning("Books data not available")
-        }
-        else {
-          this.toastr.error("An Unexpected Error Occured.")
-        }
+      this._http.get(this.ApiUrl.getBooks + '/' + l + '/grk-ugnt')
+        .subscribe(data => {
+          this.Books = data.json().books;
+          //console.log (data.json())
+        }, (error: Response) => {
+          if (error.status === 404) {
+            this.toastr.warning("Books data not available")
+          }
+          else {
+            this.toastr.error("An Unexpected Error Occured.")
+          }
 
-      })
+        })
+    }
   }
 
-  bookChange(x:string) {
+  bookChange(x: string) {
     this.chapterFirstIndex = 0;
     this.verseFirstIndex = 0;
     this.verseNumber = stringify(0);

@@ -17,7 +17,7 @@
                                 <mat-form-field>
                                         <mat-select placeholder="BOOK" [(ngModel)]="bookFirstIndex" ngModel name="book" id="book" #book="ngModel" (selectionChange)="bookChange(book.value)">
                                                 <mat-option value="0">Select</mat-option>
-                                                <mat-option *ngFor="let book of Books" [value]="book">{{book}}</mat-option>
+                                                <mat-option *ngFor="let book of Books" [value]="book">{{book | uppercase}}</mat-option>
                                         </mat-select>
                                 </mat-form-field>
                         </div>

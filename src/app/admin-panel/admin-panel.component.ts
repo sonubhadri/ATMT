@@ -58,7 +58,7 @@ export class AdminPanelComponent implements OnInit {
       .subscribe(data => {
         this.projectList = String(Object.values(data.json())).split(',');
         this.organisation = String(Object.keys(data.json()))
-        console.log('hello bye')
+        //console.log('hello bye')
         //console.log(Object.values(this.projectList))
       }, (error: Response) => {
         if (error.status === 404) {
