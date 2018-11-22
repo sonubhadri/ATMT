@@ -56,7 +56,7 @@
 
         <ng-container matColumnDef="role">
             <th mat-header-cell *matHeaderCellDef style="width:100px;"><strong>Role</strong>  </th>
-            <td mat-cell *matCellDef="let element" style="width:100px;"> {{element.role == '1'?'Translate':element.role == '2'?'Align':element.role == '3'?'Check':'No role assigned'}} </td>
+            <td mat-cell *matCellDef="let element" style="width:100px;"> {{element.role == 'translate'?'Translate':element.role == 'align'?'Align':element.role == 'check'?'Check':'No role assigned'}} </td>
         </ng-container>
 
         <ng-container matColumnDef="Language">
