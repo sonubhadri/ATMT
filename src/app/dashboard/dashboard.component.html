@@ -3,7 +3,7 @@
     <br>
     <br>
     <button style="width:150px;height:100px;" *ngFor="let Alignment of alignArray;let i = index" class="btn btn-secondary border border-white" (click)="AlignmentClick(i)">{{Alignment}}</button>
-    <h5 *ngIf="!alignArray.length > 0"><span style="color:grey;">No Assignment for Alignment</span></h5>
+    <h5 *ngIf="!(alignArray.length) > 0"><span style="color:grey;">No Assignment for Alignment</span></h5>
 </div>
 <br>
 <br>
@@ -15,7 +15,7 @@
     <br>
     <br>
     <button style="width:150px;height:100px;" *ngFor="let Translate of translateArray" class="btn btn-secondary border border-white" (click)="AlignmentClick()">{{Translate}}</button>
-    <h5 *ngIf="!translateArray.length > 0"><span style="color:grey;">No Assignment for translation</span></h5>
+    <h5 *ngIf="!(translateArray.length > 0)"><span style="color:grey;">No Assignment for translation</span></h5>
 </div>
 <br>
 <br>
@@ -27,7 +27,7 @@
     <br>
     <br>
     <button style="width:150px;height:100px;" *ngFor="let Check of checkArray" class="btn btn-secondary border border-white" (click)="AlignmentClick()">{{Check}}</button>
-    <h5 *ngIf="!checkArray.length > 0"><span style="color:grey;">No Assignment for Checking</span></h5>
+    <h5 *ngIf="!(checkArray.length > 0)"><span style="color:grey;">No Assignment for Checking</span></h5>
 </div>
 <br>
 <br>
