@@ -58,8 +58,9 @@ export class D3MatrixComponent implements OnInit, OnChanges {
     linear = false;
     interLinearflag = true;
     headers = new Headers();
+    organisation:any;
 
-    constructor(public locations: Location, public router: Router, private ApiUrl: GlobalUrl, private toastr: ToastrService, element: ElementRef, private ngZone: NgZone, d3Service: D3Service, private service: AlignerService, private _http: Http) {
+    constructor(public locations: Location, private activatedRoute: ActivatedRoute, public router: Router, private ApiUrl: GlobalUrl, private toastr: ToastrService, element: ElementRef, private ngZone: NgZone, d3Service: D3Service, private service: AlignerService, private _http: Http) {
         this.d3 = d3Service.getD3();
         this.toastr.toastrConfig.positionClass = "toast-top-center"
         this.toastr.toastrConfig.closeButton = true;
@@ -170,7 +171,8 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                     greekIndexWise: greekHorizontalWords[column] + column + 'column',
                     hindiIndexWise: hindiVerticalWords[row] + row + 'row',
                     rawPosss: rawPoss,
-                    saveButtonFlag: this.saveButtonFlag
+                    saveButtonFlag: this.saveButtonFlag,
+                    organisation:this.organisation
                 })
                 xpos += width;
 
@@ -215,7 +217,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
             }
             y[index] = separatedPair[0] + "-" + separatedPair[1];
         }
-        var data = { "bcv": x, "positional_pairs": y, "srclang": l, "trglang": "grk-ugnt" };
+        var data = { "bcv": x, "positional_pairs": y, "srclang": l, "trglang": "grk-ugnt", "organisation":this.organisation };
         this.display = true;
         this._http.post(this.ApiUrl.getnUpdateBCV, data, {
             headers: this.headers
@@ -224,10 +226,14 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                 let response: any = data;
                 this.display = false;
                 //console.log(response._body);
-                if (response._body === 'Saved') {
-                    this.toastr.success('Updation has been done successfully.');
+                if (response.json().success === true) {
+                    this.toastr.success(response.json().message);
                     document.getElementById("grid").style.display = "";
                     //this.gridBind();
+                }
+                else{
+                    this.toastr.success(response.json().message);
+                    document.getElementById("grid").style.display = "";
                 }
             }, (error: Response) => {
                 if (error.status === 400) {
@@ -242,7 +248,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
             })
 
         document.getElementById('saveButton').style.display = 'none';
-        document.getElementById("appButton").style.display = "";
+        //document.getElementById("appButton").style.display = "";
         //document.getElementById("fixButton").style.display = "none";
         //document.getElementById('discardButton').style.display = 'none';
 
@@ -363,7 +369,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                 }
                 y[index] = separatedPair[0] + "-" + separatedPair[1];
             }
-            var data = { "bcv": x, "positional_pairs": y, "srclang": l, "trglang": "grk-ugnt" };
+            var data = { "bcv": x, "positional_pairs": y, "srclang": l, "trglang": "grk-ugnt", "organisation":this.organisation  };
             this.display = true;
             this._http.post(this.ApiUrl.getnUpdateBCV, data, {
                 headers: this.headers
@@ -372,7 +378,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                     let response: any = data;
                     this.display = false;
                     //console.log(response._body);
-                    if (response._body === 'Saved') {
+                    if (response.json().success === true) {
                         this.toastr.success('Discarded the changes successfully.');
                         this.gridBind();
                         localStorage.setItem("lastAlignments", "");
@@ -509,7 +515,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
         this.display = true;
         //console.log(this.display)
-        this._http.get(this.ApiUrl.grkhin + "/" + this.Lang + "/" + this.BOOKNAME + usfmFlag)
+        this._http.get(this.ApiUrl.grkhin + "/" + this.Lang + "/grk-ugnt" + "/" + this.BOOKNAME + usfmFlag)
             .toPromise()
             .then(response => this.saveToFileSystem(response.json()))
             .catch((err) => {
@@ -527,12 +533,23 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
 
     ngOnInit() {
+        this.activatedRoute.params.subscribe((params: Params) => {
+            if (params['AssignOrganisation']) {
+            this.organisation = params['AssignOrganisation'];
+            }
+        });
     }
 
     ngOnChanges(changes: SimpleChanges) {
         const bookChapterVerse: SimpleChange = changes.BCV;
         this.BCV = bookChapterVerse.currentValue;
-        this.locations.go('/app-bcv-search/' + this.BCV)
+        if(this.organisation){
+            this.locations.go('/app-bcv-search/' + this.BCV + '/' + this.organisation)
+        }
+        else {
+            this.locations.go('/app-bcv-search/' + this.BCV)
+        }
+  
         this.gridBind();
         this.Interlinear = "Interlinear"
         this.verticalORgrid = "Display Bilinear";
@@ -759,7 +776,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                 }
             })
             .on('click', function (d: any, i) {
-                if (localStorage.getItem('access-token')) {
+                if (localStorage.getItem('access-token') && d.organisation ) {
                     if (!d.filled) {
                         d3.select(this)
                             .style("fill", "#023659")
@@ -942,7 +959,13 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                     //console.log(self.indPair)
                 }
                 else {
-                    self.toastr.error('You are not a registered User. Sign In to make changes.')
+                    if( !d.organisation && localStorage.getItem('access-token')){
+                        self.toastr.error('You are not under any organisation.')
+                    }
+                    else{
+                        self.toastr.error('You are not a registered User. Sign In to make changes.')
+                    }
+                    
                 }
             })
 

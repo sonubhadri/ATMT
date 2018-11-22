@@ -178,7 +178,11 @@ import { ReportsComponent } from './reports/reports.component';
         component: BcvSearchComponent
       },
       {
-        path: 'app-bcv-search/:AssignLang/:AssignBook',
+        path: 'app-bcv-search/:BCV/:AssignOrganisation',
+        component: BcvSearchComponent
+      },
+      {
+        path: 'app-bcv-search/:AssignLang/:AssignBook/:AssignOrganisation',
         component: BcvSearchComponent
       },
       {
