@@ -68,15 +68,15 @@ export class DashboardComponent implements OnInit {
         //console.log(this.list[0].books)
 
         for (let i = 0; i < this.list.length; i++) {
-          if (this.list[i].role == "1") {
+          if (this.list[i].role == "translate") {
             this.translateArray.push(this.list[i].project)
             this.translateBookArray.push(this.list[i].books)
           }
-          else if (this.list[i].role == "2") {
+          else if (this.list[i].role == "align") {
             this.alignArray.push(this.list[i].project)
             this.alignBookArray.push(this.list[i].books)
           }
-          else if (this.list[i].role == "3") {
+          else if (this.list[i].role == "check") {
             this.checkArray.push(this.list[i].project)
             this.checkBookArray.push(this.list[i].books)
           }
