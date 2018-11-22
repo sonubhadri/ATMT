@@ -58,6 +58,7 @@ import {
   MatTooltipModule,
   MatTreeModule,
 } from '@angular/material';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { ComboEditorComponent } from './combo-editor/combo-editor.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
@@ -69,7 +70,20 @@ import { StrongpageComponent } from './strongpage/strongpage.component';
 import { ComboComponent } from './combo/combo.component';
 import { NumberToStringPipe } from './number-to-string.pipe';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
-import { DialogOverviewExampleDialog} from './admin-panel/admin-panel.component';
+import { DialogOverviewExampleDialog } from './admin-panel/admin-panel.component';
+import { AssignTaskDialog } from './admin-panel/admin-panel.component';
+import {LoginDialog} from './navigation/navigation.component';
+import {SignupDialog} from './navigation/navigation.component';
+import {resetDialog} from './navigation/navigation.component';
+import {forgotDialog} from './navigation/navigation.component';
+import { NavigationComponent } from './navigation/navigation.component';
+import { OrganizationComponent } from './organization/organization.component';
+import { UserManagementComponent } from './user-management/user-management.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { FeedbackComponent } from './feedback/feedback.component';
+import { RequestorganisationComponent } from './requestorganisation/requestorganisation.component';
+import { ReportsComponent } from './reports/reports.component';
+
 
 @NgModule({
   declarations: [
@@ -92,7 +106,19 @@ import { DialogOverviewExampleDialog} from './admin-panel/admin-panel.component'
     ComboComponent,
     NumberToStringPipe,
     AdminPanelComponent,
-    DialogOverviewExampleDialog
+    DialogOverviewExampleDialog,
+    AssignTaskDialog,
+    LoginDialog,
+    SignupDialog,
+    resetDialog,
+    forgotDialog,
+    NavigationComponent,
+    OrganizationComponent,
+    UserManagementComponent,
+    DashboardComponent,
+    FeedbackComponent,
+    RequestorganisationComponent,
+    ReportsComponent
   ],
   imports: [
     BrowserModule, HttpModule, FormsModule, CommonModule,
@@ -135,6 +161,7 @@ import { DialogOverviewExampleDialog} from './admin-panel/admin-panel.component'
     MatToolbarModule,
     MatTooltipModule,
     MatTreeModule,
+    NgxChartsModule,
     ToastrModule.forRoot(),
     RouterModule.forRoot([
       { path: '', component: BcvSearchComponent },
@@ -148,6 +175,10 @@ import { DialogOverviewExampleDialog} from './admin-panel/admin-panel.component'
       },
       {
         path: 'app-bcv-search/:BCV',
+        component: BcvSearchComponent
+      },
+      {
+        path: 'app-bcv-search/:AssignLang/:AssignBook',
         component: BcvSearchComponent
       },
       {
@@ -183,13 +214,20 @@ import { DialogOverviewExampleDialog} from './admin-panel/admin-panel.component'
         component: ComboComponent
       },
       {
-        path: 'adminpanel',
-        component: AdminPanelComponent
-      }
+        path: 'UserDashboard',
+        component: DashboardComponent
+      },
+      { path: 'Organization', component: OrganizationComponent },
+      { path: 'UserManagement', component: UserManagementComponent },
+      { path: 'feedback', component: FeedbackComponent },
+      { path: 'requestorg', component: RequestorganisationComponent },
+      { path: 'AdminDashboard', component: AdminPanelComponent },
+      { path: 'reports', component: ReportsComponent }
+      
     ])
   ],
-  providers: [AlignerService, D3Service, GlobalUrl,{provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}],
+  providers: [AlignerService, D3Service, GlobalUrl],
   bootstrap: [AppComponent],
-  entryComponents: [DialogOverviewExampleDialog]
+  entryComponents: [DialogOverviewExampleDialog,AssignTaskDialog,LoginDialog,SignupDialog,resetDialog,forgotDialog]
 })
 export class AppModule { }

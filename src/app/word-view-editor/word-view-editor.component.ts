@@ -75,9 +75,10 @@ export class WordViewEditorComponent implements OnInit {
   glLangChange(value){
     //console.log('event run')
     this.glang = value;
+    this.display = true;
     this._http.get(this.ApiUrl.strongslist + "/" + value  + '/grk-ugnt' )
     .subscribe(data => {
-      this.display = true;
+      this.display = false;
       this.strongArray = Object.keys(data.json());
       this.checkArray =  Object.values(data.json());      
       //console.log(this.checkArray)

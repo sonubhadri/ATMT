@@ -97,16 +97,18 @@ export class GlobalUrl {
     getBcvSearch: string = 'https://stagingapi.autographamt.com/v2/searchreferences';
 
     //ResetPassword API
-    resetPassword: string = 'https://stagingapi.autographamt.com/v1/resetpassword';
+    resetPassword: string = 'https://stagingapi.autographamt.com/v2/resetpassword';
 
     //Registration API
-    registration: string = 'https://stagingapi.autographamt.com/v1/registrations';
+    //registration: string = 'https://stagingapi.autographamt.com/v1/registrations';
+    registration: string = 'https://stagingapi.autographamt.com/v2/registrations';
 
     //Auth API
-    auth: string = 'https://stagingapi.autographamt.com/v1/auth';
+    //auth: string = 'https://stagingapi.autographamt.com/v1/auth';
+    auth: string = 'https://stagingapi.autographamt.com/v2/auth';
 
     //forgotPassword API
-    forgotPassword: string = 'https://stagingapi.autographamt.com/v1/forgotpassword';
+    forgotPassword: string = 'https://stagingapi.autographamt.com/v2/forgotpassword';
 
     //fetch translationwords API
     translationwords: string = "https://stagingapi.autographamt.com/v2/alignments/translationwords";
@@ -115,4 +117,23 @@ export class GlobalUrl {
     strongslist: string = "https://stagingapi.autographamt.com/v2/alignments/strongs";
 
     strongLexicon: string = "https://stagingapi.autographamt.com/v2/lexicons";
+
+    requestOrganization: string = "https://stagingapi.autographamt.com/v2/users/organisations";
+
+    createOrganization: string = "https://stagingapi.autographamt.com/v2/organisations";
+
+    createProject: string = "https://stagingapi.autographamt.com/v2/projects";
+
+    userList: string = "https://stagingapi.autographamt.com/v2/users";
+
+    assignments: string = "https://stagingapi.autographamt.com/v2/assignments";
+
+    taskListForUser:string = "https://stagingapi.autographamt.com/v2/users/assignments";
+
+    userListProjectWise:string = "https://stagingapi.autographamt.com/v2/projects/users";
+
+    reports = "https://stagingapi.autographamt.com/v2/alignments/reports";
+
+    feedbackForm = "https://stagingapi.autographamt.com/v2/feedbacks";
+
 }

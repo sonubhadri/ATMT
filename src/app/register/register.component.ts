@@ -22,11 +22,14 @@ export class RegisterComponent implements OnInit {
   username: string
   password: string
   confirmPassword: string
+  firstname: string
+  lastname: string
   hide = true;
   display = false;
   email = new FormControl('', [Validators.required, Validators.email]);
   passwords = new FormControl('', [Validators.required, Validators.minLength(5)]);
   confirmPass = new FormControl('', [Validators.required]);
+  firstnameValid = new FormControl('', [Validators.required]);
   home = '';
   // login() : void {
   //   if(this.username == 'admin' && this.password == 'admin'){
@@ -42,13 +45,15 @@ export class RegisterComponent implements OnInit {
 
       if (this.password == this.confirmPassword) {
 
-        var data = new FormData();
-        data.append("email", this.username);
-        data.append("password", this.password);
+        // var data = new FormData();
+        // data.append("email", this.username);
+        // data.append("password", this.password);
+        // data.append("firstName",this.firstname);
+        // data.append("lastName",this.lastname?this.lastname:"");
         this.display = true;
-        this._http.post(this.API.registration, data)
+        this._http.post(this.API.registration, {"email":this.username, "password":this.password, "firstName":this.firstname, "lastName":this.lastname?this.lastname:""})
           .subscribe(Response => {
-           // console.log(Response)
+            console.log(Response)
             if (Response.json().success == true) {
               this.display = false;
               this.toastr.success(Response.json().message)
@@ -100,6 +105,10 @@ export class RegisterComponent implements OnInit {
 
   getErrorMessageForConfirmPassword() {
     return this.confirmPass.hasError('required') ? 'You must enter a value' : '';
+  }
+
+  getErrorMessageForFirstName() {
+    return this.firstnameValid.hasError('required') ? 'You must enter your first name' : '';
   }
 
   ngOnInit() {

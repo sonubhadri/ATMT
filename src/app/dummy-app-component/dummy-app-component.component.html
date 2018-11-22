@@ -6,12 +6,6 @@
         <li [routerLinkActive]="['active']">
           <a routerLink = "{{home}}" class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
         </li>
-        <li [routerLinkActive]="['active']">
-          <a routerLink = "{{csv}}" class="nav-link" href="#">Translation words</a>
-        </li>
-        <li [routerLinkActive]="['active']">
-          <a routerLink = "{{wordview}}" class="nav-link" href="#">Word View Editor</a>
-        </li>
       </ul>
       <form class="form-inline my-2 my-lg-0">
         <input id="q" class="form-control mr-sm-2" (keyup)="do_parse()" [(ngModel)]="textValue" name="text" type="search" placeholder="Search  (MAT 1 : 1)" aria-label="Search">
