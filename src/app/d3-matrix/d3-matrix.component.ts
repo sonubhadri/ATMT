@@ -701,6 +701,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
         var greekLexiconText = '';
         var greekArray = new Array();
+        var greekVerticalArray = new Array();
         for (var l = 0; l < data.json().sourcetext.length; l++) {
             //self._http.get(self.ApiUrl.getLexicon + '/' + data.json().sourcetext[l])
             //.subscribe(data => {
@@ -710,6 +711,16 @@ export class D3MatrixComponent implements OnInit, OnChanges {
             //console.log(data.json().lexicondata[data.json().sourcetext[l]].targetword)
 
             greekArray.push("<b>English Word</b>:- " + data.json().lexicondata[data.json().sourcetext[l]].targetword + "<br/><br/>" + "<b>Definition</b>:- " + data.json().lexicondata[data.json().sourcetext[l]].definition + "<br/><br/>" + "<b>greek_word</b>:- " + data.json().lexicondata[data.json().sourcetext[l]].sourceword + "<br/><br/>" + "<b>pronunciation</b>:- " + data.json().lexicondata[data.json().sourcetext[l]].pronunciation + "<br/><br/>" + "strongs:- " + data.json().lexicondata[data.json().sourcetext[l]].strongs + " " + "<br/><br/>" + "<b>transliteration</b>:- " + data.json().lexicondata[data.json().sourcetext[l]].transliteration);
+
+            //});
+
+            //    console.log(greekArray)       
+        }
+
+
+        for (var l = 0; l < data.json().targettext.length; l++) {
+     
+            greekVerticalArray.push("<b>English Word</b>:- " + data.json().lexicondata[data.json().targettext[l]].targetword + "<br/><br/>" + "<b>Definition</b>:- " + data.json().lexicondata[data.json().targettext[l]].definition + "<br/><br/>" + "<b>greek_word</b>:- " + data.json().lexicondata[data.json().targettext[l]].sourceword + "<br/><br/>" + "<b>pronunciation</b>:- " + data.json().lexicondata[data.json().targettext[l]].pronunciation + "<br/><br/>" + "strongs:- " + data.json().lexicondata[data.json().targettext[l]].strongs + " " + "<br/><br/>" + "<b>transliteration</b>:- " + data.json().lexicondata[data.json().targettext[l]].transliteration);
 
             //});
 
@@ -1118,8 +1129,8 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                     div.style("text-align", "left")
                     div.style("width", "400px")
                     div.html(function () {
-
-                        //console.log(d[i].Language)
+                       
+                        //console.log(greekArray)
                         if (d[i].hindiVerticalWords[i] != 'NULL') {
                             // console.log(d.greekHorizontalWord[i]);
 
@@ -1134,11 +1145,11 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                             let removeZero = Number(d[i].hindiVerticalWords[i]);
                             // Ended here on 17 Oct
 
-                            for (let count = 0; count < greekArray.length; count++) {
+                            for (let count = 0; count < greekVerticalArray.length; count++) {
                                 //console.log(greekArray[count])
-                                if (greekArray[count].includes("strongs:- " + removeZero + " ")) {
+                                if (greekVerticalArray[count].includes("strongs:- " + removeZero + " ")) {
                                     //console.log(greekArray[count])
-                                    return greekArray[count];
+                                    return greekVerticalArray[count];
                                 }
 
 
