@@ -58,7 +58,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
     linear = false;
     interLinearflag = true;
     headers = new Headers();
-    organisation:any;
+    organisation: any;
 
     constructor(public locations: Location, private activatedRoute: ActivatedRoute, public router: Router, private ApiUrl: GlobalUrl, private toastr: ToastrService, element: ElementRef, private ngZone: NgZone, d3Service: D3Service, private service: AlignerService, private _http: Http) {
         this.d3 = d3Service.getD3();
@@ -86,7 +86,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
         var timeDiff = Math.abs(new Date(dd * 1000).getTime() - new Date().getTime());
         if (Math.ceil(timeDiff / (1000 * 3600 * 24)) > 1) {
             localStorage.setItem("access-token", '');
-            this.router.navigate(['../app-login']);
+            //this.router.navigate(['../app-login']);
         }
     }
 
@@ -172,7 +172,8 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                     hindiIndexWise: hindiVerticalWords[row] + row + 'row',
                     rawPosss: rawPoss,
                     saveButtonFlag: this.saveButtonFlag,
-                    organisation:this.organisation
+                    organisation: this.organisation,
+                    Language: this.Lang
                 })
                 xpos += width;
 
@@ -217,7 +218,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
             }
             y[index] = separatedPair[0] + "-" + separatedPair[1];
         }
-        var data = { "bcv": x, "positional_pairs": y, "srclang": l, "trglang": "grk-ugnt", "organisation":this.organisation };
+        var data = { "bcv": x, "positional_pairs": y, "srclang": l, "trglang": "grk-ugnt", "organisation": this.organisation };
         this.display = true;
         this._http.post(this.ApiUrl.getnUpdateBCV, data, {
             headers: this.headers
@@ -231,7 +232,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                     document.getElementById("grid").style.display = "";
                     //this.gridBind();
                 }
-                else{
+                else {
                     this.toastr.success(response.json().message);
                     document.getElementById("grid").style.display = "";
                 }
@@ -369,7 +370,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                 }
                 y[index] = separatedPair[0] + "-" + separatedPair[1];
             }
-            var data = { "bcv": x, "positional_pairs": y, "srclang": l, "trglang": "grk-ugnt", "organisation":this.organisation  };
+            var data = { "bcv": x, "positional_pairs": y, "srclang": l, "trglang": "grk-ugnt", "organisation": this.organisation };
             this.display = true;
             this._http.post(this.ApiUrl.getnUpdateBCV, data, {
                 headers: this.headers
@@ -535,7 +536,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
     ngOnInit() {
         this.activatedRoute.params.subscribe((params: Params) => {
             if (params['AssignOrganisation']) {
-            this.organisation = params['AssignOrganisation'];
+                this.organisation = params['AssignOrganisation'];
             }
         });
     }
@@ -543,13 +544,13 @@ export class D3MatrixComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges) {
         const bookChapterVerse: SimpleChange = changes.BCV;
         this.BCV = bookChapterVerse.currentValue;
-        if(this.organisation){
+        if (this.organisation) {
             this.locations.go('/app-bcv-search/' + this.BCV + '/' + this.organisation)
         }
         else {
             this.locations.go('/app-bcv-search/' + this.BCV)
         }
-  
+
         this.gridBind();
         this.Interlinear = "Interlinear"
         this.verticalORgrid = "Display Bilinear";
@@ -776,7 +777,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                 }
             })
             .on('click', function (d: any, i) {
-                if (localStorage.getItem('access-token') && d.organisation ) {
+                if (localStorage.getItem('access-token') && d.organisation) {
                     if (!d.filled) {
                         d3.select(this)
                             .style("fill", "#023659")
@@ -959,13 +960,13 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                     //console.log(self.indPair)
                 }
                 else {
-                    if( !d.organisation && localStorage.getItem('access-token')){
+                    if (!d.organisation && localStorage.getItem('access-token')) {
                         self.toastr.error('You are not under any organisation.')
                     }
-                    else{
+                    else {
                         self.toastr.error('You are not a registered User. Sign In to make changes.')
                     }
-                    
+
                 }
             })
 
@@ -1105,6 +1106,55 @@ export class D3MatrixComponent implements OnInit, OnChanges {
             .text(function (d, i) {
                 return d[0].hindiVerticalWords[i];
             })
+
+            .on("mouseout", function (d) {
+                div.style("display", "none");
+            })
+            .on('mouseover', function (d: any, i) {
+                if (d[i].Language == 'grk-UGNT4') {
+                    div.style("left", d3.event.pageX + 10 + "px");
+                    div.style("top", d3.event.pageY - 25 + "px");
+                    div.style("display", "inline-block");
+                    div.style("text-align", "left")
+                    div.style("width", "400px")
+                    div.html(function () {
+
+                        //console.log(d[i].Language)
+                        if (d[i].hindiVerticalWords[i] != 'NULL') {
+                            // console.log(d.greekHorizontalWord[i]);
+
+                            // let removeZero = Number(String(d.greekHorizontalWord[i]).substring(1, String(d.greekHorizontalWord[i]).length)).toString();
+                            // if (removeZero.endsWith('0')) {
+                            //     removeZero = removeZero.substring(0, removeZero.length - 1)
+                            // }
+                            // console.log(removeZero)
+                            // console.log(greekArray)
+
+                            //Added on 17 Oct for showing lexicon data as per new updates
+                            let removeZero = Number(d[i].hindiVerticalWords[i]);
+                            // Ended here on 17 Oct
+
+                            for (let count = 0; count < greekArray.length; count++) {
+                                //console.log(greekArray[count])
+                                if (greekArray[count].includes("strongs:- " + removeZero + " ")) {
+                                    //console.log(greekArray[count])
+                                    return greekArray[count];
+                                }
+
+
+                            }
+                        }
+                        else {
+                            return 'N/A';
+                        }
+
+
+                        //return  (d.greekHorizontalWords[i] == 'NULL') ? 'N/A':d.greekHorizontalWords[i]
+
+                    });
+                }
+            })
+
 
         for (var i = 0; i < label.nodes().length; i++) {
             //console.log(  label.nodes()[i].getComputedTextLength());
