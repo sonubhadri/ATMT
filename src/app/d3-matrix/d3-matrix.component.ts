@@ -718,13 +718,15 @@ export class D3MatrixComponent implements OnInit, OnChanges {
         }
 
 
-        for (var l = 0; l < data.json().targettext.length; l++) {
-     
-            greekVerticalArray.push("<b>English Word</b>:- " + data.json().lexicondata[data.json().targettext[l]].targetword + "<br/><br/>" + "<b>Definition</b>:- " + data.json().lexicondata[data.json().targettext[l]].definition + "<br/><br/>" + "<b>greek_word</b>:- " + data.json().lexicondata[data.json().targettext[l]].sourceword + "<br/><br/>" + "<b>pronunciation</b>:- " + data.json().lexicondata[data.json().targettext[l]].pronunciation + "<br/><br/>" + "strongs:- " + data.json().lexicondata[data.json().targettext[l]].strongs + " " + "<br/><br/>" + "<b>transliteration</b>:- " + data.json().lexicondata[data.json().targettext[l]].transliteration);
+        if (this.Lang == 'grk-UGNT4') {
+            for (var l = 0; l < data.json().targettext.length; l++) {
 
-            //});
+                greekVerticalArray.push("<b>English Word</b>:- " + data.json().lexicondata[data.json().targettext[l]].targetword + "<br/><br/>" + "<b>Definition</b>:- " + data.json().lexicondata[data.json().targettext[l]].definition + "<br/><br/>" + "<b>greek_word</b>:- " + data.json().lexicondata[data.json().targettext[l]].sourceword + "<br/><br/>" + "<b>pronunciation</b>:- " + data.json().lexicondata[data.json().targettext[l]].pronunciation + "<br/><br/>" + "strongs:- " + data.json().lexicondata[data.json().targettext[l]].strongs + " " + "<br/><br/>" + "<b>transliteration</b>:- " + data.json().lexicondata[data.json().targettext[l]].transliteration);
 
-            //    console.log(greekArray)       
+                //});
+
+                //    console.log(greekArray)       
+            }
         }
 
         var grid = d3.select("#grid")
@@ -1129,7 +1131,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                     div.style("text-align", "left")
                     div.style("width", "400px")
                     div.html(function () {
-                       
+
                         //console.log(greekArray)
                         if (d[i].hindiVerticalWords[i] != 'NULL') {
                             // console.log(d.greekHorizontalWord[i]);
