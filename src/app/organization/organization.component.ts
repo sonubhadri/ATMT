@@ -56,7 +56,7 @@ export class OrganizationComponent implements OnInit {
     this.decodeToken(String(JSON.parse(JSON.stringify(this.headers)).Authorization));
 
     this.display = true;
-    this._http.post(this.API.createOrganization, { "organisation_name": this.name, "address": this.address, "email": this.email, "country_code": Number(this.concode), "phone": this.phone, "organisation_owner": this.owner }, {
+    this._http.post(this.API.createOrganization, { "organisation_name": this.name.replace(' ',''), "address": this.address, "email": this.email, "country_code": Number(this.concode), "phone": this.phone, "organisation_owner_email": this.owner }, {
       headers: this.headers
     })
       .subscribe(Response => {

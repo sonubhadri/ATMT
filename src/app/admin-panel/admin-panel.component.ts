@@ -52,6 +52,7 @@ export class AdminPanelComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this._http.get(this.ApiUrl.createProject, {
       headers: this.headers
     })
@@ -72,13 +73,14 @@ export class AdminPanelComponent implements OnInit {
   }
 
   openDialog(): void {
-    const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {      
+    const dialogRef = this.dialog.open(AssignTaskDialog, {
+      width: '1200px',
       data: { name: this.name, animal: this.animal },
-      disableClose:false
+      disableClose: false
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closeddddd');
+      //console.log('The dialog was closeddddd');
       this.animal = result;
 
       this._http.get(this.ApiUrl.createProject, {
@@ -96,7 +98,7 @@ export class AdminPanelComponent implements OnInit {
           else {
             this.toastr.error("An Unexpected Error Occured.")
           }
-  
+
         })
 
     });
@@ -133,7 +135,7 @@ export class DialogOverviewExampleDialog implements OnInit {
   constructor(private API: GlobalUrl, public router: Router,
     private toastr: ToastrService, private _http: Http, private ApiUrl: GlobalUrl, public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {
-      dialogRef.disableClose = false;
+    dialogRef.disableClose = false;
     this.toastr.toastrConfig.positionClass = "toast-top-center"
     this.toastr.toastrConfig.closeButton = true;
     this.toastr.toastrConfig.progressBar = true;
@@ -224,9 +226,9 @@ export interface tableData {
 export class AssignTaskDialog implements OnInit {
 
   ELEMENT_DATA: tableData[] = [];
-  norecordFlag:boolean;
+  norecordFlag: boolean;
 
-  displayedColumns: string[] = [ 'user','Language', 'books', 'role', 'Remove'];
+  displayedColumns: string[] = ['user', 'Language', 'books', 'role', 'Remove'];
   dataSource = new MatTableDataSource<tableData>(this.ELEMENT_DATA);
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -240,6 +242,10 @@ export class AssignTaskDialog implements OnInit {
   bookControl = new FormControl();
   role: any;
   projectBook: any;
+  projectBookviaCreate: any;
+  LangArray: any;
+  langFirstIndex: any;
+  langParam: any;
 
   bookList: string[] = ["MAT", "MRK", "LUK", "JHN", "ACT", "ROM", "1CO", "2CO", "GAL", "EPH", "PHP", "COL", "1TH", "2TH", "1TI", "2TI", "TIT", "PHM", "HEB", "JAS", "1PE", "2PE", "1JN", "2JN", "3JN", "JUD", "REV", "GEN", "EXO", "LEV", "NUM", "DEU", "JOS", "JDG", "RUT", "1SA", "2SA", "1KI", "2KI", "1CH", "2CH", "EZR", "NEH", "EST", "JOB", "PSA", "PRO", "ECC", "SNG", "ISA", "JER", "LAM", "EZK", "DAN", "HOS", "JOL", "AMO", "OBA", "JON", "MIC", "NAM", "HAB", "ZEP", "HAG", "ZEC", "MAL"];
 
@@ -274,6 +280,10 @@ export class AssignTaskDialog implements OnInit {
     }
   }
 
+  glLangChange(l) {
+    this.projectBookviaCreate = l;
+  }
+
   bookSelect(book) {
     this.bookSelected = book;
     console.log(this.bookSelected)
@@ -291,30 +301,33 @@ export class AssignTaskDialog implements OnInit {
     this.role = m;
   }
 
-  onRemoveClick(email,language,role,books){
-      console.log(email + "     " + language + "     "+ role+ "     "+ books)
-      this._http.post(this.ApiUrl.assignments + "/delete", { "email": email, "language":language , "role": role, "books": books.split(',') }, {
-        headers: this.headers
-      })
-        .subscribe(Response => {
-          //console.log(Response.json())
-          if (Response.json().success == true) {
-            this.display = false;
-            this.toastr.success('Task Deleted succesfully.')
-          }
-          else {
-            this.display = false;
-            this.toastr.error(Response.json().message)
-          }
+  onRemoveClick(email, language, role, books) {
+    console.log(email + "     " + language + "     " + role + "     " + books)
+    this._http.post(this.ApiUrl.assignments + "/delete", { "email": email, "language": language, "role": role, "books": books.split(',') }, {
+      headers: this.headers
+    })
+      .subscribe(Response => {
+        //console.log(Response.json())
+        if (Response.json().success == true) {
           this.display = false;
-        })
-  
-      this.assigndialogRef.close();
-  } 
+          this.toastr.success('Task Deleted succesfully.')
+        }
+        else {
+          this.display = false;
+          this.toastr.error(Response.json().message)
+        }
+        this.display = false;
+      })
+
+    this.assigndialogRef.close();
+  }
 
   onApproveClick() {
 
-    this._http.post(this.ApiUrl.assignments + "/add", { "email": this.user, "language": this.projectBook, "role": this.role, "books": this.bookSelected }, {
+    if (this.projectBook) {
+      this.projectBookviaCreate = this.projectBook;
+    }
+    this._http.post(this.ApiUrl.assignments + "/add", { "email": this.user, "language": this.projectBookviaCreate, "role": this.role, "books": this.bookSelected }, {
       headers: this.headers
     })
       .subscribe(Response => {
@@ -363,17 +376,31 @@ export class AssignTaskDialog implements OnInit {
         this.ELEMENT_DATA = data.json();
         this.dataSource = new MatTableDataSource<tableData>(this.ELEMENT_DATA);
         console.log(this.ELEMENT_DATA)
-        if((this.ELEMENT_DATA[0])["user"])
-        {
-           this.norecordFlag = true;
+        if ((this.ELEMENT_DATA[0])["user"]) {
+          this.norecordFlag = true;
         }
-        else if(this.ELEMENT_DATA["success"]==false) {
+        else if (this.ELEMENT_DATA["success"] == false) {
           this.norecordFlag = false;
         }
-        
+
       }, (error: Response) => {
         if (error.status === 404) {
           this.toastr.warning("Data not available")
+        }
+        else {
+          this.toastr.error("An Unexpected Error Occured.")
+        }
+
+      })
+
+
+    this._http.get(this.ApiUrl.getLang)
+      .subscribe(data => {
+        this.LangArray = data.json();
+        console.log('hello i am open')
+      }, (error: Response) => {
+        if (error.status === 404) {
+          this.toastr.warning("Language data not available")
         }
         else {
           this.toastr.error("An Unexpected Error Occured.")

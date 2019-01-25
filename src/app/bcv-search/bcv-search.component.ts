@@ -32,7 +32,7 @@ export class BcvSearchComponent implements OnInit {
   bookFirstIndex: any;
   LangArray: any; //= new Array();
   langParam: any;
-  NextFlag: boolean = false;
+  trglangParam: any;
   greekBcvArray: any;
 
   constructor(public router: Router, private activatedRoute: ActivatedRoute, private toastr: ToastrService, private _http: Http, private ApiUrl: GlobalUrl) {
@@ -106,7 +106,6 @@ export class BcvSearchComponent implements OnInit {
               this.verseChange(versestr);
 
               localStorage.setItem("lastAlignments", "");
-              this.NextFlag = false;
             }
           }
 
@@ -121,8 +120,8 @@ export class BcvSearchComponent implements OnInit {
             this.LangArray = { currLang: langFullName }
             this.langParam = params['AssignLang'];
             this.langFirstIndex = "currLang";
-            console.log(this.LangArray)
-            console.log(params['AssignLang'])
+            // console.log(this.LangArray)
+            // console.log(params['AssignLang'])
 
             this.bookFirstIndex = 0;
             this.Books = params['AssignBook'].split(',');
@@ -130,7 +129,6 @@ export class BcvSearchComponent implements OnInit {
 
 
             localStorage.setItem("lastAlignments", "");
-            this.NextFlag = false;
 
           }
 
@@ -148,6 +146,10 @@ export class BcvSearchComponent implements OnInit {
       })
   }
 
+  targetLangChange(l){
+    this.trglangParam = l;
+  }
+
   glLangChange(l) {
     if (l != 0) {
       this.bookFirstIndex = 0;
@@ -156,7 +158,7 @@ export class BcvSearchComponent implements OnInit {
       this.verseNumber = stringify(0);
       this.BCV = null
       this.langParam = l;
-      console.log(l)
+      //console.log(l)
 
       localStorage.setItem('language', this.langParam);
 
@@ -175,7 +177,7 @@ export class BcvSearchComponent implements OnInit {
           "1JN" = 62, "2JN" = 63, "3JN" = 64, "JUD" = 65, "REV" = 66
         };
 
-        this._http.get('https://autographa.herokuapp.com/assets/ugnt4_ourGreek_Mapping_VERSE_navigation.json')
+        this._http.get('http://localhost:4200/assets/ugnt4_ourGreek_Mapping_VERSE_navigation.json')
           .subscribe(data => {
             let greekBCVArray = new Array();
             let firstBook = new Array();
@@ -316,13 +318,10 @@ export class BcvSearchComponent implements OnInit {
 
     if (document.getElementById("saveButton"))
       document.getElementById("saveButton").style.display = "none";
-    if (document.getElementById("appButton"))
-      document.getElementById("appButton").style.display = 'none';
     if (document.getElementById("discardButton"))
       document.getElementById("discardButton").style.display = 'none';
 
     localStorage.setItem("lastAlignments", "");
-    this.NextFlag = false;
   }
 
   prevOnclick() {
@@ -392,7 +391,6 @@ export class BcvSearchComponent implements OnInit {
 
         if (this.verseNumber != '000') {
           document.getElementById("saveButton").style.display = "none";
-          document.getElementById("appButton").style.display = 'none';
           document.getElementById("discardButton").style.display = 'none';
         }
 
@@ -425,7 +423,6 @@ export class BcvSearchComponent implements OnInit {
         }
       }
       localStorage.setItem("lastAlignments", "");
-      this.NextFlag = false;
     }
   }
 
@@ -498,7 +495,6 @@ export class BcvSearchComponent implements OnInit {
         if (this.verseNumber != '000') {
 
           document.getElementById("saveButton").style.display = "none";
-          document.getElementById("appButton").style.display = 'none';
           document.getElementById("discardButton").style.display = 'none';
         }
         //console.log(this.chapterNumber);
@@ -524,7 +520,6 @@ export class BcvSearchComponent implements OnInit {
         //console.log (this.BCV + "  " + "next")
 
         localStorage.setItem("lastAlignments", "");
-        this.NextFlag = true;
       }
     }
   }

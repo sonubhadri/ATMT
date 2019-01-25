@@ -72,10 +72,10 @@ import { NumberToStringPipe } from './number-to-string.pipe';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 import { DialogOverviewExampleDialog } from './admin-panel/admin-panel.component';
 import { AssignTaskDialog } from './admin-panel/admin-panel.component';
-import {LoginDialog} from './navigation/navigation.component';
-import {SignupDialog} from './navigation/navigation.component';
-import {resetDialog} from './navigation/navigation.component';
-import {forgotDialog} from './navigation/navigation.component';
+import { LoginDialog } from './navigation/navigation.component';
+import { SignupDialog } from './navigation/navigation.component';
+import { resetDialog } from './navigation/navigation.component';
+import { forgotDialog } from './navigation/navigation.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { OrganizationComponent } from './organization/organization.component';
 import { UserManagementComponent } from './user-management/user-management.component';
@@ -83,6 +83,10 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { RequestorganisationComponent } from './requestorganisation/requestorganisation.component';
 import { ReportsComponent } from './reports/reports.component';
+import { CarouselComponent } from './carousel/carousel.component';
+import { SlickCarouselModule } from 'ngx-slick-carousel';
+import { OwlModule } from 'ngx-owl-carousel';
+import { WordViewAlignerComponent } from './word-view-aligner/word-view-aligner.component';
 
 
 @NgModule({
@@ -118,7 +122,9 @@ import { ReportsComponent } from './reports/reports.component';
     DashboardComponent,
     FeedbackComponent,
     RequestorganisationComponent,
-    ReportsComponent
+    ReportsComponent,
+    CarouselComponent,
+    WordViewAlignerComponent
   ],
   imports: [
     BrowserModule, HttpModule, FormsModule, CommonModule,
@@ -162,6 +168,8 @@ import { ReportsComponent } from './reports/reports.component';
     MatTooltipModule,
     MatTreeModule,
     NgxChartsModule,
+    SlickCarouselModule,
+    OwlModule,
     ToastrModule.forRoot(),
     RouterModule.forRoot([
       { path: '', component: BcvSearchComponent },
@@ -226,12 +234,13 @@ import { ReportsComponent } from './reports/reports.component';
       { path: 'feedback', component: FeedbackComponent },
       { path: 'requestorg', component: RequestorganisationComponent },
       { path: 'AdminDashboard', component: AdminPanelComponent },
-      { path: 'reports', component: ReportsComponent }
-      
+      { path: 'reports', component: ReportsComponent },
+      { path: 'carousel', component: CarouselComponent },
+      { path: 'WordViewAligner', component: WordViewAlignerComponent }
     ])
   ],
   providers: [AlignerService, D3Service, GlobalUrl],
   bootstrap: [AppComponent],
-  entryComponents: [DialogOverviewExampleDialog,AssignTaskDialog,LoginDialog,SignupDialog,resetDialog,forgotDialog]
+  entryComponents: [DialogOverviewExampleDialog, AssignTaskDialog, LoginDialog, SignupDialog, resetDialog, forgotDialog]
 })
 export class AppModule { }

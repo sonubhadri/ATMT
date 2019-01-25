@@ -17,9 +17,9 @@ export class LinearWidgetComponent implements OnInit {
 
   ngOnInit() {
     //console.log(this.linearCard)
-    this.sourcetext = this.linearCard.sourcetext;
-    this.targettext = this.linearCard.targettext;
-    this.englishword = this.linearCard.englishword;
+    this.sourcetext =  this.linearCard.targetContent[this.linearCard.lid].strongs;
+    this.targettext = this.linearCard.sourceContent[this.linearCard.lid].hin_text;
+    this.englishword = this.linearCard.targetContent[this.linearCard.lid].english;
 
     if(this.sourcetext.length ==  this.englishword.length){
       

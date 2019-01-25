@@ -56,7 +56,7 @@ export class DashboardComponent implements OnInit {
   }
 
   AlignmentClick(i){
-    console.log(i)
+    //console.log(i)
     localStorage.setItem("AlignmentLang",this.alignArray[i]);
     localStorage.setItem("AlignmentBooks",this.alignBookArray[i]);
     this.router.navigate(['../app-bcv-search/' + this.alignArray[i]+ '/' + this.alignBookArray[i] + '/' + this.alignOrganisationArray[i] ]);
