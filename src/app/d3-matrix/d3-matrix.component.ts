@@ -298,8 +298,11 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
 
         let greekHorizontalWord = d.targetContent[currentLid].strongs;
-        Object.values(d.sourceContent[currentLid])[0].unshift('NULL');
-        let hindiVerticalWords = Object.values(d.sourceContent[currentLid])[0];
+        //console.log(Object.values(d.sourceContent[currentLid])[0])
+        let firstSourceObj:any = Object.values(d.sourceContent[currentLid])[0];
+
+        firstSourceObj.unshift('NULL');
+        let hindiVerticalWords:any = Object.values(d.sourceContent[currentLid])[0];
         //let colorCode = d.colorCode;
         let colorCode = d.positionalPairs[currentLid].colorCode;
 
@@ -435,9 +438,9 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
         greekHorizontalWord = d.targetContent[acrossLid].strongs;
 
-
-        Object.values(d.sourceContent[d.lid])[0].unshift('NULL');
-        let hindiVerticalWords = Object.values(d.sourceContent[d.lid])[0];
+        let firstSourceObj:any = Object.values(d.sourceContent[d.lid])[0];
+        firstSourceObj.unshift('NULL');
+        let hindiVerticalWords:any = Object.values(d.sourceContent[d.lid])[0];
 
         let colorCode = [];
         if (d.positionalPairs[acrossLid]) {
@@ -688,7 +691,8 @@ export class D3MatrixComponent implements OnInit, OnChanges {
         if (this.Interlinear == "Interlinear") {
             // Code for horizontal alignment
             this.Statuses = [];
-            for (var h = 0; h < Object.values(this.gridDataJson.sourceContent[this.gridDataJson.lid])[0].length; h++) {
+            let firstSourceObj:any = Object.values(this.gridDataJson.sourceContent[this.gridDataJson.lid])[0];
+            for (var h = 0; h < firstSourceObj.length; h++) {
 
 
                 var greekPair = new Array();
@@ -940,7 +944,8 @@ export class D3MatrixComponent implements OnInit, OnChanges {
         if (this.Interlinear == "Interlinear") {
             // Code for horizontal alignment
             this.Statuses = [];
-            for (var h = 0; h < Object.values(data.json().sourceContent[data.json().lid])[0].length; h++) {
+            let firstSourceObj:any = Object.values(data.json().sourceContent[data.json().lid])[0];
+            for (var h = 0; h < firstSourceObj.length; h++) {
 
 
                 var greekPair = new Array();
@@ -1019,7 +1024,8 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
 
         if (this.Lang == 'grk-UGNT4') {
-            for (var l = 0; l <  Object.values(data.json().sourceContent[lidApi])[0].length; l++) {
+            let firstSourceObj:any = Object.values(data.json().sourceContent[lidApi])[0];
+            for (var l = 0; l <  firstSourceObj.length; l++) {
 
                 greekVerticalArray.push("<b>English Word</b>:- " + data.json().lexicanData[Object.values(data.json().sourceContent[lidApi])[0][l]].targetword + "<br/><br/>" + "<b>Definition</b>:- " + data.json().lexicanData[Object.values(data.json().sourceContent[lidApi])[0][l]].definition + "<br/><br/>" + "<b>greek_word</b>:- " + data.json().lexicanData[Object.values(data.json().sourceContent[lidApi])[0][l]].sourceword + "<br/><br/>" + "<b>pronunciation</b>:- " + data.json().lexicanData[Object.values(data.json().sourceContent[lidApi])[0][l]].pronunciation + "<br/><br/>" + "strongs:- " + data.json().lexicanData[Object.values(data.json().sourceContent[lidApi])[0][l]].strongs + " " + "<br/><br/>" + "<b>transliteration</b>:- " + data.json().lexicanData[Object.values(data.json().sourceContent[lidApi])[0][l]].transliteration);
 
@@ -1645,9 +1651,9 @@ export class D3MatrixComponent implements OnInit, OnChanges {
         if (this.Interlinear == "Interlinear") {
             // Code for horizontal alignment
             //this.Statuses = [];
-
+            let firstSourceObj:any = Object.values(data.json().sourceContent[data.json().lid])[0];
             if (data.json().positionalPairs[acrossLid]) {
-                for (var h = 0; h < Object.values(data.json().sourceContent[data.json().lid])[0].length; h++) {
+                for (var h = 0; h < firstSourceObj.length; h++) {
 
 
                     var greekPair = new Array();
@@ -1741,7 +1747,8 @@ export class D3MatrixComponent implements OnInit, OnChanges {
         }
 
         if (this.Lang == 'grk-UGNT4') {
-            for (var l = 0; l < Object.values(data.json().sourceContent[data.json().lid])[0].length; l++) {
+            let firstSourceObj:any = Object.values(data.json().sourceContent[data.json().lid])[0];
+            for (var l = 0; l < firstSourceObj.length; l++) {
 
                 greekVerticalArray.push("<b>English Word</b>:- " + data.json().lexicanData[Object.values(data.json().sourceContent[data.json().lid])[0][l]].targetword + "<br/><br/>" + "<b>Definition</b>:- " + data.json().lexicanData[Object.values(data.json().sourceContent[data.json().lid])[0][l]].definition + "<br/><br/>" + "<b>greek_word</b>:- " + data.json().lexicanData[Object.values(data.json().sourceContent[data.json().lid])[0][l]].sourceword + "<br/><br/>" + "<b>pronunciation</b>:- " + data.json().lexicanData[Object.values(data.json().sourceContent[data.json().lid])[0][l]].pronunciation + "<br/><br/>" + "strongs:- " + data.json().lexicanData[Object.values(data.json().sourceContent[data.json().lid])[0][l]].strongs + " " + "<br/><br/>" + "<b>transliteration</b>:- " + data.json().lexicanData[Object.values(data.json().sourceContent[data.json().lid])[0][l]].transliteration);
 
