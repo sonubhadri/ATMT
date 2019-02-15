@@ -46,6 +46,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
     serviceResult: any;
     positionalPairOfApi: any;
     rawPos: any;
+    localStorageRawPos : any;
     indPair = new Array();
     saveButtonFlag: boolean = true;
     lexiconData: string;
@@ -243,7 +244,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
         this.positionalPairOfApi = {};
         let posObjLength = Object.keys(d.positionalPairs);
         for (let i = 0; i < posObjLength.length; i++) {
-            this.positionalPairOfApi[posObjLength[i]] = d.positionalPairs[posObjLength[i]].pairs;
+            this.positionalPairOfApi[String(posObjLength[i])] = d.positionalPairs[posObjLength[i]].pairs;
         }
 
 
@@ -406,7 +407,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
         let greekHorizontalWord;
 
         // if (flag == 'prev') {
-
+        
         //     d.prevFourStrongsList[res].unshift('NULL');
         //     d.prevFourEnglishWordsList[res].unshift('NULL');
         //     greekHorizontalWords = d.prevFourEnglishWordsList[res];
@@ -488,6 +489,8 @@ export class D3MatrixComponent implements OnInit, OnChanges {
     }
 
     saveOnClick() {
+        console.log(this.localStorageRawPos)
+        console.log(this.positionalPairOfApi)
 
         this.decodeToken(String(JSON.parse(JSON.stringify(this.headers)).Authorization));
         document.getElementById("grid").style.display = "none";
@@ -519,7 +522,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
             }
             y[index] = separatedPair[0] + "-" + separatedPair[1];
         }
-        var data = { "bcv": x, "positional_pairs": y, "srclang": l, "trglang": "grk-ugnt", "organisation": this.organisation };
+        var data = { "bcv": x, "positional_pairs": y, "srclang": l, "trglang": this.trgLang, "organisation": this.organisation };
         this.display = true;
         this._http.post(this.ApiUrl.getnUpdateBCV, data, {
             headers: this.headers
@@ -550,7 +553,8 @@ export class D3MatrixComponent implements OnInit, OnChanges {
             })
 
         document.getElementById('saveButton').style.display = 'none';
-        localStorage.setItem("lastAlignments", this.rawPos);
+        // localStorage.setItem("lastAlignments", this.rawPos);
+        localStorage.setItem("lastAlignments", JSON.stringify(this.localStorageRawPos));        
     }
 
     discardOnClick() {
@@ -582,9 +586,18 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
         if (localStorage.getItem("lastAlignments") !== "") {
             var x: any = this.BCV;
-            var y: any = localStorage.getItem("lastAlignments").split(',');
+            var u: any = localStorage.getItem("lastAlignments");
+            var y:any = {};
+            console.log(JSON.parse(u))
+            console.log(Object.keys(JSON.parse(u))[0])
             var l: any = this.Lang;
             //var y: any = this.positionalPairOfApi;
+
+            let objLen = Object.keys(JSON.parse(u)).length;
+            for(let len = 0; len < objLen; len++){
+                   y[Object.keys(JSON.parse(u))[len]] = JSON.parse(u)[Object.keys(JSON.parse(u))[len]].pairs;
+            }
+            console.log(y)
 
             var z: number = y.length;
 
@@ -610,7 +623,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                 }
                 y[index] = separatedPair[0] + "-" + separatedPair[1];
             }
-            var data = { "bcv": x, "positional_pairs": y, "srclang": l, "trglang": "grk-ugnt", "organisation": this.organisation };
+            var data = { "bcv": x, "positional_pairs": y, "srclang": l, "trglang": this.trgLang, "organisation": this.organisation };
             this.display = true;
             this._http.post(this.ApiUrl.getnUpdateBCV, data, {
                 headers: this.headers
@@ -756,7 +769,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
         this.display = true;
         //console.log(this.display)
-        this._http.get(this.ApiUrl.grkhin + "/" + this.Lang + "/grk-ugnt" + "/" + this.BOOKNAME + usfmFlag)
+        this._http.get(this.ApiUrl.grkhin + "/" + this.Lang + "/" +  this.trgLang + "/" + this.BOOKNAME + usfmFlag)
             .toPromise()
             .then(response => this.saveToFileSystem(response.json()))
             .catch((err) => {
@@ -957,6 +970,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
         //Commented for the new json data
         //this.rawPos = data.json().positionalPairs;
+        this.localStorageRawPos = data.json().positionalPairs;
 
         //Added as per the new json data
         this.rawPos = data.json().positionalPairs[lidApi].pairs;
@@ -1658,6 +1672,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
         this.gridDataJson = data.json();
         //this.rawPos = data.json().positionalPairs;
+        this.localStorageRawPos = data.json().positionalPairs;
         this.display = false;
         var that = this;
         let self = this;
@@ -2347,6 +2362,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
 
         //Commented for the new json data
         //this.rawPos = data.json().positionalPairs;
+        this.localStorageRawPos = data.json().positionalPairs;
 
         //Added as per the new json data
         if (data.json().positionalPairs[lidApi]) {

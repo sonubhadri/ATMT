@@ -47,7 +47,7 @@ export class AdminPanelComponent implements OnInit {
     var timeDiff = Math.abs(new Date(dd * 1000).getTime() - new Date().getTime());
     if (Math.ceil(timeDiff / (1000 * 3600 * 24)) > 1) {
       localStorage.setItem("access-token", '');
-      this.router.navigate(['../app-login']);
+      // this.router.navigate(['../app-login']);
     }
   }
 
@@ -157,7 +157,8 @@ export class DialogOverviewExampleDialog implements OnInit {
     var timeDiff = Math.abs(new Date(dd * 1000).getTime() - new Date().getTime());
     if (Math.ceil(timeDiff / (1000 * 3600 * 24)) > 1) {
       localStorage.setItem("access-token", '');
-      this.router.navigate(['../app-login']);
+      // this.router.navigate(['../app-login']);
+      this.router.navigate(['']);
     }
   }
 
@@ -276,7 +277,7 @@ export class AssignTaskDialog implements OnInit {
     var timeDiff = Math.abs(new Date(dd * 1000).getTime() - new Date().getTime());
     if (Math.ceil(timeDiff / (1000 * 3600 * 24)) > 1) {
       localStorage.setItem("access-token", '');
-      this.router.navigate(['../app-login']);
+      // this.router.navigate(['../app-login']);
     }
   }
 

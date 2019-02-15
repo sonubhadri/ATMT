@@ -197,22 +197,22 @@ import { WordViewAlignerComponent } from './word-view-aligner/word-view-aligner.
         path: 'ComboEditor/:BCV/:Strong/:Hindi',
         component: ComboEditorComponent
       },
-      {
-        path: 'app-register',
-        component: RegisterComponent
-      },
-      {
-        path: 'app-login',
-        component: LoginComponent
-      },
-      {
-        path: 'resetpassword',
-        component: ResetpasswordComponent
-      },
-      {
-        path: 'forgotpassword',
-        component: ForgotpasswordComponent
-      },
+      // {
+      //   path: 'app-register',
+      //   component: RegisterComponent
+      // },
+      // {
+      //   path: 'app-login',
+      //   component: LoginComponent
+      // },
+      // {
+      //   path: 'resetpassword',
+      //   component: ResetpasswordComponent
+      // },
+      // {
+      //   path: 'forgotpassword',
+      //   component: ForgotpasswordComponent
+      // },
       {
         path: 'wordview',
         component: WordViewEditorComponent

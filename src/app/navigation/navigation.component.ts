@@ -59,6 +59,14 @@ export class NavigationComponent implements OnInit {
     this.role = playload.role;
     this.username = playload.firstName;
 
+    let dd = Number(playload.exp);
+    var timeDiff = Math.abs(new Date(dd * 1000).getTime() - new Date().getTime());
+    if (Math.ceil(timeDiff / (1000 * 3600 * 24)) > 1) {
+      localStorage.setItem("access-token", '');
+      // this.router.navigate(['../app-login']);
+      this.router.navigate(['']);
+    }
+
   }
 
   ngOnInit() {
@@ -127,9 +135,9 @@ export class NavigationComponent implements OnInit {
     //location.reload();
   }
 
-  signin() {
-    this.router.navigate(['../app-login'])
-  }
+  // signin() {
+  //   this.router.navigate(['../app-login'])
+  // }
 
   signup() {
     this.router.navigate(['../app-register'])
