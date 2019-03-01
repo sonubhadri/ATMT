@@ -44,10 +44,16 @@ export class AdminPanelComponent implements OnInit {
   decodeToken(token) {
     var playload = JSON.parse(atob(token.split('.')[1]));
     let dd = Number(playload.exp)
-    var timeDiff = Math.abs(new Date(dd * 1000).getTime() - new Date().getTime());
-    if (Math.ceil(timeDiff / (1000 * 3600 * 24)) > 1) {
+    // var timeDiff = Math.abs(new Date(dd * 1000).getTime() - new Date().getTime());
+    // if (Math.ceil(timeDiff / (1000 * 3600 * 24)) > 1) {
+    //   localStorage.setItem("access-token", '');
+    //   // this.router.navigate(['../app-login']);
+    // }
+
+    if(Date.now() / 1000 > dd){
       localStorage.setItem("access-token", '');
-      // this.router.navigate(['../app-login']);
+      location.reload();
+      this.router.navigate(['../'])
     }
   }
 
@@ -154,11 +160,17 @@ export class DialogOverviewExampleDialog implements OnInit {
   decodeToken(token) {
     var playload = JSON.parse(atob(token.split('.')[1]));
     let dd = Number(playload.exp)
-    var timeDiff = Math.abs(new Date(dd * 1000).getTime() - new Date().getTime());
-    if (Math.ceil(timeDiff / (1000 * 3600 * 24)) > 1) {
+    // var timeDiff = Math.abs(new Date(dd * 1000).getTime() - new Date().getTime());
+    // if (Math.ceil(timeDiff / (1000 * 3600 * 24)) > 1) {
+    //   localStorage.setItem("access-token", '');
+    //   // this.router.navigate(['../app-login']);
+    //   this.router.navigate(['']);
+    // }
+
+    if(Date.now() / 1000 > dd){
       localStorage.setItem("access-token", '');
-      // this.router.navigate(['../app-login']);
-      this.router.navigate(['']);
+      location.reload();
+      this.router.navigate(['../'])
     }
   }
 
@@ -274,10 +286,16 @@ export class AssignTaskDialog implements OnInit {
   decodeToken(token) {
     var playload = JSON.parse(atob(token.split('.')[1]));
     let dd = Number(playload.exp)
-    var timeDiff = Math.abs(new Date(dd * 1000).getTime() - new Date().getTime());
-    if (Math.ceil(timeDiff / (1000 * 3600 * 24)) > 1) {
+    // var timeDiff = Math.abs(new Date(dd * 1000).getTime() - new Date().getTime());
+    // if (Math.ceil(timeDiff / (1000 * 3600 * 24)) > 1) {
+    //   localStorage.setItem("access-token", '');
+    //   // this.router.navigate(['../app-login']);
+    // }
+
+    if(Date.now() / 1000 > dd){
       localStorage.setItem("access-token", '');
-      // this.router.navigate(['../app-login']);
+      location.reload();
+      this.router.navigate(['../'])
     }
   }
 

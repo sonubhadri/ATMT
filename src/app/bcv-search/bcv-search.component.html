@@ -15,7 +15,7 @@
 
                                 <div style="width: 20%;display:inline-block;padding: 10px">
                                         <mat-form-field>
-                                                <mat-select placeholder="TARGET"  ngModel name="targetLang" id="targetLang" #targetLang="ngModel" (selectionChange)="targetLangChange(targetLang.value)">
+                                                <mat-select placeholder="TARGET" [(ngModel)]="trgFirstIndex" ngModel name="targetLang" id="targetLang" #targetLang="ngModel" (selectionChange)="targetLangChange(targetLang.value)">
                                                         <mat-option value="0">Select</mat-option>
                                                         <mat-option value="grk-ugnt">Greek</mat-option>
                                                         <mat-option value="heb-uhb">Hebrew</mat-option>

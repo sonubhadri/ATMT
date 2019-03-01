@@ -26,6 +26,7 @@ export class BcvSearchComponent implements OnInit {
   bookNumber: string;
   verseNumber: string;
   BCV: any;
+  trgFirstIndex: any;
   langFirstIndex: any;
   chapterFirstIndex: any;
   verseFirstIndex: any;
@@ -48,7 +49,9 @@ export class BcvSearchComponent implements OnInit {
     this.verseFirstIndex = 0;
     this.bookFirstIndex = 0;
     this.langFirstIndex = 0;
+    this.trgFirstIndex = 0;
 
+    localStorage.setItem('language', "");
 
     this._http.get(this.ApiUrl.getLang)
       .subscribe(data => {
@@ -63,8 +66,8 @@ export class BcvSearchComponent implements OnInit {
             "1CO" = 46, "2CO" = 47, "GAL" = 48, "EPH" = 49, "PHP" = 50, "COL" = 51, "1TH" = 52,
             "2TH" = 53, "1TI" = 54, "2TI" = 55, "TIT" = 56, "PHM" = 57, "HEB" = 58, "JAS" = 59,
             "1PE" = 60, "2PE" = 61, "1JN" = 62, "2JN" = 63, "3JN" = 64, "JUD" = 65, "REV" = 66,
-            "GEN" = "01", "EXO" = "02", "LEV" = "03", "NUM" = "04", "DEU" = "05", "JOS" = "06",
-            "JDG" = "07", "RUT" = "08", '1SA' = "09", "2SA" = 10, "1KI" = 11, "2KI" = 12,
+             "01"="GEN", "02"="EXO","03"="LEV","04"="NUM","05"="DEU","06"="JOS","07"="JDG","08"="RUT",
+             "09"='1SA', "2SA" = 10, "1KI" = 11, "2KI" = 12,
             "1CH" = 13, "2CH" = 14, "EZR" = 15, "NEH" = 16, "EST" = 17, "JOB" = 18, "PSA" = 19
             , "PRO" = 20, "ECC" = 21, "SNG" = 22, "ISA" = 23, "JER" = 24, "LAM" = 25, "EZK" = 26,
             "DAN" = 27, "HOS" = 28, "JOL" = 29, "AMO" = 30, "OBA" = 31, "JON" = 32, "MIC" = 33,
@@ -88,8 +91,19 @@ export class BcvSearchComponent implements OnInit {
                 this.langFirstIndex = "hin-4";
               }
 
+              if(Number(BcvParam.substring(0, 2)) < 40){
+                this.trgFirstIndex = "heb-uhb";
+                this.trglangParam  = "heb-uhb";
+              }
+              else{
+                this.trgFirstIndex = "grk-ugnt";
+                this.trglangParam  = "grk-ugnt";
+              }
+
+
               this.glLangChange(langstr);
               let booknostr = bookno[BcvParam.substring(0, 2)];
+              console.log(booknostr)
               this.bookFirstIndex = booknostr;
               this.bookChange(booknostr);
 
@@ -147,6 +161,8 @@ export class BcvSearchComponent implements OnInit {
   }
 
   targetLangChange(l){
+    this.chapterFirstIndex = 0;
+    this.verseFirstIndex = 0;
     this.trglangParam = l;
   }
 
@@ -165,8 +181,11 @@ export class BcvSearchComponent implements OnInit {
       if (l == 'grk-UGNT4') {
 
         enum booknoo {
-          "GEN" = "01", "EXO" = "02", "LEV" = "03", "NUM" = "04", "DEU" = "05",
-          "JOS" = "06", "JDG" = "07", "RUT" = "08", '1SA' = "09", "2SA" = 10, "1KI" = 11, "2KI" = 12,
+          // "GEN" = "01", "EXO" = "02", "LEV" = "03", "NUM" = "04", "DEU" = "05",
+          // "JOS" = "06", "JDG" = "07", "RUT" = "08", '1SA' = "09",
+          "01"="GEN", "02"="EXO","03"="LEV","04"="NUM","05"="DEU","06"="JOS","07"="JDG","08"="RUT",
+             "09"='1SA',
+          "2SA" = 10, "1KI" = 11, "2KI" = 12,
           "1CH" = 13, "2CH" = 14, "EZR" = 15, "NEH" = 16, "EST" = 17, "JOB" = 18, "PSA" = 19
           , "PRO" = 20, "ECC" = 21, "SNG" = 22, "ISA" = 23, "JER" = 24, "LAM" = 25, "EZK" = 26,
           "DAN" = 27, "HOS" = 28, "JOL" = 29, "AMO" = 30, "OBA" = 31, "JON" = 32, "MIC" = 33,
@@ -236,7 +255,7 @@ export class BcvSearchComponent implements OnInit {
     this.BCV = null
 
     // var data = new FormData();
-    // data.append("bookname", x);    
+    // data.append("bookname", x);
     this.bookName = x.toUpperCase();
     //console.log(this.bookName)
 
@@ -331,8 +350,11 @@ export class BcvSearchComponent implements OnInit {
       (<HTMLInputElement>document.getElementById("prebtn")).disabled = true;
 
       enum booknoo {
-        "GEN" = "01", "EXO" = "02", "LEV" = "03", "NUM" = "04", "DEU" = "05",
-        "JOS" = "06", "JDG" = "07", "RUT" = "08", '1SA' = "09", "2SA" = 10, "1KI" = 11, "2KI" = 12,
+        // "GEN" = "01", "EXO" = "02", "LEV" = "03", "NUM" = "04", "DEU" = "05",
+        // "JOS" = "06", "JDG" = "07", "RUT" = "08", '1SA' = "09",
+        "01"="GEN", "02"="EXO","03"="LEV","04"="NUM","05"="DEU","06"="JOS","07"="JDG","08"="RUT",
+             "09"='1SA',
+         "2SA" = 10, "1KI" = 11, "2KI" = 12,
         "1CH" = 13, "2CH" = 14, "EZR" = 15, "NEH" = 16, "EST" = 17, "JOB" = 18, "PSA" = 19
         , "PRO" = 20, "ECC" = 21, "SNG" = 22, "ISA" = 23, "JER" = 24, "LAM" = 25, "EZK" = 26,
         "DAN" = 27, "HOS" = 28, "JOL" = 29, "AMO" = 30, "OBA" = 31, "JON" = 32, "MIC" = 33,
@@ -432,8 +454,11 @@ export class BcvSearchComponent implements OnInit {
       (<HTMLInputElement>document.getElementById("nxtbtn")).disabled = true;
       (<HTMLInputElement>document.getElementById("prebtn")).disabled = true;
       enum booknoo {
-        "GEN" = "01", "EXO" = "02", "LEV" = "03", "NUM" = "04", "DEU" = "05",
-        "JOS" = "06", "JDG" = "07", "RUT" = "08", '1SA' = "09", "2SA" = 10, "1KI" = 11, "2KI" = 12,
+        // "GEN" = "01", "EXO" = "02", "LEV" = "03", "NUM" = "04", "DEU" = "05",
+        // "JOS" = "06", "JDG" = "07", "RUT" = "08", '1SA' = "09",
+        "01"="GEN", "02"="EXO","03"="LEV","04"="NUM","05"="DEU","06"="JOS","07"="JDG","08"="RUT",
+             "09"='1SA',
+         "2SA" = 10, "1KI" = 11, "2KI" = 12,
         "1CH" = 13, "2CH" = 14, "EZR" = 15, "NEH" = 16, "EST" = 17, "JOB" = 18, "PSA" = 19
         , "PRO" = 20, "ECC" = 21, "SNG" = 22, "ISA" = 23, "JER" = 24, "LAM" = 25, "EZK" = 26,
         "DAN" = 27, "HOS" = 28, "JOL" = 29, "AMO" = 30, "OBA" = 31, "JON" = 32, "MIC" = 33,

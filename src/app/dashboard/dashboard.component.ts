@@ -49,10 +49,16 @@ export class DashboardComponent implements OnInit {
     this.user = playload.sub;
     let dd = Number(playload.exp)
     var timeDiff = Math.abs(new Date(dd * 1000).getTime() - new Date().getTime());
-    if (Math.ceil(timeDiff / (1000 * 3600 * 24)) > 1) {
+    // console.log(Date.now() / 1000)
+    // console.log(playload.exp)
+    // console.log(playload)
+    // console.log(Math.ceil(timeDiff / (1000 * 3600 * 24)))
+    
+   // if (Math.ceil(timeDiff / (1000 * 3600 * 24)) > 1) {
+     if(Date.now() / 1000 > dd){
       localStorage.setItem("access-token", '');
-      // this.router.navigate(['../app-login']);
-      this.router.navigate(['']);
+      location.reload();
+      this.router.navigate(['../'])
     }
   }
 
@@ -108,6 +114,12 @@ export class DashboardComponent implements OnInit {
       }, (error: Response) => {
         if (error.status === 404) {
           this.toastr.warning("Data not available")
+        }
+        else if (error.status == 401){
+          localStorage.setItem("access-token", '');
+          // this.router.navigate(['../app-login']);
+          location.reload();
+          this.router.navigate(['../'])
         }
         else {
           this.toastr.error("An Unexpected Error Occured.")

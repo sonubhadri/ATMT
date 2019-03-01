@@ -60,11 +60,19 @@ export class NavigationComponent implements OnInit {
     this.username = playload.firstName;
 
     let dd = Number(playload.exp);
-    var timeDiff = Math.abs(new Date(dd * 1000).getTime() - new Date().getTime());
-    if (Math.ceil(timeDiff / (1000 * 3600 * 24)) > 1) {
+    // var timeDiff = Math.abs(new Date(dd * 1000).getTime() - new Date().getTime());
+    // if (Math.ceil(timeDiff / (1000 * 3600 * 24)) > 1) {
+    //   localStorage.setItem("access-token", '');
+    //   this.role = "";
+    //   this.username = "";
+    //   // this.router.navigate(['../app-login']);
+    //   this.router.navigate(['']);
+    // }
+
+    if(Date.now() / 1000 > dd){
       localStorage.setItem("access-token", '');
-      // this.router.navigate(['../app-login']);
-      this.router.navigate(['']);
+      location.reload();
+      this.router.navigate(['../'])
     }
 
   }
@@ -91,7 +99,14 @@ export class NavigationComponent implements OnInit {
           //this.display = false;
           //console.log(this.textValue);
           this.textValue = "";
-          this.router.navigate(['/app-bcv-search/' + response.json()]);
+
+         let bcv = String(response.json());
+          let len = bcv.length;
+          if(len == 7){
+            bcv = "0" +  bcv;
+          }
+
+          this.router.navigate(['/app-bcv-search/' + bcv]);
 
         }, (error: Response) => {
           if (error.status === 400) {

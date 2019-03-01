@@ -37,10 +37,16 @@ export class FeedbackComponent implements OnInit {
     var playload = JSON.parse(atob(token.split('.')[1]));
     let dd = Number(playload.exp)
     this.email = playload.sub;
-    var timeDiff = Math.abs(new Date(dd * 1000).getTime() - new Date().getTime());
-    if (Math.ceil(timeDiff / (1000 * 3600 * 24)) > 1) {
+    // var timeDiff = Math.abs(new Date(dd * 1000).getTime() - new Date().getTime());
+    // if (Math.ceil(timeDiff / (1000 * 3600 * 24)) > 1) {
+    //   localStorage.setItem("access-token", '');
+    //   this.router.navigate(['../']);
+    // }
+
+    if(Date.now() / 1000 > dd){
       localStorage.setItem("access-token", '');
-      this.router.navigate(['../']);
+      location.reload();
+      this.router.navigate(['../'])
     }
   }
 

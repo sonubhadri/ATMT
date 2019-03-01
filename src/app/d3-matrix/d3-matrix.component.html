@@ -24,7 +24,7 @@
     </div>
 
     <div *ngIf="linear">
-      <linear-widget style="display:inline-block;text-align:left" [linearCard]="gridDataJson"></linear-widget>
+      <linear-widget style="display:inline-block;text-align:left" [linearLid]= "carouselBcv" [linearCard]="gridDataJson" ></linear-widget>
     </div>
   </div>
 
@@ -37,7 +37,7 @@
     <!-- <button type="button" *ngIf="!display" id="verticalORgrid" class="btn btn-light" (click)="verticalORgridOnClick()">{{verticalORgrid}}</button> -->
     <div *ngIf="!display">
       <div>
-        <mat-slide-toggle style="padding-left: 30px; margin-right: 40px" *ngIf="!display" [formControl]="autoRenew" (change)="onChange()"
+        <mat-slide-toggle [disabled]="matDisabled" [checked]="checked" style="padding-left: 30px; margin-right: 40px" *ngIf="!display" [formControl]="autoRenew" (change)="onChange()"
           color="primary">
           <span style="color:grey;font-size: 17px">Word Across verses</span>
         </mat-slide-toggle>
@@ -55,7 +55,7 @@
         </mat-form-field> -->
 
         <mat-form-field>
-            <mat-select placeholder="ChangeTargetContent" [(ngModel)]="targetContentFirstIndex" ngModel name="targetDrpDwn" id="targetDrpDwn" #targetDrpDwn="ngModel" (selectionChange)="targetDrpDwnfunc(targetDrpDwn.value)">
+            <mat-select [disabled]="matDisabled" placeholder="ChangeTargetContent" [(ngModel)]="targetContentFirstIndex" ngModel name="targetDrpDwn" id="targetDrpDwn" #targetDrpDwn="ngModel" (selectionChange)="targetDrpDwnfunc(targetDrpDwn.value)">
                     <mat-option value="0">Select</mat-option>
                     <mat-option *ngFor="let targetDrpDwn of TargetContent" [value]="targetDrpDwn">{{targetDrpDwn}}</mat-option>
             </mat-select>
@@ -66,13 +66,13 @@
 
       <div *ngIf="acrossVerseFlag" style="margin-left: 0px;width:100%;">
         <a id="prevContent" style="background-color: inherit;cursor:pointer" (click)="prevContentOnClick()">
-          <mat-icon style="font-size: 60px;margin-right: 80px;color:grey;">navigate_before</mat-icon>
+          <mat-icon id='befNav' [ngStyle]="{'color': befNav == 'blue'? befNave : 'grey'}" style="font-size: 60px;margin-right: 80px;">navigate_before</mat-icon>
         </a>
         <!-- <button type="button" id="prevContent" class="btn btn-light" (click)="prevContentOnClick()">Previous Content</button> -->
-        <span style="font-size: 25px;color:grey;">{{carouselBcv}}</span>
+        <span style="font-size: 25px;color:grey;">{{alphaBcv}}</span>
         <!-- <button type="button" id="nextContent" class="btn btn-light" (click)="nextContentOnClick()">Next Content</button> -->
         <a id="nextContent" style="background-color: inherit;cursor:pointer" (click)="nextContentOnClick()">
-          <mat-icon style="font-size: 60px;margin-left: 80px;color:grey;">navigate_next</mat-icon>
+          <mat-icon id='nextNav' [ngStyle]="{'color':nextNav  == 'blue'? nextNav : 'grey'}" style="font-size: 60px;margin-left: 80px;">navigate_next</mat-icon>
         </a>
 
       </div>
