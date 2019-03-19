@@ -17,8 +17,10 @@
                                         <mat-form-field>
                                                 <mat-select placeholder="TARGET" [(ngModel)]="trgFirstIndex" ngModel name="targetLang" id="targetLang" #targetLang="ngModel" (selectionChange)="targetLangChange(targetLang.value)">
                                                         <mat-option value="0">Select</mat-option>
-                                                        <mat-option value="grk-ugnt">Greek</mat-option>
-                                                        <mat-option value="heb-uhb">Hebrew</mat-option>
+                                                        <!-- <mat-option value="grk-ugnt">Greek</mat-option>
+                                                        <mat-option value="heb-uhb">Hebrew</mat-option> -->
+
+                                                        <mat-option *ngFor="let item of Target | keysPipe" [value]="item.key">{{item.value | uppercase}}</mat-option>
                                                 </mat-select>
                                         </mat-form-field>
                                 </div>

@@ -35,6 +35,7 @@ export class BcvSearchComponent implements OnInit {
   langParam: any;
   trglangParam: any;
   greekBcvArray: any;
+  Target:any;
 
   constructor(public router: Router, private activatedRoute: ActivatedRoute, private toastr: ToastrService, private _http: Http, private ApiUrl: GlobalUrl) {
 
@@ -244,6 +245,22 @@ export class BcvSearchComponent implements OnInit {
             }
 
           })
+
+          this._http.get(this.ApiUrl.getTarget + '/' + l)
+          .subscribe(data => {
+            this.Target = data.json();
+            //console.log (data.json())
+          }, (error: Response) => {
+            if (error.status === 404) {
+              this.toastr.warning("Target Language data not available")
+            }
+            else {
+              this.toastr.error("An Unexpected Error Occured.")
+            }
+
+          })
+
+
       }
     }
   }

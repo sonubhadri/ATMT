@@ -136,4 +136,6 @@ export class GlobalUrl {
 
     feedbackForm = "https://stagingapi.autographamt.com/v2/feedbacks";
 
+    getTarget = "https://stagingapi.autographamt.com/v2/alignments/targetlanguages";
+
 }
