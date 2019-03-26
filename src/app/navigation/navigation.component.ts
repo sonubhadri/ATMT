@@ -79,6 +79,7 @@ export class NavigationComponent implements OnInit {
 
   ngOnInit() {
     localStorage.setItem('language', "");
+    localStorage.setItem('Targetlanguage', "");
   }
 
   title = 'app';

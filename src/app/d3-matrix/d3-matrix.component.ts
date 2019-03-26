@@ -102,8 +102,8 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                 let currentLidForInterlinear =  this.gridDataJson.LidList[indexOfBcv + 1];
 
                 if ((this.Interlinear == "Reverse-Interlinear") && (currentLidForInterlinear != undefined)) {
-                    console.log(currentLidForInterlinear)
-                    console.log(this.gridDataJson)
+                    // console.log(currentLidForInterlinear)
+                    // console.log(this.gridDataJson)
                     this.Statuses = [];
                     for (var h = 0; h < this.gridDataJson.targetContent[currentLidForInterlinear].strongs.length; h++) {
         
@@ -262,8 +262,8 @@ export class D3MatrixComponent implements OnInit, OnChanges {
         let currentLidForInterlinear =  this.gridDataJson.LidList[indexOfBcv + 1];
 
         if ((this.Interlinear == "Reverse-Interlinear") && (currentLidForInterlinear != undefined)) {
-            console.log(currentLidForInterlinear)
-            console.log(this.gridDataJson)
+            // console.log(currentLidForInterlinear)
+            // console.log(this.gridDataJson)
             this.Statuses = [];
             for (var h = 0; h < this.gridDataJson.targetContent[currentLidForInterlinear].strongs.length; h++) {
 
@@ -754,7 +754,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
             y[Object.keys(y)[i]][index] = separatedPair[0] + "-" + separatedPair[1];
         }
       }
-      console.log(y)
+      //console.log(y)
 
         var data = { "bcv": x, "positional_pairs": y, "srclang": l, "trglang": this.trgLang, "organisation": this.organisation };
         this.display = true;
@@ -1690,7 +1690,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                     }
 
                 }
-                console.log(d.positionalPairOfApi)
+               // console.log(d.positionalPairOfApi)
             })
 
             .on("mouseover", function (d: any, i) {
@@ -2419,7 +2419,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                     }
 
                 }
-                console.log(d.positionalPairOfApi)
+                //console.log(d.positionalPairOfApi)
             })
 
             .on("mouseover", function (d: any, i) {
@@ -3194,7 +3194,7 @@ export class D3MatrixComponent implements OnInit, OnChanges {
                     }
 
                 }
-                console.log(d.positionalPairOfApi)
+               // console.log(d.positionalPairOfApi)
             })
 
             .on("mouseover", function (d: any, i) {
@@ -3528,8 +3528,8 @@ export class D3MatrixComponent implements OnInit, OnChanges {
         let booknoo = {
             "01":"GEN",   "02":"EXO",   "03":"LEV",   "04":"NUM",   "05":"DEU",
             "06":"JOS",   "07":"JDG",   "08":"RUT",   "09":'1SA',   "10":"2SA",   "11":"1KI",   "12":"2KI",
-            "13":"1CH",   "14":"2CH",   "15":"EZR",   "16":"NEH",   "17":"EST",   "18":"JOB",   "19":"PSA"
-          ,   "20":"PRO",   "21":"ECC",   "22":"SNG",   "23":"ISA",   "24":"JER",   "25":"LAM",   "26":"EZK",
+            "13":"1CH",   "14":"2CH",   "15":"EZR",   "16":"NEH",   "17":"EST",   "18":"JOB",   "19":"PSA",
+            "20":"PRO",   "21":"ECC",   "22":"SNG",   "23":"ISA",   "24":"JER",   "25":"LAM",   "26":"EZK",
             "27":"DAN",   "28":"HOS",   "29":"JOL",   "30":"AMO",   "31":"OBA",   "32":"JON",   "33":"MIC",
             "34":"NAM",   "35":"HAB",   "36":"ZEP",   "37":"HAG",   "38":"ZEC",   "39":"MAL",   "40":"MAT",
             "41":"MRK",   "42":"LUK",   "43":"JHN",   "44":"ACT",   "45":"ROM",   "46":"1CO",   "47":"2CO",
@@ -3540,9 +3540,9 @@ export class D3MatrixComponent implements OnInit, OnChanges {
          bcv = String(bcv);
          let len = bcv.length;
          if(len == 7){
-            console.log(bcv.substring(0, 1));
-             console.log("0" + bcv.substring(0, 1));
-             console.log(booknoo["01"])
+            // console.log(bcv.substring(0, 1));
+            //  console.log("0" + bcv.substring(0, 1));
+            //  console.log(booknoo["01"])
            let book = booknoo["0" + bcv.substring(0, 1)];
            let chapter = bcv.substring(1, 4).replace(/^0+/, '');
            let verse = bcv.substring(4, 7).replace(/^0+/, '');

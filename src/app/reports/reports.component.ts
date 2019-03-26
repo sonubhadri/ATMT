@@ -54,6 +54,7 @@ export class ReportsComponent {
   ngOnInit() {
 
     localStorage.setItem("language", "");
+    localStorage.setItem('Targetlanguage', "");
 
     this.langFirstIndex = 0;
 

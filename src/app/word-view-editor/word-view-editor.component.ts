@@ -34,6 +34,7 @@ export class WordViewEditorComponent implements OnInit {
 
   ngOnInit() {
     localStorage.setItem("language", "");
+    localStorage.setItem('Targetlanguage', "");
     
     this.langFirstIndex = 0;
 

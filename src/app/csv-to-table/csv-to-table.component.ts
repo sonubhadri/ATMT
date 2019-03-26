@@ -38,6 +38,7 @@ export class CsvToTableComponent implements OnInit {
 
   ngOnInit() {
     localStorage.setItem("language", "");
+    localStorage.setItem('Targetlanguage', "");
     this.getSampeTranslationData('');
   }
 
