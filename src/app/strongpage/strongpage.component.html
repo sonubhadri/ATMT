@@ -73,7 +73,7 @@
             </mat-expansion-panel-header>
             <div *ngIf="checkedCount[acc] > 0" style="border:ridge; text-align: right">
                 <button  class="btn btn-outline-danger" (click)="Unchecked(objLangWordArr[acc],acc)">UNCHECK ALL</button>
-                <a routerLink="/combo/{{link}}/{{lang}}/{{(objBcvCheckPos[acc])[i]}}" style="display:block;text-decoration:underline;text-align: center"
+                <a routerLink="/combo/{{link}}/{{lang}}/{{trglang}}/{{(objBcvCheckPos[acc])[i]}}" style="display:block;text-decoration:underline;text-align: center"
                   target="_blank" *ngFor="let link of objBcvCheckArr[acc] ; let i = index">
                   <!-- {{link|numberToString}} -->
                   {{ bookno[(link|numberToString).substring(0,2)] }}:{{(link|numberToString).substring(2,5)|number}}:{{(link|numberToString).substring(5,8)|number}}
@@ -89,7 +89,7 @@
               </mat-expansion-panel-header>
               <div *ngIf="uncheckedCount[acc] > 0" style="border:ridge; text-align: right">
                   <button class="btn btn-outline-primary" (click)="Checked(objLangWordArr[acc],acc)">CHECK ALL</button>
-                  <a routerLink="/combo/{{link}}/{{lang}}/{{(objBcvUncheckPos[acc])[i]}}" style="display:block;text-decoration:underline;text-align: center"
+                  <a routerLink="/combo/{{link}}/{{lang}}/{{trglang}}/{{(objBcvUncheckPos[acc])[i]}}" style="display:block;text-decoration:underline;text-align: center"
                     target="_blank" *ngFor="let link of objBcvUncheckArr[acc] ; let i = index">
                     <!-- {{link|numberToString}} -->
                     {{ bookno[(link|numberToString).substring(0,2)] }}:{{(link|numberToString).substring(2,5)|number}}:{{(link|numberToString).substring(5,8)|number}}

@@ -22,6 +22,7 @@ export class StrongpageComponent implements OnInit {
   sourceword: any;
   strongs: any;
   lang: any;
+  trglang:any;
   targetword: any;
   transliteration: any;
   objlen: Number;
@@ -81,14 +82,15 @@ export class StrongpageComponent implements OnInit {
 
   ngOnInit() {
     this.activatedRoute.params.subscribe((params: Params) => {
-      if (params['Strong'] && params['Lang']) {
+      if (params['Strong'] && params['Lang'] && params['TrgLang']) {
         this.strongNo = params['Strong'];
         this.lang = params['Lang'];
+        this.trglang = params['TrgLang'];
       }
 
     });
 
-    this._http.get(this.ApiUrl.strongslist + '/' + this.lang + '/' + 'grk-ugnt' + "/" + this.strongNo)
+    this._http.get(this.ApiUrl.strongslist + '/' + this.lang + '/' + this.trglang + "/" + this.strongNo)
       .subscribe(data => {
         this.display = true;
         this.apiData = data.json();
@@ -187,16 +189,16 @@ export class StrongpageComponent implements OnInit {
     // console.log((((Object.values(this.apiData)[ind]["references"])["unchecked"])["positionalPairs"]).length)
     // console.log((((Object.values(this.apiData)[ind]["references"])["unchecked"])["bcv"]).length)
 
-    var data = { "srclang": this.lang, "trglang": "grk-ugnt", "strongs": this.strongNo, "word": word, "status": "0", "positionData": param };
+    var data = { "srclang": this.lang, "trglang": this.trglang, "strongs": this.strongNo, "word": word, "status": "0", "positionData": param };
     this.display = true;
     this._http.post(this.ApiUrl.strongslist, data, {
       headers: this.headers
     })
       .subscribe(data => {
-        let response: any = data;
+        let response: any = data.json();
 
-        //console.log(response._body);
-        if (response._body === 'Done') {
+        console.log(response.success);
+        if (response.success === true) {
           this.toastr.success('Word has been checked successfully.');
           this.filterData(ind, 'check');
           this.display = false;
@@ -226,16 +228,16 @@ export class StrongpageComponent implements OnInit {
       param[this.objBcvCheckArr[ind][i]] =  this.objBcvCheckPos[ind][i];
     }
 
-    var data = { "srclang": this.lang, "trglang": "grk-ugnt", "strongs": this.strongNo, "word": word, "status": "1","positionData": param  };
+    var data = { "srclang": this.lang, "trglang": this.trglang, "strongs": this.strongNo, "word": word, "status": "1","positionData": param  };
     this.display = true;
     this._http.post(this.ApiUrl.strongslist, data, {
       headers: this.headers
     })
       .subscribe(data => {
-        let response: any = data;
+        let response: any = data.json();
 
-        //console.log(response._body);
-        if (response._body === 'Done') {
+        console.log(response.success);
+        if (response.success === true) {
           this.toastr.success('Word has been Unchecked successfully.');
           this.filterData(ind, 'uncheck');
           this.display = false;

@@ -218,11 +218,11 @@ import { WordViewAlignerComponent } from './word-view-aligner/word-view-aligner.
         component: WordViewEditorComponent
       },
       {
-        path: 'strong/:Strong/:Lang',
+        path: 'strong/:Strong/:Lang/:TrgLang',
         component: StrongpageComponent
       },
       {
-        path: 'combo/:BCV/:Lang/:Pos',
+        path: 'combo/:BCV/:Lang/:TrgLang/:Pos',
         component: ComboComponent
       },
       {

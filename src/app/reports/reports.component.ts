@@ -39,6 +39,8 @@ export class ReportsComponent {
 
   LangArray: any;
   langFirstIndex: any;
+  Target: any;
+  trgFirstIndex: any;
   display: boolean;
   glang: any;
   autoalign: any;
@@ -75,11 +77,33 @@ export class ReportsComponent {
 
   glLangChange(key) {
     //console.log('event run')
+    this.trgFirstIndex = 0;
 
     this.glang = key;
+
+    this._http.get(this.ApiUrl.getTarget + "/" + key).subscribe(
+      data => {
+        this.Target = data.json();
+        //console.log (data.json())
+      },
+      (error: Response) => {
+        if (error.status === 404) {
+          this.toastr.warning("Target Language data not available");
+        } else {
+          this.toastr.error("An Unexpected Error Occured.");
+        }
+      }
+    );
+  }
+
+
+  targetLangChange(l) {
+    if (l != 0) {
+      this.trgFirstIndex = l;
+
     this.display = true;
     document.getElementById('pie').style.visibility = "hidden";
-    this._http.get(this.ApiUrl.reports + "/" + key + "/grk-ugnt")
+    this._http.get(this.ApiUrl.reports + "/" + this.glang + "/" + l)
       .subscribe(Response => {
         if (Response.json()) {
           this.display = false;
@@ -102,5 +126,7 @@ export class ReportsComponent {
 
       })
 
+    }
   }
+
 }

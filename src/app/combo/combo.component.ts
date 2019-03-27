@@ -16,6 +16,7 @@ export class ComboComponent implements OnInit {
   // langWord: any;
   Pos = [];
   Lang: any;
+  trglang:any;
   linearCard: any;
   sourcetext;
   targettext;
@@ -69,20 +70,14 @@ export class ComboComponent implements OnInit {
         // this.langWord = params['BCV'].split('-')[2];
         this.Pos = params['Pos'].split(',');
         this.Lang = params['Lang'];
+        this.trglang = params['TrgLang'];
+        
         var x: any = this.BCV;
         var l: any = this.Lang;
         //console.log(this.Pos)
 
-        let trglang;
-        if(Number(this.BCV.substring(0, 2)) < 40){
-          trglang = "heb-uhb";
-        }
-        else{
-          trglang = "grk-ugnt";
-        }
-
         this.display = true;
-        this._http.get(this.ApiUrl.getnUpdateBCV + '/' + x + '/' + l + '/' + trglang)
+        this._http.get(this.ApiUrl.getnUpdateBCV + '/' + x + '/' + l + '/' + this.trglang)
           .subscribe(data => {
 
             this.linearCard = data.json();
@@ -233,7 +228,4 @@ export class ComboComponent implements OnInit {
       this.toastr.error('You are not a registered User. Sign In to make changes.')
     }
   }
-
-
-
 }

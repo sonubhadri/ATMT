@@ -31,13 +31,15 @@ export class WordViewEditorComponent implements OnInit {
   langFirstIndex: any;
   display:boolean;
   glang:any;
+  Target: any;
+  trgFirstIndex: any;
 
   ngOnInit() {
     localStorage.setItem("language", "");
     localStorage.setItem('Targetlanguage', "");
     
     this.langFirstIndex = 0;
-
+    this.trgFirstIndex = 0;
     
     this._http.get(this.ApiUrl.getLang)
       .subscribe(data => {
@@ -75,26 +77,50 @@ export class WordViewEditorComponent implements OnInit {
 
   glLangChange(value){
     //console.log('event run')
-    this.glang = value;
-    this.display = true;
-    this._http.get(this.ApiUrl.strongslist + "/" + value  + '/grk-ugnt' )
-    .subscribe(data => {
-      this.display = false;
-      this.strongArray = Object.keys(data.json());
-      this.checkArray =  Object.values(data.json());      
-      //console.log(this.checkArray)
-      this.getSampeTranslationData();
-      
-    }, (error: Response) => {
-      if (error.status === 404) {
-        this.toastr.warning("Strongs data not available")
-      }
-      else {
-        this.toastr.error("An Unexpected Error Occured.")
-      }
 
-    })
-         
+    this.trgFirstIndex = 0;
+
+    this.glang = value;
+
+    this._http.get(this.ApiUrl.getTarget + "/" + value).subscribe(
+      data => {
+        this.Target = data.json();
+        //console.log (data.json())
+      },
+      (error: Response) => {
+        if (error.status === 404) {
+          this.toastr.warning("Target Language data not available");
+        } else {
+          this.toastr.error("An Unexpected Error Occured.");
+        }
+      }
+    );         
+  }
+
+
+  targetLangChange(l) {
+    if (l != 0) {
+      this.trgFirstIndex = l;
+
+      this.display = true;
+      this._http.get(this.ApiUrl.strongslist + "/" + this.glang   + '/' + l )
+      .subscribe(data => {
+        this.display = false;
+        this.strongArray = Object.keys(data.json());
+        this.checkArray =  Object.values(data.json());      
+        //console.log(this.checkArray)
+        this.getSampeTranslationData();
+        
+      }, (error: Response) => {
+        if (error.status === 404) {
+          this.toastr.warning("Strongs data not available")
+        }
+        else {
+          this.toastr.error("An Unexpected Error Occured.")
+        }
+  
+      })
+    }
   }
 
 }
